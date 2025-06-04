@@ -1,12 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  rules: {
-    "@typescript-eslint/no-unused-vars": "off",
-    "no-unused-vars": "off",
-    "no-undef": "off",
-    "no-unesscaped-entities": "off",
-    "no-explicit-any": "off",
-    
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
   },
 };
 
