@@ -20,7 +20,7 @@ const WelcomePage: React.FC = () => {
         
         <div className="mb-8">
           <p className="text-gray-700 text-lg mb-4">
-            Thank you for joining us! We're excited to have you on board.
+            Thank you for joining us! We&apos;re excited to have you on board.
           </p>
           <p className="text-gray-600 mb-4">
             Our platform is designed to help you achieve your goals with powerful tools and resources.
@@ -53,7 +53,7 @@ const WelcomePage: React.FC = () => {
       </div>
       
       <footer className="mt-8 text-center text-gray-500">
-        <p>© 2023 Our Platform. All rights reserved.</p>
+        <p>© 2025 Our Platform. All rights reserved.</p>
       </footer>
     </div>
   );

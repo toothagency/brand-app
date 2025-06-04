@@ -4,7 +4,6 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { registerSchema, RegisterValidations } from "../utils/validations";
 
 

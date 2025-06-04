@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios';
 // Request Interceptor: Logs outgoing requests
 import type { InternalAxiosRequestConfig } from 'axios';
 // Create a new Axios instance
