@@ -140,7 +140,7 @@ const StepNavigationAlternative: React.FC<StepNavigationProps> = ({
   const currentStepData = steps[currentStep - 1];
 
   return (
-    <div className="mb-8 ">
+    <div className="mb-8 pt-20">
       {/* Enhanced progress bar with gradient */}
       <div className="relative h-1 bg-gray-100 rounded-full mb-8 mx-6 shadow-inner ">
         <div

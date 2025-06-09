@@ -1,29 +1,35 @@
 export interface LoginRequest {
-  email: string;
-  password: string;
+    email: string;
+    password: string;
 }
 
 export interface SignupRequest {
-  username: string;
-  email: string;
-  password: string;
-  firstName?: string; // Optional
-  lastName?: string;  // Optional
+    userName: string;
+    email: string;
+    password: string;
+  
 }
 
 export interface User {
-  id: string; // Or number, depending on your backend
-  username: string;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-  // Add other relevant user fields
+    id: string; // Or number, depending on your backend
+    username: string;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    // Add other relevant user fields
 }
 
 export interface AuthResponse {
-  user: User;
-  token: string; // e.g., JWT
-  // Add other relevant response fields like expiration, refresh token, etc.
+    message: string,
+    success: boolean,
+    user: {
+        email: string,
+
+        password: string,
+        userId: string,
+        username: string
+    },
+    userId?: string
 }
 
 // Specific types for Login and Register responses if they differ significantly
@@ -33,7 +39,7 @@ export type RegisterResponse = AuthResponse;
 
 // You might also want types for potential error responses
 export interface AuthErrorResponse {
-  statusCode: number;
-  message: string | string[]; // Can be a single message or array of validation errors
-  error: string; // e.g., "Bad Request", "Unauthorized"
+    statusCode: number;
+    message: string | string[]; // Can be a single message or array of validation errors
+    error: string; // e.g., "Bad Request", "Unauthorized"
 }

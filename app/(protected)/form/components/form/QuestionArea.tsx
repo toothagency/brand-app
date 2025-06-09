@@ -1,13 +1,13 @@
-import React, { useState, useMemo, useEffect } from "react";
+// QuestionArea.tsx
+import React from "react";
+// --- ADJUST PATHS AS NEEDED ---
 import InputRenderer from "./InputRenderer";
 import SuggestionsPanel from "./SuggestionsPanel";
 import NavigationControls from "./NavigationControls";
-import type {
-  StepDefinition,
-  QuestionDefinition,
-  FormData,
-} from "../../utils/types"; // Adjust path
-import { generateSuggestions } from "../../utils/helperFunctions";
+import type { StepDefinition, QuestionDefinition, FormData } from "../../utils/types"; // Path to types
+import { isClientAnswerFormatValid } from "../../utils/helperFunctions"; // Path to helpers
+import { Loader2, AlertCircle, Sparkles as SuggestionIcon } from 'lucide-react'; // Added SuggestionIcon
+// --- END ADJUST PATHS ---
 
 interface QuestionAreaProps {
   currentStepData: StepDefinition;
@@ -20,7 +20,15 @@ interface QuestionAreaProps {
   prevQuestion: () => void;
   isLastQuestion: boolean;
   isPrevDisabled: boolean;
-  isNextButtonDisabled: boolean; // Renamed for clarity
+  isNextButtonDisabled: boolean;
+  isSubmittingQuestion?: boolean;
+  currentQuestionError?: string | null;
+  suggestions: string[];
+  isLoadingSuggestions: boolean;
+  showSuggestionsUI: boolean;
+  onSelectSuggestion: (suggestionValue: string) => void;
+  onManualSuggestionFetch: () => void; // For the button
+  canShowManualSuggestButton: boolean; // To control button visibility
 }
 
 const QuestionArea: React.FC<QuestionAreaProps> = ({
@@ -35,58 +43,51 @@ const QuestionArea: React.FC<QuestionAreaProps> = ({
   isLastQuestion,
   isPrevDisabled,
   isNextButtonDisabled,
+  isSubmittingQuestion,
+  currentQuestionError,
+  suggestions,
+  isLoadingSuggestions,
+  showSuggestionsUI,
+  onSelectSuggestion,
+  onManualSuggestionFetch,
+  canShowManualSuggestButton,
 }) => {
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const suggestions = useMemo(
-    () => generateSuggestions(formData, currentQuestionData),
-    [formData, currentQuestionData]
-  );
-
-  useEffect(() => {
-    const currentAnswer = formData[currentQuestionData.id];
-    // Show suggestions if the answer is a string, longer than 10 chars, and suggestions exist
-    if (
-      typeof currentAnswer === "string" &&
-      currentAnswer.length > 10 &&
-      suggestions.length > 0
-    ) {
-      setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
-    }
-  }, [formData, currentQuestionData.id, suggestions]);
 
   const isQuestionAnswered = (questionIndexInStep: number): boolean => {
-    const questionId = currentStepData.questions[questionIndexInStep]?.id;
-    if (!questionId) return false;
-    const answer = formData[questionId];
-    if (Array.isArray(answer)) return answer.length > 0;
-    return !!answer; // Check if answer is truthy (not empty string, undefined, null, 0, false)
+    const questionDef = currentStepData.questions[questionIndexInStep];
+    if (!questionDef) return false;
+    const answer = formData[questionDef.id];
+    return isClientAnswerFormatValid(answer, questionDef.type);
   };
 
+  if (!currentQuestionData) {
+    return (
+        <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 mb-6 flex flex-col min-h-[450px] justify-center items-center">
+            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+            <p className="mt-2 text-gray-600">Loading question content...</p>
+        </div>
+    );
+  }
+
   return (
-    <div className="bg-white rounded shadow-lg p-6 sm:p-8 mb-6 flex flex-col h-[500px] sm:h-[550px] md:h-[500px]">
-      <div className="mb-6">
-        <div className="flex items-start gap-3 mb-4 h-[80px]">
+    <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 mb-6 flex flex-col min-h-[450px] sm:min-h-[500px] md:min-h-[550px]">
+      <div className="flex-grow mb-6"> {/* Main content wrapper */}
+        <div className="flex items-start gap-3 mb-4">
           <div
-            className={`w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1`}
-          >
-            <span
-              className={`text-blue-600 font-bold text-lg`}
-            >
-              {currentQuestionIndex + 1}
-            </span>
-          </div>
+            className={`w-10 h-10 bg-${currentStepData.color}-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1`}
+          > <span className={`text-${currentStepData.color}-600 font-bold text-lg`}> {currentQuestionIndex + 1} </span> </div>
           <div>
-            <h2 className="text-lg sm:text-xl font-bold text-gray-900">
-              {currentQuestionData.question}
-            </h2>
-            <p className="text-sm text-gray-600 mt-1">
-              {currentQuestionData.subtitle}
-            </p>
+            <h2 className="text-lg sm:text-xl font-bold text-gray-900"> {currentQuestionData.question} </h2>
+            <p className="text-sm text-gray-600 mt-1"> {currentQuestionData.subtitle} </p>
           </div>
         </div>
-        <div className="h-[190px] p-1 overflow-y-auto">
+
+        {currentQuestionError && (
+          <div role="alert" className="mb-4 p-3 bg-red-50 border-l-4 border-red-400 text-red-700 rounded-md flex items-center gap-2 shadow-sm">
+            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+            <p className="text-sm font-medium">{currentQuestionError}</p>
+          </div>
+        )}
 
         <InputRenderer
           question={currentQuestionData}
@@ -94,14 +95,33 @@ const QuestionArea: React.FC<QuestionAreaProps> = ({
           onChange={handleInputChange}
           onCheckboxChange={handleCheckboxChange}
         />
-        </div>
-      </div>
 
-      {showSuggestions && suggestions.length > 0 && (
-        <SuggestionsPanel
-          suggestions={suggestions}
-          onSelectSuggestion={handleInputChange}
-        />
+        {/* Manual "Generate Suggestions" Button */}
+        {canShowManualSuggestButton && (
+          <div className="mt-6 mb-2 text-center"> {/* Adjusted margin */}
+            <button
+              onClick={onManualSuggestionFetch}
+              disabled={isLoadingSuggestions || isSubmittingQuestion}
+              className={`inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium rounded-lg transition-colors
+                          bg-yellow-400 hover:bg-yellow-500 text-yellow-900 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-offset-2
+                          disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed`}
+            >
+              <SuggestionIcon className="w-4 h-4" />
+              Generate Suggestions
+            </button>
+          </div>
+        )}
+      </div> {/* End of flex-grow for main content (input, error, manual button) */}
+
+      {/* Suggestions Panel - shown if showSuggestionsUI is true */}
+      {showSuggestionsUI && (
+        <div className="mb-6"> {/* This div ensures spacing if suggestions are shown */}
+          <SuggestionsPanel
+            suggestions={suggestions}
+            isLoading={isLoadingSuggestions}
+            onSelectSuggestion={onSelectSuggestion}
+          />
+        </div>
       )}
 
       <NavigationControls
@@ -109,6 +129,7 @@ const QuestionArea: React.FC<QuestionAreaProps> = ({
         onNext={nextQuestion}
         isPrevDisabled={isPrevDisabled}
         isNextDisabled={isNextButtonDisabled}
+        isSubmitting={isSubmittingQuestion}
         isLastQuestion={isLastQuestion}
         stepColor={currentStepData.color}
         currentQuestionIndex={currentQuestionIndex}
@@ -118,5 +139,4 @@ const QuestionArea: React.FC<QuestionAreaProps> = ({
     </div>
   );
 };
-
 export default QuestionArea;

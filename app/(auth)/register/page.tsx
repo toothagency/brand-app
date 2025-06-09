@@ -1,14 +1,22 @@
 "use client";
-import { Lock, Mail, User } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterValidations } from "../utils/validations";
-
+import { useSignup } from "../hooks/authHooks";
+import { useRouter } from "next/navigation";
 
 const Register = () => {
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Add state for password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
+  // Use the signup mutation hook
+  const signupMutation = useSignup();
 
   const {
     register,
@@ -17,7 +25,7 @@ const Register = () => {
     setError
   } = useForm<RegisterValidations>({
     resolver: zodResolver(registerSchema),
-    mode: "onBlur", // Change validation mode to trigger on blur
+    mode: "onBlur",
     defaultValues: {
       username: "",
       email: "",
@@ -30,25 +38,49 @@ const Register = () => {
   const onSubmit = async (data: RegisterValidations) => {
     setIsSubmitting(true);
     try {
-      // Here you would typically send the data to your API
-      console.log("Form submitted successfully:", data);
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      alert("Registration successful!");
-      // You could redirect the user or show a success message here
+      // Transform data to match what the backend expects
+      const signupData = {
+        userName: data.username, // Change to userName to match backend
+        email: data.email,
+        password: data.password
+        // confirmPassword and terms aren't sent to the API
+      };
+      
+      // Call the signup mutation
+      await signupMutation.mutateAsync(signupData);
+      
+      // If we reach here, registration was successful
+      console.log("Registration successful!");
+      
+      // Redirect to dashboard or login page
+      router.push('/login');
+      
     } catch (error) {
       console.error("Registration failed:", error);
-      // Example of setting a form error manually
+      
+      // Set form error
       setError("root", { 
         type: "manual",
-        message: "Registration failed. Please try again." 
+        message: error instanceof Error 
+          ? error.message 
+          : "Registration failed. Please try again." 
       });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  console.log("Form errors:", errors); // Add this to debug validation errors
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  // Toggle confirm password visibility
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
+  console.log("Form errors:", errors);
 
   return (
     <>
@@ -69,6 +101,15 @@ const Register = () => {
               </p>
             </div>
             <div>
+              {/* Display API error messages */}
+              {signupMutation.isError && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
+                  {signupMutation.error instanceof Error 
+                    ? signupMutation.error.message 
+                    : "An error occurred during registration."}
+                </div>
+              )}
+              {/* Display form validation errors */}
               {errors.root && (
                 <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
                   {errors.root.message}
@@ -87,7 +128,7 @@ const Register = () => {
                       type="text"
                       id="username"
                       placeholder="Enter your username"
-                      className={`mt-2 w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ${errors.username ? 'ring-red-500' : 'ring-gray-300'} placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-500 sm:text-sm sm:leading-6`}
+                      className={`mt-2 w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ${errors.username ? 'ring-red-500' : 'ring-gray-300'} placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6`}
                       {...register("username")}
                     />
                     {errors.username && (
@@ -105,7 +146,7 @@ const Register = () => {
                       type="email"
                       id="email"
                       placeholder="Enter your email"
-                      className={`mt-2 w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ${errors.email ? 'ring-red-500' : 'ring-gray-300'} placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-500 sm:text-sm sm:leading-6`}
+                      className={`mt-2 w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ${errors.email ? 'ring-red-500' : 'ring-gray-300'} placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6`}
                       {...register("email")}
                     />
                     {errors.email && (
@@ -119,13 +160,27 @@ const Register = () => {
                     >
                      <Lock className="mr-2"/> Password
                     </label>
-                    <input
-                      type="password"
-                      id="password"
-                      placeholder="Create a password"
-                      className={`mt-2 w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ${errors.password ? 'ring-red-500' : 'ring-gray-300'} placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-500 sm:text-sm sm:leading-6`}
-                      {...register("password")}
-                    />
+                    <div className="relative mt-2">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        placeholder="Create a password"
+                        className={`w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ${errors.password ? 'ring-red-500' : 'ring-gray-300'} placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pr-10`}
+                        {...register("password")}
+                      />
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                        tabIndex={-1}
+                      >
+                        {showPassword ? (
+                          <EyeOff size={18} aria-hidden="true" />
+                        ) : (
+                          <Eye size={18} aria-hidden="true" />
+                        )}
+                      </button>
+                    </div>
                     {errors.password && (
                       <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
                     )}
@@ -137,13 +192,27 @@ const Register = () => {
                     >
                      <Lock className="mr-2"/> Confirm Password
                     </label>
-                    <input
-                      type="password"
-                      id="confirmPassword"
-                      placeholder="Confirm your password"
-                      className={`mt-2 w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ${errors.confirmPassword ? 'ring-red-500' : 'ring-gray-300'} placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-500 sm:text-sm sm:leading-6`}
-                      {...register("confirmPassword")}
-                    />
+                    <div className="relative mt-2">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        id="confirmPassword"
+                        placeholder="Confirm your password"
+                        className={`w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ${errors.confirmPassword ? 'ring-red-500' : 'ring-gray-300'} placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pr-10`}
+                        {...register("confirmPassword")}
+                      />
+                      <button
+                        type="button"
+                        onClick={toggleConfirmPasswordVisibility}
+                        className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                        tabIndex={-1}
+                      >
+                        {showConfirmPassword ? (
+                          <EyeOff size={18} aria-hidden="true" />
+                        ) : (
+                          <Eye size={18} aria-hidden="true" />
+                        )}
+                      </button>
+                    </div>
                     {errors.confirmPassword && (
                       <p className="mt-1 text-sm text-red-600">{errors.confirmPassword.message}</p>
                     )}
@@ -155,7 +224,7 @@ const Register = () => {
                       <input
                         type="checkbox"
                         id="terms"
-                        className={`h-4 w-4 rounded border-gray-300 bg-white text-pink-500 checked:bg-none indeterminate:bg-none focus:border-gray-300 focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 focus:ring-offset-white ${errors.terms ? 'border-red-500' : ''}`}
+                        className={`h-4 w-4 rounded border-gray-300 bg-white text-blue-500 checked:bg-none indeterminate:bg-none focus:border-gray-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white ${errors.terms ? 'border-red-500' : ''}`}
                         {...register("terms")}
                       />
                       <svg
@@ -184,7 +253,7 @@ const Register = () => {
                       htmlFor="terms"
                       className="select-none text-sm text-gray-900"
                     >
-                      I agree to the <a href="#" className="text-pink-500 hover:text-pink-400">Terms</a> and <a href="#" className="text-pink-500 hover:text-pink-400">Privacy Policy</a>
+                      I agree to the <a href="#" className="text-blue-500 hover:text-blue-400">Terms</a> and <a href="#" className="text-blue-500 hover:text-blue-400">Privacy Policy</a>
                     </label>
                   </div>
                 </div>
@@ -194,10 +263,10 @@ const Register = () => {
                 <div>
                   <button
                     type="submit"
-                    disabled={isSubmitting || formIsSubmitting}
-                    className="block w-full rounded bg-pink-500 px-3.5 py-2.5 text-sm font-semibold text-white hover:bg-pink-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500 disabled:bg-pink-300 disabled:cursor-not-allowed"
+                    disabled={isSubmitting || formIsSubmitting || signupMutation.isPending}
+                    className="block w-full rounded bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed"
                   >
-                    {isSubmitting ? "Signing up..." : "Sign up"}
+                    {signupMutation.isPending || isSubmitting ? "Signing up..." : "Sign up"}
                   </button>
                 </div>
               </form>
@@ -207,7 +276,7 @@ const Register = () => {
                 Already have an account? 
                 <Link
                   href="/login"
-                  className="font-semibold ml-1 text-pink-500 hover:text-pink-400"
+                  className="font-semibold ml-1 text-blue-500 hover:text-blue-400"
                 >
                   Sign in
                 </Link>

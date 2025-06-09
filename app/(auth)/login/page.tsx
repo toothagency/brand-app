@@ -1,19 +1,21 @@
 "use client";
-import { Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation"; // Import useRouter
 
 // Import validation schema and type
-import { loginSchema, LoginValidations } from "../utils/validations"; 
+import { loginSchema, LoginValidations } from "../utils/validations";
 // Import the custom login hook
-import { useLogin } from "../hooks/authHooks"; 
+import { useLogin } from "../hooks/authHooks";
 
 const Login = () => {
   const router = useRouter(); // Initialize useRouter
   const loginMutation = useLogin(); // Use the custom login hook
+  // Add state for password visibility
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -29,22 +31,26 @@ const Login = () => {
     },
   });
 
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   // Handle form submission
   const onSubmit = (data: LoginValidations) => {
     loginMutation.mutate(data, {
       onSuccess: (authData) => {
-        // Handle successful login 
-        // The token is already stored by the hook's onSuccess
         console.log("Login successful:", authData);
-        // Redirect to dashboard or desired page
-        router.push("/dashboard"); 
+        // Redirect to dashboard after successful login
+        router.push('/form');
       },
       onError: (error) => {
         // Handle login errors from the API
         console.error("Login failed:", error);
-        setError("root", { 
+        setError("root", {
           type: "manual",
-          message: error.message || "Invalid email or password. Please try again." 
+          message:
+            error.message || "Invalid email or password. Please try again.",
         });
       },
     });
@@ -76,26 +82,36 @@ const Login = () => {
                 </div>
               )}
               {/* Update form tag */}
-              <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
-                <div className="space-y-6"> {/* Adjusted spacing */}
+              <form
+                className="space-y-6"
+                onSubmit={handleSubmit(onSubmit)}
+                noValidate
+              >
+                <div className="space-y-6">
+                  {" "}
+                  {/* Adjusted spacing */}
                   <div>
                     <label
                       htmlFor="email"
                       className="select-none text-sm font-medium leading-6 text-gray-900 flex"
                     >
-                      <Mail className="mr-2"/> Email
+                      <Mail className="mr-2" /> Email
                     </label>
                     <input
                       type="email"
                       id="email"
                       placeholder="Enter your email"
-                      className={`mt-2 w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ${errors.email ? 'ring-red-500' : 'ring-gray-300'} placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-500 sm:text-sm sm:leading-6`}
+                      className={`mt-2 w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ${
+                        errors.email ? "ring-red-500" : "ring-gray-300"
+                      } placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6`}
                       {...register("email")} // Register email field
                       disabled={loginMutation.isPending} // Disable during submission
                     />
                     {/* Display email validation errors */}
                     {errors.email && (
-                      <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.email.message}
+                      </p>
                     )}
                   </div>
                   <div>
@@ -103,20 +119,31 @@ const Login = () => {
                       htmlFor="password"
                       className="select-none text-sm font-medium leading-6 text-gray-900 flex"
                     >
-                      <Lock className="mr-2"/> Password
+                      <Lock className="mr-2" /> Password
                     </label>
-                    <input
-                      type="password"
-                      id="password"
-                      placeholder="Enter your password"
-                      className={`mt-2 w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ${errors.password ? 'ring-red-500' : 'ring-gray-300'} placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-pink-500 sm:text-sm sm:leading-6`}
-                      {...register("password")} // Register password field
-                      disabled={loginMutation.isPending} // Disable during submission
-                    />
-                    {/* Display password validation errors */}
-                    {errors.password && (
-                      <p className="mt-1 text-sm text-red-600">{errors.password.message}</p>
-                    )}
+                    <div className="relative mt-2">
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        placeholder="Enter your password"
+                        className="w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pr-10"
+                        {...register("password")} // Register password field
+                        disabled={loginMutation.isPending} // Disable during submission
+                      />
+                      <button
+                        type="button"
+                        onClick={togglePasswordVisibility}
+                        className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                        tabIndex={-1}
+                      >
+                        {showPassword ? (
+                          <EyeOff size={18} aria-hidden="true" />
+                        ) : (
+                          <Eye size={18} aria-hidden="true" />
+                        )}
+                      </button>
+                    </div>
+                    {/* Removed password validation error display */}
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
@@ -126,7 +153,7 @@ const Login = () => {
                       <input
                         type="checkbox"
                         id="remember-me"
-                        className="h-4 w-4 rounded border-gray-300 bg-white text-pink-500 checked:bg-none indeterminate:bg-none focus:border-gray-300 focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 focus:ring-offset-white disabled:bg-gray-100 disabled:checked:border-gray-300 disabled:checked:bg-gray-100 disabled:indeterminate:border-gray-300 disabled:indeterminate:bg-gray-100"
+                        className="h-4 w-4 rounded border-gray-300 bg-white text-blue-500 checked:bg-none indeterminate:bg-none focus:border-gray-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white disabled:bg-gray-100 disabled:checked:border-gray-300 disabled:checked:bg-gray-100 disabled:indeterminate:border-gray-300 disabled:indeterminate:bg-gray-100"
                         disabled={loginMutation.isPending}
                       />
                       <svg
@@ -139,15 +166,15 @@ const Login = () => {
                         <path
                           className="opacity-0 group-has-[:indeterminate]:opacity-100"
                           d="M2.5 6H9.5"
-                          strokeWidth="1.67" // Use camelCase
-                          strokeLinecap="round" // Use camelCase
+                          strokeWidth="1.67"
+                          strokeLinecap="round"
                         />
                         <path
                           className="opacity-0 group-has-[:checked]:opacity-100"
                           d="M2 6.05059L4.47477 8.52525L10 3"
-                          strokeWidth="1.67" // Use camelCase
-                          strokeLinecap="round" // Use camelCase
-                          strokeLinejoin="round" // Use camelCase
+                          strokeWidth="1.67"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         />
                       </svg>
                     </div>
@@ -161,8 +188,8 @@ const Login = () => {
                   <div>
                     {/* Consider using Link component if this is an internal route */}
                     <a
-                      href="#" 
-                      className="inline-block text-sm font-semibold text-pink-500 hover:text-pink-400"
+                      href="#"
+                      className="inline-block text-sm font-semibold text-blue-500 hover:text-blue-400"
                     >
                       Forgot password?
                     </a>
@@ -171,7 +198,7 @@ const Login = () => {
                 <div>
                   <button
                     type="submit"
-                    className="block w-full rounded bg-pink-500 px-3.5 py-2.5 text-sm font-semibold text-white hover:bg-pink-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-500 disabled:bg-pink-300 disabled:cursor-not-allowed"
+                    className="block w-full rounded bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed"
                     disabled={loginMutation.isPending} // Disable button during submission
                   >
                     {/* Show loading state */}
@@ -182,10 +209,10 @@ const Login = () => {
             </div>
             <div>
               <p className="text-center text-sm text-gray-500">
-                Don&apos;t have an account? 
+                Don&apos;t have an account?
                 <Link
                   href="/register"
-                  className="font-semibold ml-1 text-pink-500 hover:text-pink-400"
+                  className="font-semibold ml-1 text-blue-500 hover:text-blue-400"
                 >
                   Sign up
                 </Link>

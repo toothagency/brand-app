@@ -1,14 +1,15 @@
-import React from "react";
-import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
-import type { StepDefinition } from "../../utils/types"; // Adjust path as needed
+// NavigationControls.tsx
+import React from 'react';
+import { ChevronLeft, ChevronRight, Sparkles, Loader2 } from 'lucide-react';
 
 interface NavigationControlsProps {
   onPrev: () => void;
   onNext: () => void;
   isPrevDisabled: boolean;
   isNextDisabled: boolean;
+  isSubmitting?: boolean;
   isLastQuestion: boolean;
-  stepColor: StepDefinition["color"];
+  stepColor: string;
   currentQuestionIndex: number;
   totalQuestionsInStep: number;
   isQuestionAnswered: (questionIndex: number) => boolean;
@@ -19,8 +20,9 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   onNext,
   isPrevDisabled,
   isNextDisabled,
+  isSubmitting,
   isLastQuestion,
-  stepColor,
+  stepColor, // This would be your single primary color if you standardized
   currentQuestionIndex,
   totalQuestionsInStep,
   isQuestionAnswered,
@@ -29,26 +31,19 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
     <button
       onClick={onPrev}
       disabled={isPrevDisabled}
-      className="flex items-center gap-2 px-4 py-3 text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors rounded hover:bg-gray-100 mb-4 sm:mb-0"
+      className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed transition-colors rounded-lg hover:bg-gray-100 mb-4 sm:mb-0"
       aria-label="Previous question"
-    >
-      <ChevronLeft className="w-5 h-5" /> Previous
-    </button>
+    > <ChevronLeft className="w-5 h-5" /> Previous </button>
 
     <div className="flex gap-2 items-center my-3 sm:my-0">
       {Array.from({ length: totalQuestionsInStep }).map((_, i) => (
         <div
           key={i}
           className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 ${
-            i === currentQuestionIndex
-              ? `bg-blue-600 scale-150`
-              : isQuestionAnswered(i)
-              ? "bg-blue-400"
-              : "bg-gray-300"
+            i === currentQuestionIndex ? `bg-${stepColor}-600 scale-125` : // Use primary color
+            isQuestionAnswered(i) ? 'bg-green-500' : 'bg-gray-300' // Green for answered is a common UX
           }`}
-          title={`Question ${i + 1} ${
-            isQuestionAnswered(i) ? "answered" : "unanswered"
-          }`}
+          title={`Question ${i+1} ${isQuestionAnswered(i) ? 'answered' : 'unanswered'}`}
         />
       ))}
     </div>
@@ -56,20 +51,19 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
     <button
       onClick={onNext}
       disabled={isNextDisabled}
-      className={`flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-150 shadow-md hover:shadow-lg focus:ring-2 focus:ring-blue-400 focus:ring-offset-2`}
+      className={`flex items-center justify-center gap-2 px-6 py-3 min-w-[160px] text-base font-medium text-white rounded-lg transition-all duration-150 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed 
+                  ${isSubmitting ? `bg-gray-400 hover:bg-gray-400 focus:ring-gray-300 cursor-wait` 
+                                : `bg-${stepColor}-600 hover:bg-${stepColor}-700 focus:ring-${stepColor}-400`} `} // Use primary color
       aria-label={isLastQuestion ? "Generate My Brand" : "Next question"}
     >
-      {isLastQuestion ? (
-        <>
-          <Sparkles className="w-5 h-5" /> Generate My Brand
-        </>
+      {isSubmitting ? (
+        <> <Loader2 className="w-5 h-5 animate-spin" /> <span>Processing...</span> </>
+      ) : isLastQuestion ? (
+        <> <Sparkles className="w-5 h-5" /> <span>Generate Brand</span> </>
       ) : (
-        <>
-          Next <ChevronRight className="w-5 h-5" />
-        </>
+        <> <span>Next</span> <ChevronRight className="w-5 h-5" /> </>
       )}
     </button>
   </div>
 );
-
 export default NavigationControls;
