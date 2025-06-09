@@ -26,7 +26,7 @@ const ContextPanel: React.FC<ContextPanelProps> = ({
 
   return (
     <div className="w-full md:w-80 lg:w-96">
-      <div className="bg-white rounded h-[500px] shadow-lg p-5 sticky top-4">
+      <div className="bg-white rounded h-[600px] shadow-lg p-5 sticky top-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900">
             Your Brand Progress
@@ -41,7 +41,7 @@ const ContextPanel: React.FC<ContextPanelProps> = ({
         </div>
 
         {/* Scrollable area for answers */}
-        <div className="space-y-4 max-h-[350px] overflow-y-auto custom-scrollbar pr-2">
+        <div className="space-y-4 min-h-[450px] max-h-[450px] overflow-y-auto custom-scrollbar pr-2">
           {steps.map((step, stepIndex) => {
             const stepAnswers = step.questions.filter((q) => {
               const answer = formData[q.id];
@@ -54,23 +54,23 @@ const ContextPanel: React.FC<ContextPanelProps> = ({
 
             const StepIcon = step.icon;
             return (
-              <div key={stepIndex} className="border-l-2 border-gray-200 pl-3">
+              <div key={stepIndex} className="">
                 <div className="flex items-center gap-2 mb-2">
                   <StepIcon
                     className={`w-4 h-4 text-${step.color}-600 flex-shrink-0`}
                   />
-                  <span className="font-medium text-gray-700 text-sm">
+                  <span className="font-bold text-gray-700 text-sm">
                     {step.title}
                   </span>
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 pl-4 mt-2">
                   {stepAnswers.map((question) => (
                     <div key={question.id} className="text-xs">
-                      <span className="font-medium text-gray-600">
+                      <span className="font-semibold text-gray-600">
                         {question.question.split("?")[0]}?{" "}
                         {/* Shorten question */}
                       </span>
-                      <p className="text-gray-500 mt-0.5 line-clamp-2 leading-snug">
+                      <p className="text-gray-500 mt-0.5 line-clamp-3 leading-snug">
                         {Array.isArray(formData[question.id])
                           ? (formData[question.id] as string[]).join(", ")
                           : (formData[question.id] as string)}
@@ -90,7 +90,7 @@ const ContextPanel: React.FC<ContextPanelProps> = ({
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div
-              className="bg-green-500 h-2 rounded-full transition-all duration-300"
+              className="bg-blue-500 h-2 rounded-full transition-all duration-300"
               style={{ width: `${overallProgress}%` }}
             ></div>
           </div>

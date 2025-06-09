@@ -70,12 +70,12 @@ const QuestionArea: React.FC<QuestionAreaProps> = ({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8 mb-6 flex flex-col min-h-[450px] sm:min-h-[500px] md:min-h-[550px]">
+    <div className="bg-white rounded shadow-lg p-6 sm:p-8 mb-6 flex flex-col min-h-[450px] sm:min-h-[600px] ">
       <div className="flex-grow mb-6"> {/* Main content wrapper */}
         <div className="flex items-start gap-3 mb-4">
           <div
-            className={`w-10 h-10 bg-${currentStepData.color}-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1`}
-          > <span className={`text-${currentStepData.color}-600 font-bold text-lg`}> {currentQuestionIndex + 1} </span> </div>
+            className={`w-12 h-12 bg-${currentStepData.color}-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1`}
+          > <span className={`text-${currentStepData.color}-600 font-bold text-xl`}> {currentQuestionIndex + 1} </span> </div>
           <div>
             <h2 className="text-lg sm:text-xl font-bold text-gray-900"> {currentQuestionData.question} </h2>
             <p className="text-sm text-gray-600 mt-1"> {currentQuestionData.subtitle} </p>

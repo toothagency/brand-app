@@ -35,8 +35,8 @@ const QuickStats: React.FC<QuickStatsProps> = ({
   return (
     <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
       {statsConfig.map(stat => (
-        <div key={stat.label} className="bg-white rounded-lg p-4 shadow">
-          <div className={`text-2xl font-bold text-${stat.color}-600`}>
+        <div key={stat.label} className="bg-white rounded p-4 shadow">
+          <div className={`text-2xl font-bold text-blue-600`}>
             {/* Access the value using the key from statsData */}
             {statsData[stat.key as keyof typeof statsData]}
             {/* Add suffix if defined (e.g., %) */}
