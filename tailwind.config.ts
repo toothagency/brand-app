@@ -14,6 +14,8 @@ const config: Config = {
     // === For StepNavigation & Active States ===
     // Backgrounds for step items
     'bg-blue-100',
+    'bg-orange-50',
+    'bg-blue-50',
     'bg-green-100',
     'bg-purple-100',
     'bg-orange-100',
