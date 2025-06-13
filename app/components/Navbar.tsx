@@ -88,12 +88,8 @@ const Navbar: React.FC = () => {
           {/* Logo & Main Nav Links */}
           <div className="flex items-center space-x-8">
             <Link href="/" className="flex-shrink-0 flex items-center space-x-2">
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center font-bold text-lg transition-all duration-300 ${
-                !hasScrolled && isHomePage 
-                  ? 'bg-white/20 text-white backdrop-blur-sm' 
-                  : 'bg-gradient-to-br from-blue-600 to-purple-600 text-white shadow-md'
-              }`}>B</div>
-              <span className="text-xl font-bold">BrandKit</span>
+              <div className={`md:w-14 md:h-14 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg transition-all duration-300 `}><img src="/Logo.png" alt=""/></div>
+              
             </Link>
 
             {/* Desktop Navigation */}
