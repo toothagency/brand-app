@@ -62,11 +62,10 @@ const Login = () => {
         <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-12 lg:px-8">
           <div className="w-full max-w-sm space-y-8">
             <div className="text-center">
-              <img
-                className="mx-auto h-12 w-auto"
-                src="https://htmlwind.com/assets/images/logo/htmlwind.svg"
-                alt="Htmlwind Logo"
-              />
+             <Link href="/" className="flex-shrink-0 flex items-center justify-center space-x-2 w-full">
+              <div className={`md:w-14 md:h-14 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg transition-all duration-300 `}><img src="/Logo.png" alt=""/></div>
+              
+            </Link>
               <h2 className="mt-6 text-2xl font-semibold text-gray-900 sm:text-3xl">
                 Login to your account
               </h2>

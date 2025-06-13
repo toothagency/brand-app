@@ -84,7 +84,7 @@ const Navbar: React.FC = () => {
     <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out ${navbarClasses}`}>
       <div className="container mx-auto px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          
+           
           {/* Logo & Main Nav Links */}
           <div className="flex items-center space-x-8">
             <Link href="/" className="flex-shrink-0 flex items-center space-x-2">
@@ -154,7 +154,7 @@ const Navbar: React.FC = () => {
               ) : (
                 <>
                   <Link href="/login" className="px-4 py-2 text-sm font-medium hover:text-blue-600 transition-colors">Log In</Link>
-                  <Link href="/signup" className="px-5 py-2.5 text-sm font-medium text-white bg-gray-800 rounded-full hover:bg-gray-900 transition-colors shadow-sm">
+                  <Link href="/register" className="px-5 py-2.5 text-sm font-medium text-white bg-gray-800 rounded-full hover:bg-gray-900 transition-colors shadow-sm">
                     Sign Up
                   </Link>
                 </>
