@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterValidations } from "../utils/validations";
 import { useSignup } from "../hooks/authHooks";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const router = useRouter();
@@ -51,11 +52,12 @@ const Register = () => {
       
       // If we reach here, registration was successful
       console.log("Registration successful!");
-      
+      toast.success("Registration successful! Please log in.");
       // Redirect to dashboard or login page
       router.push('/login');
       
     } catch (error) {
+      toast.error("Registration failed. Please try again.");
       console.error("Registration failed:", error);
       
       // Set form error

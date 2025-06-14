@@ -58,7 +58,7 @@ export const useLogin = () => {
 export const useSignup = () => {
     return useMutation<AuthResponse, Error, SignupRequest>({
         mutationFn: async (signupData: SignupRequest) => {
-            const response = await apiClient.post<AuthResponse>('/register', signupData);
+            const response = await apiClient.post<AuthResponse>('/register_user', signupData);
             return response.data;
         },
         onSuccess: (data) => {

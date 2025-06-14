@@ -1,52 +1,91 @@
 "use client";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { useRouter, useSearchParams } from "next/navigation"; // Added useSearchParams
 
 // Import validation schema and type
 import { loginSchema, LoginValidations } from "../utils/validations";
 // Import the custom login hook
 import { useLogin } from "../hooks/authHooks";
+import toast from "react-hot-toast";
 
 const Login = () => {
-  const router = useRouter(); // Initialize useRouter
-  const loginMutation = useLogin(); // Use the custom login hook
-  // Add state for password visibility
+  const router = useRouter();
+  const searchParams = useSearchParams(); // Initialize useSearchParams to get query parameters
+  const loginMutation = useLogin();
   const [showPassword, setShowPassword] = useState(false);
+  
+  // Get the returnUrl from query params or store referrer on component mount
+  const [returnUrl, setReturnUrl] = useState<string>("");
+  
+  useEffect(() => {
+    // Check if there's a returnUrl in the query parameters
+    const urlReturnPath = searchParams.get("returnUrl");
+    
+    if (urlReturnPath) {
+      // If we have a returnUrl parameter, use it
+      setReturnUrl(urlReturnPath);
+    } else {
+      // Get referrer from document if available
+      const referrer = document.referrer;
+      // Parse the referrer URL to get just the path
+      if (referrer) {
+        try {
+          const referrerUrl = new URL(referrer);
+          // Check if it's from the same origin and not the register page
+          if (referrerUrl.origin === window.location.origin && 
+              !referrerUrl.pathname.includes('/register')) {
+            setReturnUrl(referrerUrl.pathname + referrerUrl.search);
+          }
+        } catch (e) {
+          // Invalid URL, just ignore
+          console.error("Invalid referrer URL:", e);
+        }
+      }
+    }
+  }, [searchParams]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setError, // Get setError to handle API errors
+    setError,
   } = useForm<LoginValidations>({
-    resolver: zodResolver(loginSchema), // Use the Zod resolver with your schema
-    mode: "onBlur", // Validate on blur
+    resolver: zodResolver(loginSchema),
+    mode: "onBlur",
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  // Handle form submission
   const onSubmit = (data: LoginValidations) => {
     loginMutation.mutate(data, {
       onSuccess: (authData) => {
         console.log("Login successful:", authData);
-        // Redirect to dashboard after successful login
-        router.push('/form');
+        toast.success("Login successful! Redirecting...");
+        
+        // Determine where to redirect after login
+        if (returnUrl && !returnUrl.includes('/register')) {
+          // Redirect to the return URL if it exists and is not the register page
+          router.push(returnUrl);
+        } else {
+          // Default redirect to home page
+          router.push('/');
+        }
       },
       onError: (error) => {
-        // Handle login errors from the API
         console.error("Login failed:", error);
+        toast.error(
+          error.message || "Invalid email or password. Please try again."
+        );
         setError("root", {
           type: "manual",
           message:
@@ -103,8 +142,8 @@ const Login = () => {
                       className={`mt-2 w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ${
                         errors.email ? "ring-red-500" : "ring-gray-300"
                       } placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6`}
-                      {...register("email")} // Register email field
-                      disabled={loginMutation.isPending} // Disable during submission
+                      {...register("email")}
+                      disabled={loginMutation.isPending}
                     />
                     {/* Display email validation errors */}
                     {errors.email && (
@@ -126,8 +165,8 @@ const Login = () => {
                         id="password"
                         placeholder="Enter your password"
                         className="w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pr-10"
-                        {...register("password")} // Register password field
-                        disabled={loginMutation.isPending} // Disable during submission
+                        {...register("password")}
+                        disabled={loginMutation.isPending}
                       />
                       <button
                         type="button"
@@ -142,11 +181,9 @@ const Login = () => {
                         )}
                       </button>
                     </div>
-                    {/* Removed password validation error display */}
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
-                  {/* Remember me checkbox (optional, no validation added here) */}
                   <div className="flex items-center gap-x-2.5">
                     <div className="group relative flex h-4 w-4">
                       <input
@@ -185,7 +222,6 @@ const Login = () => {
                     </label>
                   </div>
                   <div>
-                    {/* Consider using Link component if this is an internal route */}
                     <a
                       href="#"
                       className="inline-block text-sm font-semibold text-blue-500 hover:text-blue-400"
@@ -198,9 +234,8 @@ const Login = () => {
                   <button
                     type="submit"
                     className="block w-full rounded bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed"
-                    disabled={loginMutation.isPending} // Disable button during submission
+                    disabled={loginMutation.isPending}
                   >
-                    {/* Show loading state */}
                     {loginMutation.isPending ? "Signing in..." : "Sign in"}
                   </button>
                 </div>

@@ -13,12 +13,20 @@ interface NavLink {
 }
 
 const Navbar: React.FC = () => {
+  const pathname = usePathname();
+  
+  // ✨ Move this array here
+  const routesWithoutNavbar = ['/login', '/register'];
+
+  // ✨ Move the check to the top, before any other hooks
+  if (routesWithoutNavbar.includes(pathname)) {
+    return null; // Don't render anything if the path matches
+  }
   
   const [hasScrolled, setHasScrolled] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   
-  const pathname = usePathname();
   const isHomePage: boolean = pathname === '/';
   
   const { user, isLoading, logout } = useClientAuth();
@@ -26,13 +34,6 @@ const Navbar: React.FC = () => {
   const [isAvatarMenuOpen, setIsAvatarMenuOpen] = useState(false);
   const avatarMenuRef = useRef<HTMLDivElement>(null);
 
-  // ✨ Add this array
-  const routesWithoutNavbar = ['/login', '/register'];
-
-  // ✨ Add this check at the very top of the return statement
-  if (routesWithoutNavbar.includes(pathname)) {
-    return null; // Don't render anything if the path matches
-  }
   // Effect to close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -88,7 +89,7 @@ const Navbar: React.FC = () => {
           {/* Logo & Main Nav Links */}
           <div className="flex items-center space-x-8">
             <Link href="/" className="flex-shrink-0 flex items-center space-x-2">
-              <div className={`md:w-14 md:h-14 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg transition-all duration-300 `}><img src="/Logo.png" alt=""/></div>
+              <div className={`md:w-12 md:h-12 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg transition-all duration-300 `}><img src="/Logo.png" alt=""/></div>
               
             </Link>
 

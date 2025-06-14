@@ -1,6 +1,7 @@
 // src/hooks/useBrandingFormQueries.ts (adjust path as needed)
 import { useMutation, UseMutationResult, UseMutationOptions } from '@tanstack/react-query';
 import axiosInstance from '../../../configs/axiosConfigs'; // UPDATE THIS PATH
+import { DetailedBrandObject } from '../utils/types';
 
 // --- TYPE DEFINITIONS ---
 export interface SubmitAnswerPayload {
@@ -12,7 +13,7 @@ export interface SubmitAnswerPayload {
 }
 
 export interface SubmitAnswerResponse {
-  success: boolean;
+  error: boolean;
   message: string;
 }
 
@@ -84,6 +85,14 @@ const createBrandAPI = async (payload: CreateBrandRequest): Promise<CreateBrandR
   return response.data;
 };
 
+
+const fetchBrandResultsAPI = async (userId: string, brandId: string): Promise<DetailedBrandObject> => { // <--- RETURN TYPE IS DetailedBrandObject
+  const response = await axiosInstance.post<DetailedBrandObject>(`/get_results`, { userId: userId, brandId: brandId }); // Expect DetailedBrandObject
+  if (!response.data?.brandId) { // Check a key property of DetailedBrandObject
+    throw new Error("Backend did not return a valid detailed brand object with brandId.");
+  }
+  return response.data;
+};
 // --- REACT QUERY HOOKS ---
 export const useSubmitBrandingAnswer = (
   hookOptions?: Omit<UseMutationOptions<SubmitAnswerResponse, Error, SubmitAnswerPayload>, 'mutationFn'>
@@ -107,6 +116,26 @@ export const useCreateBrand = (
   };
   const mutationConfig: UseMutationOptions<CreateBrandResponse, Error, CreateBrandRequest> = {
     mutationFn: createBrandAPI, ...defaultOptions, ...hookOptions,
+  };
+  return useMutation(mutationConfig);
+};
+
+export const useGetBrandResults = (
+  userId: string,
+  hookOptions?: Omit<UseMutationOptions<DetailedBrandObject, Error, { brandId: string }>, 'mutationFn'> // <--- TData IS DetailedBrandObject
+): UseMutationResult<DetailedBrandObject, Error, { brandId: string }> => { // <--- UseMutationResult also uses DetailedBrandObject
+  const defaultOptions: Partial<UseMutationOptions<DetailedBrandObject, Error, { brandId: string }>> = {
+    // onSuccess and onError can be handled in the component if preferred
+    // onSuccess: (data) => console.log('RQ Hook (GetBrandResults) - Success:', data),
+    // onError: (error) => console.error('RQ Hook (GetBrandResults) - Error:', error.message),
+  };
+  const mutationConfig: UseMutationOptions<DetailedBrandObject, Error, { brandId: string }> = { // <--- Use DetailedBrandObject
+    mutationFn: async ({ brandId }) => {
+        if (!userId) throw new Error("User ID is required for fetching results.");
+        return fetchBrandResultsAPI(userId, brandId);
+    },
+    ...defaultOptions,
+    ...hookOptions,
   };
   return useMutation(mutationConfig);
 };
