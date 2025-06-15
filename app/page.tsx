@@ -306,10 +306,7 @@ export default function HomePage() {
                           {/* Enhanced gradient overlay for hover effect */}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-                          {/* Optional brand name overlay on hover */}
-                          <div className="absolute bottom-4 left-4 right-4 text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
-                            {card.alt}
-                          </div>
+                         
                         </div>
                       )
                     )}
