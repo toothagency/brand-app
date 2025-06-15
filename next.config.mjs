@@ -4,7 +4,13 @@ const nextConfig = {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
+    
   },
+  images: {
+    domains: [
+      'images.unsplash.com',  // Allow Unsplash images
+      'unsplash.com',         // In case there are any direct unsplash.com URLs
+    ],}
 };
 
 export default nextConfig;
