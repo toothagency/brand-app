@@ -76,3 +76,13 @@ export interface CreateBrandResponse {
 
 export interface SubmitAnswerResponse { success: boolean; message: string; }
 export interface SuggestionsResponseBody { question: number; section: number; suggestions: string[]; userId: string; }
+
+export type CalendarEntry = {
+  date: string;
+  event: string;
+  design_concept: string; // Based on "Design concept" header
+  caption: string;
+  // Add other potential keys if your header row in content_calender can vary
+  // and you want them to be typed. Otherwise, [key: string]: string handles extras.
+  [key: string]: string; // Allows for any other dynamically created keys from the header
+};
