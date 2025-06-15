@@ -193,10 +193,12 @@ const Navbar: React.FC = () => {
                     <LogOut className="w-5 h-5"/> Log Out
                   </button>
                 </>
-              ) : (
-                <Link href="/signup" onClick={closeMobileMenu} className="block w-full mt-4 px-6 py-3 bg-gray-800 text-white text-center rounded-lg font-medium hover:bg-gray-900 transition-all duration-300">
+              ) : (<div className='flex space-x-3'>
+                 <Link href="/login" className="block w-full mt-4 text-center bg-gray-200 px-6 py-3 text-sm font-medium hover:text-blue-600 transition-colors">Log In</Link>
+                <Link href="/register" onClick={closeMobileMenu} className="block w-full mt-4 px-6 py-3 bg-gray-800 text-white text-center rounded font-medium hover:bg-gray-900 transition-all duration-300">
                   Sign Up
                 </Link>
+              </div>
               )}
             </div>
           </div>
