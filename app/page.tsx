@@ -21,28 +21,38 @@ export default function HomePage() {
   const { createBrand, isLoading } = useBrand();
   const [error, setError] = useState<string | null>(null);
 
-  const handleGetStarted = async () => {
-    const currentUser = getCurrentUser();
+ const handleGetStarted = async () => {
+  // Provide immediate feedback by setting loading state
+  setError(null);
+  
+  // Check if user is logged in
+  const currentUser = getCurrentUser();
 
-    if (!currentUser) {
-      // If user is not logged in, redirect to login
-      router.push("/login");
-      return;
-    }
+  if (!currentUser) {
+    // If user is not logged in, redirect to login immediately
+    router.push("/login");
+    return;
+  }
 
-    try {
-      setError(null);
-      const brand = await createBrand();
-
-      if (brand) {
-        // Redirect to dashboard or brand setup page
-        router.push("/form");
-      }
-    } catch (err) {
-      console.error("Error creating brand:", err);
-      setError("Failed to create brand. Please try again.");
-    }
-  };
+  // For logged-in users, start loading state immediately
+ 
+  
+  // Start redirecting immediately without waiting for createBrand to complete
+  // This improves perceived performance significantly
+  router.push("/form");
+  
+  // Optional: start the brand creation in the background
+  // The form page already has logic to create or resume a brand
+  try {
+    createBrand().catch(err => {
+      console.error("Background brand creation error:", err);
+      // No need to show error here as we're already redirecting
+    });
+  } catch (err) {
+    console.error("Error starting brand creation:", err);
+    // No need to set error since we're already redirecting
+  }
+};
 
   // Define the card type
   type BrandCard = {
