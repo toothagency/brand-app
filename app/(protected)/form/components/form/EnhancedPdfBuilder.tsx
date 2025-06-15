@@ -1,7 +1,7 @@
 import jsPDF from "jspdf";
 import type { DetailedBrandObject, BrandObjectColor } from "../../utils/types";
 
-class ImprovedPdfBuilder {
+class PdfBuilderWithImages {
   doc: jsPDF;
   currentY: number;
   pageHeight: number;
@@ -68,6 +68,37 @@ class ImprovedPdfBuilder {
       g: parseInt(result[2], 16),
       b: parseInt(result[3], 16)
     } : { r: 126, g: 200, b: 227 }; // Default pastel blue
+  }
+
+  // Helper function to load image and convert to base64
+  private async loadImageAsBase64(url: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous'; // Handle CORS
+      
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        ctx?.drawImage(img, 0, 0);
+        
+        try {
+          const dataURL = canvas.toDataURL('image/jpeg', 0.8);
+          resolve(dataURL);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      
+      img.onerror = () => {
+        reject(new Error(`Failed to load image: ${url}`));
+      };
+      
+      img.src = url;
+    });
   }
 
   addCoverPage(title: string, brandName?: string, tagline?: string) {
@@ -354,6 +385,92 @@ class ImprovedPdfBuilder {
     });
   }
 
+  // New method to add logos with images
+  async addLogosWithImages(logos: any[]) {
+    if (!logos || logos.length === 0) return;
+    
+    this.addSectionTitle("Brand Logos");
+    
+    for (let index = 0; index < logos.length; index++) {
+      const logo = logos[index];
+      this.addPageIfNeeded(200); // Reserve space for image + description
+      
+      // Add logo title
+      this.doc.setFontSize(12);
+      this.doc.setFont("helvetica", "bold");
+      this.doc.setTextColor(60, 60, 60);
+      this.doc.text(`Logo ${index + 1}`, this.leftMargin, this.currentY);
+      this.currentY += 20;
+      
+      // Try to load and add the image
+      if (logo.image_url) {
+        try {
+          console.log(`Loading logo image: ${logo.image_url}`);
+          const imageData = await this.loadImageAsBase64(logo.image_url);
+          
+          // Add the image
+          const imageWidth = 120;
+          const imageHeight = 80;
+          
+          // Add a border around the image
+          this.doc.setDrawColor(200, 200, 200);
+          this.doc.setLineWidth(1);
+          this.doc.rect(this.leftMargin - 2, this.currentY - 2, imageWidth + 4, imageHeight + 4, "S");
+          
+          this.doc.addImage(
+            imageData,
+            'JPEG',
+            this.leftMargin,
+            this.currentY,
+            imageWidth,
+            imageHeight
+          );
+          
+          this.currentY += imageHeight + 10;
+          
+        } catch (error) {
+          console.error(`Failed to load logo image: ${logo.image_url}`, error);
+          
+          // Add placeholder if image fails to load
+          this.doc.setFillColor(240, 240, 240);
+          this.doc.rect(this.leftMargin, this.currentY, 120, 80, "F");
+          this.doc.setDrawColor(200, 200, 200);
+          this.doc.rect(this.leftMargin, this.currentY, 120, 80, "S");
+          
+          this.doc.setFontSize(10);
+          this.doc.setTextColor(150, 150, 150);
+          this.doc.text("Image could not be loaded", this.leftMargin + 60, this.currentY + 40, { align: "center" });
+          
+          this.currentY += 90;
+        }
+      } else {
+        // No image URL provided
+        this.doc.setFillColor(240, 240, 240);
+        this.doc.rect(this.leftMargin, this.currentY, 120, 80, "F");
+        this.doc.setDrawColor(200, 200, 200);
+        this.doc.rect(this.leftMargin, this.currentY, 120, 80, "S");
+        
+        this.doc.setFontSize(10);
+        this.doc.setTextColor(150, 150, 150);
+        this.doc.text("No image available", this.leftMargin + 60, this.currentY + 40, { align: "center" });
+        
+        this.currentY += 90;
+      }
+      
+      // Add description
+      if (logo.description) {
+        this.doc.setFontSize(9);
+        this.doc.setFont("helvetica", "normal");
+        this.doc.setTextColor(80, 80, 80);
+        const descLines = this.doc.splitTextToSize(logo.description, this.contentWidth);
+        this.doc.text(descLines, this.leftMargin, this.currentY);
+        this.currentY += descLines.length * 10 + 15;
+      }
+      
+      this.currentY += 10; // Extra spacing between logos
+    }
+  }
+
   addContentCalendarSample(entries: any[], maxEntries: number = 5) {
     this.addSectionTitle("Content Calendar Sample");
     
@@ -430,4 +547,4 @@ class ImprovedPdfBuilder {
   }
 }
 
-export default ImprovedPdfBuilder;
+export default PdfBuilderWithImages;

@@ -885,7 +885,7 @@ const FullBrandingForm: React.FC = () => {
     return (
       <ResultsDisplay
         brandData={detailedBrandResult}
-        onStartOver={handleStartOver}
+        onBack={handleStartOver}
       />
     );
 
