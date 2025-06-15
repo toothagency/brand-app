@@ -1,4 +1,3 @@
-
 import Axios from 'axios';
 
 const axios = Axios.create({
@@ -46,9 +45,22 @@ axios.interceptors.response.use(
       data: error.response?.data,
       timestamp: new Date().toISOString(),
     });
-    if (error.response?.status === 401 && typeof window !== 'undefined') {
-      window.location.href = '/auth/login';
+    
+    // Check if this is an auth endpoint (login or register)
+    const isAuthEndpoint = error.config?.url && (
+      error.config.url.includes('/login') || 
+      error.config.url.includes('/register')
+    );
+    
+    // Only redirect on 401 for non-auth endpoints
+    if (error.response?.status === 401 && !isAuthEndpoint && typeof window !== 'undefined') {
+      // Store current path as returnUrl if not already on login page
+      const currentPath = window.location.pathname;
+      if (!currentPath.includes('/login')) {
+        window.location.href = `/login?returnUrl=${encodeURIComponent(currentPath)}`;
+      }
     }
+    
     return Promise.reject(error);
   }
 );

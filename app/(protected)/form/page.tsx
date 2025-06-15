@@ -909,10 +909,10 @@ const FullBrandingForm: React.FC = () => {
     );
 
   return (
-    <div className="min-h-screen mt-10 bg-gradient-to-br from-slate-100 to-sky-100 p-2 sm:p-4 md:p-6">
+    <div className="min-h-screen mt-20 bg-gradient-to-br from-slate-100 to-sky-100 p-2 sm:p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         <FormHeader
-          title="AI Brand Builder Pro"
+          title="Brand Form"
           subtitle="Answer questions to craft a powerful brand identity with AI-driven insights."
         />
         <StepNavigation steps={STEPS_DATA} currentStep={currentStep} />

@@ -2,19 +2,46 @@ import { useMutation } from '@tanstack/react-query';
 import { LoginRequest, SignupRequest, AuthResponse } from '../utils/types';
 import apiClient from '../../configs/axiosConfigs';
 import Cookies from 'js-cookie';
+import axios from 'axios';
+
+// Enhanced error type for better error handling
+interface ApiError extends Error {
+  statusCode?: number;
+  response?: {
+    status: number;
+    data: any;
+  };
+}
 
 /**
  * Custom hook for handling user login
  * @returns Mutation hook for login functionality
  */
 export const useLogin = () => {
-    return useMutation<AuthResponse, Error, LoginRequest>({
+    return useMutation<AuthResponse, ApiError, LoginRequest>({
         mutationFn: async (credentials: LoginRequest) => {
-            const response = await apiClient.post<AuthResponse>('/login', credentials);
-            if (!response.data || typeof response.data === 'string') {
-                throw new Error('Invalid response from server');
+            try {
+                const response = await apiClient.post<AuthResponse>('/login', credentials);
+                if (!response.data || typeof response.data === 'string') {
+                    throw new Error('Invalid response from server');
+                }
+                return response.data;
+            } catch (error) {
+                // Enhanced error handling
+                if (axios.isAxiosError(error)) {
+                    const errorMessage = error.response?.data?.message || 
+                                        (error.response?.status === 401 ? 'Invalid email or password' : 
+                                         'An error occurred during login');
+                    
+                    // Create a more detailed error object
+                    const apiError = new Error(errorMessage) as ApiError;
+                    apiError.statusCode = error.response?.status;
+                    apiError.response = error.response;
+                    
+                    throw apiError;
+                }
+                throw error;
             }
-            return response.data;
         },
         onSuccess: (data) => {
             // Access the user property which contains user data
@@ -56,10 +83,25 @@ export const useLogin = () => {
  * @returns Mutation hook for signup functionality
  */
 export const useSignup = () => {
-    return useMutation<AuthResponse, Error, SignupRequest>({
+    return useMutation<AuthResponse, ApiError, SignupRequest>({
         mutationFn: async (signupData: SignupRequest) => {
-            const response = await apiClient.post<AuthResponse>('/register_user', signupData);
-            return response.data;
+            try {
+                const response = await apiClient.post<AuthResponse>('/register_user', signupData);
+                return response.data;
+            } catch (error) {
+                // Enhanced error handling similar to login
+                if (axios.isAxiosError(error)) {
+                    const errorMessage = error.response?.data?.message || 
+                                        'An error occurred during registration';
+                    
+                    const apiError = new Error(errorMessage) as ApiError;
+                    apiError.statusCode = error.response?.status;
+                    apiError.response = error.response;
+                    
+                    throw apiError;
+                }
+                throw error;
+            }
         },
         onSuccess: (data) => {
             // Access the user property which contains user data
