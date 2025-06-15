@@ -72,7 +72,7 @@ const LoginForm = () => {
         toast.success("Login successful! Redirecting...");
         
         
-          router.push('/');
+          router.push('/form');
         
       },
       onError: (error) => {

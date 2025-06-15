@@ -15,6 +15,7 @@ import {
   Star,
   CircleCheckBig,
 } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function HomePage() {
   const router = useRouter();
@@ -30,28 +31,20 @@ export default function HomePage() {
 
   if (!currentUser) {
     // If user is not logged in, redirect to login immediately
+    console.log("redirecting to login");
     router.push("/login");
+    toast("Please login to Continue" )
     return;
   }
 
   // For logged-in users, start loading state immediately
  
-  
-  // Start redirecting immediately without waiting for createBrand to complete
-  // This improves perceived performance significantly
-  router.push("/form");
-  
-  // Optional: start the brand creation in the background
-  // The form page already has logic to create or resume a brand
-  try {
-    createBrand().catch(err => {
-      console.error("Background brand creation error:", err);
-      // No need to show error here as we're already redirecting
-    });
-  } catch (err) {
-    console.error("Error starting brand creation:", err);
-    // No need to set error since we're already redirecting
+  else{
+
+    router.push("/form");
+    
   }
+
 };
 
   // Define the card type
