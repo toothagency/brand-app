@@ -32,7 +32,7 @@ export default function HomePage() {
   if (!currentUser) {
     // If user is not logged in, redirect to login immediately
     console.log("redirecting to login");
-    router.push("/login");
+    router.replace("/login");
     toast("Please login to Continue" )
     return;
   }

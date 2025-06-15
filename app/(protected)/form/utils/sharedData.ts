@@ -10,7 +10,7 @@ export const STEPS_DATA: StepDefinition[] = [
         icon: Target,
         color: "blue",
         questions: [
-            { id: "purpose", question: "What change do you want your brand to make in people's lives?", subtitle: "Think about the core problem you solve or the transformation you create", placeholder: "e.g., Help busy parents save time on healthy meal planning", type: "textarea", required: true, category: "strategy" },
+            { id: "purpose", question: "Describe what your business idea is and what change your brand wants to make in people's lives?", subtitle: "Think about the core problem you solve or the transformation you create", placeholder: "e.g., Help busy parents save time on healthy meal planning", type: "textarea", required: true, category: "strategy" },
             { id: "vision", question: "If your brand had achieved all its goals in 10 years, what would the world look like?", subtitle: "Your ultimate destination - the big picture impact", placeholder: "e.g., A world where every family enjoys stress-free, healthy dinners together", type: "textarea", required: true, category: "strategy" },
             { id: "mission", question: "How do you achieve your purpose on a day-to-day basis?", subtitle: "Your daily actions and operations that drive toward your vision", placeholder: "e.g., By creating personalized meal plans and grocery lists in under 5 minutes", type: "textarea", required: true, category: "strategy" },
             { id: "values", question: "Choose 3 words that describe the kind of business you want to build. Why those words?", subtitle: "Your core principles and beliefs that guide decisions", placeholder: "e.g., Trustworthy, Innovative, Family-focused - because...", type: "textarea", required: true, category: "strategy" },
@@ -24,7 +24,7 @@ export const STEPS_DATA: StepDefinition[] = [
         icon: MessageSquare,
         color: "green",
         questions: [
-            { id: "personality", question: "If your business was a person, what kind of personality would it have?", subtitle: "Think about traits, characteristics, and how they'd behave", placeholder: "e.g., Like a helpful neighbor who's also a nutritionist - warm, knowledgeable, never pushy", type: "textarea", required: true, category: "communication" },
+            { id: "personality", question: "Suggest a name for your brand and why you chose that name ?", subtitle: "Think about traits, characteristics, and how they'd behave", placeholder: "e.g., Like a helpful neighbor who's also a nutritionist - warm, knowledgeable, never pushy", type: "textarea", required: true, category: "communication" },
             { id: "customerFeelings", question: "What 3 words do you want customers to feel when they see your brand?", subtitle: "The emotional response you want to trigger", placeholder: "e.g., Confident, Supported, Inspired", type: "text", required: true, category: "communication" },
             { id: "brandVoice", question: "If your brand was a person, how would they talk?", subtitle: "Your communication style and tone", placeholder: "e.g., Warm and encouraging, like a supportive friend who gives great advice", type: "textarea", required: true, category: "communication" },
             { id: "brandStory", question: "Why did you start this brand? Tell us the story behind your 'aha' moment.", subtitle: "The origin story that connects with your audience", placeholder: "e.g., After struggling to feed my family healthy meals while working full-time, I realized...", type: "textarea", required: true, category: "communication" },
@@ -49,7 +49,7 @@ export const STEPS_DATA: StepDefinition[] = [
             },
             {
                 id: "industryDifferentiation",
-                question: "What industry are you in, and what do you want to feel different about you?",
+                question: "How do you want people to feel when they see your visuals ?",
                 subtitle: "How you stand apart visually from your industry norms",
                 placeholder: "e.g., Food tech industry - want to feel more personal and less corporate than competitors",
                 type: "textarea",
