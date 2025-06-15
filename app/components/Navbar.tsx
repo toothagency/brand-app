@@ -64,7 +64,18 @@ const Navbar: React.FC = () => {
     : 'bg-transparent text-black'; // Assuming a light hero background where black text is visible
 
   const navLinks: NavLink[] = [
-   
+    { name: 'Features', href: '#' },
+    { name: 'Pricing', href: '#' },
+    { 
+      name: 'Solutions', 
+      href: '#',
+      dropdown: [
+        { name: 'For Startups', href: '#' },
+        { name: 'For Agencies', href: '#' },
+        { name: 'For Marketers', href: '#' },
+      ]
+    },
+    { name: 'Resources', href: '/blog' },
   ];
 
   const handleMobileMenuToggle = (): void => setIsMobileMenuOpen(!isMobileMenuOpen);
