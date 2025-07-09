@@ -839,7 +839,7 @@ const FullBrandingForm: React.FC = () => {
         message="Preparing your new brand..."
       />
     );
-  if (getBrandResultsMutation.isPending)
+  if (getBrandResultsMutation.isPending && !showResults)
     return (
       <LoadingScreen
         title="Generating Your Full Brand Strategy"
