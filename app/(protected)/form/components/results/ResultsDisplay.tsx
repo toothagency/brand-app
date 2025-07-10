@@ -23,6 +23,7 @@ import {
   Droplet,
   ShoppingBag,
   Zap,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button"; // Assuming Shadcn UI Button
 import {
@@ -43,10 +44,13 @@ import type {
   BrandObjectApplication,
 } from "../../utils/types"; // Adjust path
 import PdfBuilderWithImages from "../form/EnhancedPdfBuilder";
+import { useCreateBrand } from "../../hooks/formHooks";
+import Cookies from "js-cookie";
 
 interface ResultsDisplayProps {
   brandData: DetailedBrandObject;
-  onBack: () => void; // Changed from onStartOver to onBack for clarity
+  onEdit: () => void; // For Edit button (just go back to form view)
+  onStartOver: () => void; // For Start Over (clear everything)
 }
 
 type CalendarEntry = {
@@ -190,7 +194,8 @@ const renderKeyValueForPdf = (
 
 const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
   brandData,
-  onBack,
+  onEdit,
+  onStartOver,
 }) => {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [expandedSections, setExpandedSections] = useState<
@@ -205,6 +210,9 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
     CalendarEntry[]
   >([]);
   const [showAllCalendarEntries, setShowAllCalendarEntries] = useState(false);
+  const [showPopover, setShowPopover] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const createBrandMutation = useCreateBrand();
 
   const {
     brand_communication,
@@ -408,6 +416,56 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
     }
   };
 
+  // Helper to get userId from cookies
+  const getUserId = () => {
+    const userDataCookie = Cookies.get("userData");
+    if (!userDataCookie) return null;
+    try {
+      const parsedData = JSON.parse(userDataCookie);
+      return parsedData?.userId || null;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const handleStartOver = () => {
+    setShowPopover(true);
+  };
+
+  const handlePopoverClose = () => {
+    setShowPopover(false);
+  };
+
+  const handleStartOverNo = () => {
+    // Do NOT clear localStorage here. Just close popover and go back to form.
+    setShowPopover(false);
+    onStartOver();
+  };
+
+  const handleStartOverYes = async () => {
+    setIsSaving(true);
+    const userId = getUserId();
+    if (userId) {
+      try {
+        localStorage.removeItem("brandingFormData");
+
+        await createBrandMutation.mutateAsync({ userId });
+        setShowPopover(false);
+        onStartOver();
+      } catch (error) {
+        toast.error("Failed to save brand before starting over.");
+      }
+    } else {
+      toast.error("User not found. Cannot save brand.");
+    }
+    setIsSaving(false);
+  };
+
+  const handleEdit = () => {
+    setShowPopover(false);
+    onEdit();
+  };
+
   // --- UI Rendering ---
   return (
     <div className="min-h-screen mt-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 sm:p-6 md:p-8 print:bg-white">
@@ -447,7 +505,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
             <Button
               variant="outline"
               size="lg"
-              onClick={onBack}
+              onClick={handleStartOver}
               className="w-full sm:w-auto"
             >
               Back to Form
@@ -917,6 +975,34 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
         {/* End of space-y-6 for sections */}
       </div>{" "}
       {/* End of max-w-5xl */}
+     
+      {showPopover && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
+            <div className="flex justify-between items-center mb-4">
+
+            <h3 className="text-lg font-semibold ">Edit or Start Over?</h3>
+            <Button variant="outline" className="p-2 w-6 h-6" onClick={handlePopoverClose}> <X className="w-4 h-4" /></Button>
+            </div>
+            <p className="mb-6">Do you want to Edit this brand or Create A New Brand ?</p>
+            <div className="flex justify-end gap-4">
+              <Button onClick={handleEdit} variant="secondary" disabled={isSaving}>
+                Edit
+              </Button>
+              <Button onClick={handleStartOverYes} disabled={isSaving}>
+                {isSaving ? "Saving..." : "Start Over"}
+              </Button>
+            </div>
+            <button
+              className="absolute top-2 right-3 text-gray-400 hover:text-gray-600"
+              onClick={handlePopoverClose}
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

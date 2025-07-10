@@ -5,8 +5,8 @@ import { DetailedBrandObject } from '../utils/types';
 
 // --- TYPE DEFINITIONS ---
 export interface SubmitAnswerPayload {
-  question: number; 
-  section: number;  
+  question: number;
+  section: number;
   answer: string | string[] | undefined;
   userId: string;
   brandId: string;
@@ -18,14 +18,14 @@ export interface SubmitAnswerResponse {
 }
 
 export interface FetchSuggestionsPayload {
-  question: number; 
-  section: number;  
+  question: number;
+  section: number;
   brandId: string;
   userId: string;
 }
 
 // This type represents the actual JSON body returned by your /get_suggestions endpoint
-export interface SuggestionsResponseBody { 
+export interface SuggestionsResponseBody {
   question: number;
   section: number;
   suggestions: string[];
@@ -35,8 +35,8 @@ export interface SuggestionsResponseBody {
 
 // Brand creation types
 export interface BrandObject {
-  id: string; 
-  answerId?: string; 
+  id: string;
+  answerId?: string;
   brand_communication?: string;
   brand_identity?: string;
   brand_strategy?: string;
@@ -63,16 +63,16 @@ const submitAnswerAPI = async (payload: SubmitAnswerPayload): Promise<SubmitAnsw
 export const fetchBrandingSuggestionsAPI = async (payload: FetchSuggestionsPayload): Promise<string[]> => {
   // The generic <SuggestionsResponseBody> tells Axios what structure to expect for `response.data`
   const response = await axiosInstance.post<SuggestionsResponseBody>('/get_suggestions', payload); // REPLACE ENDPOINT
-  
+
   console.log("fetchBrandingSuggestionsAPI - Axios response.data:", response.data);
 
   // Now, response.data directly IS the object that should contain the 'suggestions' array
   if (response.data && Array.isArray(response.data.suggestions)) {
     return response.data.suggestions;
   }
-  
+
   console.warn("fetchBrandingSuggestionsAPI: 'suggestions' array not found or invalid in response.data.", response.data);
-  return []; 
+  return [];
 };
 
 const createBrandAPI = async (payload: CreateBrandRequest): Promise<CreateBrandResponse> => {
@@ -131,8 +131,8 @@ export const useGetBrandResults = (
   };
   const mutationConfig: UseMutationOptions<DetailedBrandObject, Error, { brandId: string }> = { // <--- Use DetailedBrandObject
     mutationFn: async ({ brandId }) => {
-        if (!userId) throw new Error("User ID is required for fetching results.");
-        return fetchBrandResultsAPI(userId, brandId);
+      if (!userId) throw new Error("User ID is required for fetching results.");
+      return fetchBrandResultsAPI(userId, brandId);
     },
     ...defaultOptions,
     ...hookOptions,

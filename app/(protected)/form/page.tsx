@@ -324,7 +324,7 @@ const FullBrandingForm: React.FC = () => {
         setSuggestions(await fetchBrandingSuggestionsAPI(payload));
       } catch (error) {
         console.error("Failed to fetch suggestions:", error);
-        toast.error("Could not fetch suggestions.");
+        toast.error("Could not fetch suggestions. Please retry later");
         setSuggestions([]);
         setShowSuggestionsUI(false);
       } finally {
@@ -453,7 +453,7 @@ const FullBrandingForm: React.FC = () => {
           "Submission response is invalid or missing 'success' property:",
           submissionResponse
         );
-        toast.error("Received an invalid response after saving answer.");
+       
         setCurrentQuestionError("Invalid response from server after saving.");
         return; // Stop further execution
       }
@@ -463,9 +463,7 @@ const FullBrandingForm: React.FC = () => {
           "Submission was not successful according to backend:",
           submissionResponse.message
         );
-        toast.error(
-          submissionResponse.message || "Failed to save answer properly."
-        );
+       
         setCurrentQuestionError(
           submissionResponse.message ||
             "Backend indicated save was not successful."
@@ -473,7 +471,7 @@ const FullBrandingForm: React.FC = () => {
         // Potentially stop here if a non-successful save should prevent result fetching
         // return; // Uncomment if you want to stop if submissionResponse.success is false
       } else {
-        toast.success(submissionResponse.message || "Answer saved!");
+       
       }
 
       // --- Code execution reaches here if submitAnswerMutation was "successful" ---
@@ -489,10 +487,8 @@ const FullBrandingForm: React.FC = () => {
         setResultsError(null); // Clear previous results errors
 
         // Re-add a loading toast here if you removed it for getBrandResultsMutation
-        const resultsToastId = "generating-final-results";
-        toast.loading("Preparing to generate brand strategy...", {
-          id: resultsToastId,
-        });
+      
+       
 
         console.log(
           "LOG A: Last question submitted. Preparing to fetch brand results."
@@ -509,15 +505,15 @@ const FullBrandingForm: React.FC = () => {
             { brandId: activeBrandSession.id },
             {
               onSuccess: (detailedBrandObj: DetailedBrandObject) => {
-                toast.dismiss(resultsToastId);
+                
                 console.log("SUCCESS (getBrandResults):", detailedBrandObj);
                 setDetailedBrandResult(detailedBrandObj);
                 setShowResults(true);
-                toast.success("Brand results generated successfully!");
+                
               },
               onError: (error: any) => {
                 // Temporarily 'any' for deep logging
-                toast.dismiss(resultsToastId);
+             
                 console.error(
                   "ERROR (getBrandResultsMutation onError): Raw error object:",
                   error
@@ -543,18 +539,18 @@ const FullBrandingForm: React.FC = () => {
                       "Network or API error during results fetch.";
                   }
                 }
-                toast.error(specificErrorMessage);
+              
                 setResultsError(specificErrorMessage);
                 setShowResults(false);
               },
             }
           );
         } else {
-          toast.dismiss(resultsToastId);
+          
           const errorMsg =
             "Session error: Cannot fetch results (brand/user ID missing before getBrandResults call).";
           console.error(errorMsg, { activeBrandSession, currentUser });
-          toast.error(errorMsg);
+          
           setResultsError(errorMsg); // This would set the UI error
           // If this block is hit, the "passed" message is not from getBrandResultsMutation's onError
         }
@@ -565,7 +561,7 @@ const FullBrandingForm: React.FC = () => {
         "ERROR in nextQuestion's main try...catch block:",
         errorFromSubmitOrLogic
       );
-      toast.dismiss("generating-final-results"); // Dismiss any loading toast
+    
 
       let errorMessage =
         "An unexpected error occurred after submitting your answer.";
@@ -589,7 +585,7 @@ const FullBrandingForm: React.FC = () => {
           "Failed to process your answer.";
       }
 
-      toast.error(errorMessage);
+      
       // Decide if this should set currentQuestionError or resultsError
       // If it's after the *last* question's submission, it's more like a resultsError
       if (isLastQuestionOfAll) {
@@ -643,14 +639,7 @@ const FullBrandingForm: React.FC = () => {
     setIsLoadingSuggestions(false);
     setShowSuggestionsUI(false);
 
-    // Reset mutations
-    submitAnswerMutation.reset();
-    createBrandMutation.reset();
-    getBrandResultsMutation.reset();
-
     // Clear session related state and cookies/localStorage
-    setCurrentUser(null);
-    setActiveBrandSession(null);
     Cookies.remove("currentBrandData");
     try {
       localStorage.removeItem("brandingFormData");
@@ -843,7 +832,7 @@ const FullBrandingForm: React.FC = () => {
     return (
       <LoadingScreen
         title="Generating Your Full Brand Strategy"
-        message="Compiling your brand results..."
+        message="Compiling your brand results... This may take a few minutes."
       />
     );
   if (resultsError)
@@ -885,7 +874,8 @@ const FullBrandingForm: React.FC = () => {
     return (
       <ResultsDisplay
         brandData={detailedBrandResult}
-        onBack={handleStartOver}
+        onEdit={() => setShowResults(false)}
+        onStartOver={handleStartOver}
       />
     );
 

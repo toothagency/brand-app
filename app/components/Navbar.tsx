@@ -104,13 +104,13 @@ const Navbar: React.FC = () => {
                 >
                   <Link
                     href={link.href}
-                    className="px-4 py-2 rounded-md text-sm font-medium flex items-center gap-1 hover:bg-gray-100 transition-colors"
+                    className="px-4 py-2 rounded-md text-base font-medium flex items-center gap-1 hover:text-blue-500 transition-colors"
                   >
                     {link.name}
                     {link.dropdown && <ChevronDown className="w-4 h-4" />}
                   </Link>
                   {link.dropdown && activeDropdown === link.name && (
-                    <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-2xl border border-gray-100 py-2">
+                    <div className="absolute top-full left-0 w-48 bg-white rounded-lg shadow-2xl border border-gray-100 ">
                       {link.dropdown.map((item, idx) => (
                         <Link key={idx} href={item.href} className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors">
                           {item.name}
@@ -155,7 +155,7 @@ const Navbar: React.FC = () => {
               ) : (
                 <>
                   <Link href="/login" className="px-4 py-2 text-sm font-medium hover:text-blue-600 transition-colors">Log In</Link>
-                  <Link href="/register" className="px-5 py-2.5 text-sm font-medium text-white bg-gray-800 rounded-full hover:bg-gray-900 transition-colors shadow-sm">
+                  <Link href="/register" className="px-5 py-2.5 text-sm font-medium text-white bg-gray-800 rounded-full hover:bg-yellow-500 transition-colors shadow-sm">
                     Sign Up
                   </Link>
                 </>

@@ -122,11 +122,11 @@ export default function HomePage() {
     }
   ];
 
-  // Distribute cards into 2 columns instead of 3 for better performance
+  // Distribute cards into 3 columns for desktop, 2 for mobile
   const distributeCards = (): BrandCard[][] => {
-    const columns: BrandCard[][] = [[], []];
+    const columns: BrandCard[][] = [[], [], []];
     brandCards.forEach((card, index) => {
-      columns[index % 2].push(card);
+      columns[index % 3].push(card);
     });
     return columns;
   };
@@ -152,7 +152,7 @@ export default function HomePage() {
       number: "02",
       title: "Build an awesome logo",
       description:
-        "Get a stunning logo and brand identity that reflects your vision. Use Jovo's AI Logo Maker or upload your own to complete your brand visual system.",
+        "Get a stunning logo and brand identity that reflects your vision. ",
       items: [
         "Logo Design",
         "Font & Color Palette",
@@ -218,10 +218,52 @@ export default function HomePage() {
         {/* Additional subtle pattern overlay for navbar contrast */}
         <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-white/20"></div>
 
-        <div className="container mx-auto px-6 pt-32 md:pt-20 pb-16 relative z-10">
+        <div className="container mx-auto px-6 pt-16 md:pt-20 pb-16 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
-            <div className="space-y-8">
+            {/* Right Content (should appear first on mobile) */}
+            <div className={
+              `order-1 lg:order-2 relative h-[45vh] md:h-[90vh] max-h-screen transform rotate-1 md:rotate-3 [mask-image:linear-gradient(to_bottom,transparent_5%,black_20%,black_80%,transparent_95%)] ${isPageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`
+            }>
+              {/* Reduced columns from 3 to 2 for better performance */}
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 h-full overflow-hidden relative">
+                {cardColumns.map((column, columnIndex) => (
+                  <div
+                    key={columnIndex}
+                    className={`flex flex-col gap-4 ${
+                      isPageLoaded ? 
+                        ((cardColumns.length === 3 && columnIndex === 1)
+                          ? "animate-scroll-down-infinite"
+                          : "animate-scroll-up-infinite")
+                        : ""
+                    }`}
+                  >
+                    {[...column, ...column].map(
+                      (card, cardIndex) => (
+                        <div
+                          key={`${columnIndex}-${cardIndex}`}
+                          className={`${card.height} rounded overflow-hidden transform hover:scale-105 hover:-rotate-3 transition-all duration-300 shadow-lg hover:shadow-2xl cursor-pointer flex-shrink-0 relative group`}
+                        >
+                          <div className="w-full h-full relative">
+                            <Image
+                              src={card.image}
+                              alt={card.alt}
+                              fill
+                              sizes="(max-width: 768px) 100vw, 50vw"
+                              className="object-cover"
+                              loading={cardIndex < 4 ? "eager" : "lazy"}
+                              priority={cardIndex < 2}
+                            />
+                          </div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+                      )
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Left Content (should appear second on mobile) */}
+            <div className="order-2 lg:order-1 space-y-8 ">
               <div className="space-y-6">
                 <h1 className="text-5xl lg:text-6xl text-center md:text-left font-extrabold text-gray-900 leading-tight">
                   <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text font-semibold text-transparent">
@@ -232,19 +274,16 @@ export default function HomePage() {
                     lightning speed
                   </span>
                 </h1>
-
                 <p className="text-xl md:w-[90%] text-center md:text-left text-gray-600 leading-relaxed">
                   From logos, brand kit to social media content. We give you
                   everything you need to launch today.
                 </p>
               </div>
-
-              {/* Get Started Button with improved loading state */}
               <div className="flex justify-center md:justify-start">
                 <button
                   onClick={handleGetStarted}
                   disabled={isLoading || isRedirecting}
-                  className="px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-3 text-lg disabled:opacity-70 disabled:transform-none disabled:cursor-not-allowed relative"
+                  className="px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold hover:from-yellow-600 hover:to-yellow-500 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-3 text-lg disabled:opacity-70 disabled:transform-none disabled:cursor-not-allowed relative"
                 >
                   {isRedirecting ? (
                     <>
@@ -259,60 +298,11 @@ export default function HomePage() {
                   )}
                 </button>
               </div>
-
-              {/* Error Message */}
               {error && (
                 <div className="text-red-600 bg-red-50 px-4 py-2 rounded-lg border border-red-200">
                   {error}
                 </div>
               )}
-            </div>
-
-            {/* Right Content - Only show animation when page is loaded */}
-            <div className={`relative h-[70vh] md:h-[90vh] max-h-screen transform md:rotate-3 [mask-image:linear-gradient(to_bottom,transparent_5%,black_20%,black_80%,transparent_95%)] ${isPageLoaded ? 'opacity-100' : 'opacity-0'} transition-opacity duration-500`}>
-              {/* Reduced columns from 3 to 2 for better performance */}
-              <div className="grid grid-cols-2 gap-4 h-full overflow-hidden relative">
-                {cardColumns.map((column, columnIndex) => (
-                  <div
-                    key={columnIndex}
-                    className={`flex flex-col gap-4 ${
-                      isPageLoaded ? 
-                        (columnIndex === 0 
-                          ? "animate-scroll-up-infinite" 
-                          : "animate-scroll-down-infinite") 
-                        : ""
-                    }`}
-                  >
-                    {/* Only duplicate once instead of twice for better performance */}
-                    {[...column, ...column].map(
-                      (card, cardIndex) => (
-                        <div
-                          key={`${columnIndex}-${cardIndex}`}
-                          className={`${card.height} rounded overflow-hidden transform hover:scale-105 hover:-rotate-3 transition-all duration-300 shadow-lg hover:shadow-2xl cursor-pointer flex-shrink-0 relative group`}
-                        >
-                          {/* Use Next.js Image component for better optimization */}
-                          <div className="w-full h-full relative">
-                            <Image
-                              src={card.image}
-                              alt={card.alt}
-                              fill
-                              sizes="(max-width: 768px) 100vw, 50vw"
-                              className="object-cover"
-                              loading={cardIndex < 4 ? "eager" : "lazy"}
-                              priority={cardIndex < 2}
-                            />
-                          </div>
-                          
-                          {/* Enhanced gradient overlay for hover effect */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                         
-                        </div>
-                      )
-                    )}
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         </div>
