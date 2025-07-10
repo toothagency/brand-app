@@ -1,5 +1,5 @@
-import React from "react";
-import { CheckCircle, Circle } from "lucide-react";
+import React, { useRef, useState } from "react";
+import { CheckCircle, Circle, Mic, MicOff } from "lucide-react";
 import type { QuestionDefinition } from "../../utils/types"; // Adjust path as needed
 
 interface InputRendererProps {
@@ -15,28 +15,87 @@ const InputRenderer: React.FC<InputRendererProps> = ({
   onChange,
   onCheckboxChange,
 }) => {
+  // Speech-to-text state and logic
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
+  const handleMicClick = () => {
+    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+      alert("Speech recognition not supported in this browser.");
+      return;
+    }
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!recognitionRef.current) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.lang = "en-US";
+      recognitionRef.current.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        onChange(((value as string) || "") + (value ? " " : "") + transcript);
+        setListening(false);
+      };
+      recognitionRef.current.onend = () => setListening(false);
+      recognitionRef.current.onerror = () => setListening(false);
+    }
+    setListening(true);
+    recognitionRef.current.start();
+  };
+
   switch (question.type) {
     case "textarea":
       return (
-        <textarea
-          className="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical min-h-[100px]"
-          rows={4}
-          placeholder={question.placeholder}
-          value={(value as string) || ""}
-          onChange={(e) => onChange(e.target.value)}
-          aria-label={question.question}
-        />
+        <div className="relative">
+          <textarea
+            className="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-vertical min-h-[100px] pr-12"
+            rows={4}
+            placeholder={question.placeholder}
+            value={(value as string) || ""}
+            onChange={(e) => onChange(e.target.value)}
+            aria-label={question.question}
+          />
+          <button
+            type="button"
+            onClick={handleMicClick}
+            className="absolute top-2 right-2 w-9 h-9 flex items-center justify-center rounded-full bg-white shadow border border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+            aria-label="Start speech to text"
+            tabIndex={0}
+          >
+            {listening ? <MicOff className="w-5 h-5 animate-pulse" /> : <Mic className="w-5 h-5" />}
+          </button>
+          {listening && (
+            <span className="absolute top-2 right-14 px-2 py-1 rounded-full bg-blue-500 text-white text-xs shadow font-semibold animate-pulse select-none">
+              Listening...
+            </span>
+          )}
+        </div>
       );
     case "text":
       return (
-        <input
-          type="text"
-          className="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder={question.placeholder}
-          value={(value as string) || ""}
-          onChange={(e) => onChange(e.target.value)}
-          aria-label={question.question}
-        />
+        <div className="relative">
+          <input
+            type="text"
+            className="w-full p-3 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-12"
+            placeholder={question.placeholder}
+            value={(value as string) || ""}
+            onChange={(e) => onChange(e.target.value)}
+            aria-label={question.question}
+          />
+          <button
+            type="button"
+            onClick={handleMicClick}
+            className="absolute top-2 right-2 w-9 h-9 flex items-center justify-center rounded-full bg-white shadow border border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+            aria-label="Start speech to text"
+            tabIndex={0}
+          >
+            {listening ? <MicOff className="w-5 h-5 animate-pulse" /> : <Mic className="w-5 h-5" />}
+          </button>
+          {listening && (
+            <span className="absolute top-2 right-14 px-2 py-1 rounded-full bg-blue-500 text-white text-xs shadow font-semibold animate-pulse select-none">
+              Listening...
+            </span>
+          )}
+        </div>
       );
     case "select":
       return (
