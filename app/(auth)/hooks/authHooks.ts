@@ -46,30 +46,50 @@ export const useLogin = () => {
         onSuccess: (data) => {
             // Access the user property which contains user data
             const userData = data.user;
-            console.log(data)
-            if (userData && userData.email && userData.userId && userData.username) {
+            console.log("Login response data:", data);
+            console.log("User data from response:", userData);
+            
+            // Handle both userId and userid (backend inconsistency)
+            const userId = userData?.userId || userData?.userid;
+            
+            if (userData && userData.email && userId && userData.username) {
                 // Store user session data in cookies - exclude password
                 const userDataToStore = {
                     email: userData.email,
-                    userId: userData.userId,
+                    userId: userId, // Use the extracted userId
                     username: userData.username
                 };
+
+                console.log("Setting cookies with data:", userDataToStore);
 
                 // Set user data in a cookie
                 Cookies.set('userData', JSON.stringify(userDataToStore), {
                     expires: 7, // Expires in 7 days
                     secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'lax'
+                    sameSite: 'lax',
+                    path: '/'
                 });
 
                 // Set a simpler auth flag for middleware to check quickly
                 Cookies.set('isAuthenticated', 'true', {
                     expires: 7,
                     secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'lax'
+                    sameSite: 'lax',
+                    path: '/'
+                });
+
+                // Verify cookies were set
+                console.log("Cookies after setting:", {
+                    userData: Cookies.get('userData'),
+                    isAuthenticated: Cookies.get('isAuthenticated')
                 });
             } else {
                 console.error("Login response missing user data", data);
+                console.error("Missing fields:", {
+                    email: !!userData?.email,
+                    userId: !!userId,
+                    username: !!userData?.username
+                });
             }
         },
         onError: (error) => {
@@ -119,14 +139,16 @@ export const useSignup = () => {
                 Cookies.set('userData', JSON.stringify(userDataToStore), {
                     expires: 7,
                     secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'lax'
+                    sameSite: 'lax',
+                    path: '/'
                 });
 
                 // Set a simpler auth flag for middleware
                 Cookies.set('isAuthenticated', 'true', {
                     expires: 7,
                     secure: process.env.NODE_ENV === 'production',
-                    sameSite: 'lax'
+                    sameSite: 'lax',
+                    path: '/'
                 });
             } else {
                 console.error("Signup response missing user data", data);
@@ -166,8 +188,17 @@ export const getCurrentUser = () => {
  * Function to log out the current user
  */
 export const logout = () => {
+    // Clear all authentication cookies
     Cookies.remove('userData');
     Cookies.remove('isAuthenticated');
+    Cookies.remove('currentBrandData');
+    
+    // Clear localStorage items
+    try {
+        localStorage.removeItem('brandingFormData');
+    } catch (error) {
+        console.error('Error clearing localStorage:', error);
+    }
 };
 
 

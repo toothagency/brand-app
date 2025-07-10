@@ -24,9 +24,9 @@ export interface AuthResponse {
     success: boolean,
     user: {
         email: string,
-
         password: string,
-        userId: string,
+        userId?: string, // Handle camelCase
+        userid?: string, // Handle lowercase (backend inconsistency)
         username: string
     },
     userId?: string
