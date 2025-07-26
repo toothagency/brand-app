@@ -31,6 +31,7 @@
     "zod": "^3.25.50"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^15.4.4",
     "@tailwindcss/forms": "^0.5.10",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",

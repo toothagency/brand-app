@@ -269,20 +269,23 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
     setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
-   const handleDownloadPdfProgrammatic = async () => {
+  const handleDownloadPdfProgrammatic = async () => {
     setIsGeneratingPdf(true);
-    toast.loading("Generating your professional brand blueprint with images...", {
-      id: "pdf-generation-prog",
-    });
+    toast.loading(
+      "Generating your professional brand blueprint with images...",
+      {
+        id: "pdf-generation-prog",
+      }
+    );
 
     await new Promise((resolve) => setTimeout(resolve, 300));
 
     try {
       const builder = new PdfBuilderWithImages(brandData);
-      
+
       // Cover page
       builder.addCoverPage(
-        "Brand Blueprint", 
+        "Brand Blueprint",
         brand_communication?.brand_name,
         brand_communication?.brand_tagline
       );
@@ -290,27 +293,50 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
       // Brand Communication Section
       if (brand_communication) {
         builder.addSectionTitle("Brand Communication", true);
-        
-        builder.addKeyValuePair("Brand Name", brand_communication.brand_name, true);
-        builder.addKeyValuePair("Brand Tagline", brand_communication.brand_tagline, true);
-        
+
+        builder.addKeyValuePair(
+          "Brand Name",
+          brand_communication.brand_name,
+          true
+        );
+        builder.addKeyValuePair(
+          "Brand Tagline",
+          brand_communication.brand_tagline,
+          true
+        );
+
         if (brand_communication.primary_core_message) {
           builder.addSectionTitle("Primary Core Message");
-          builder.addKeyValuePair("Who We Serve", brand_communication.primary_core_message.who_we_serve);
-          builder.addKeyValuePair("Where They Need Help", brand_communication.primary_core_message.where_they_need_help);
-          builder.addKeyValuePair("Their Market Alternative", brand_communication.primary_core_message.their_market_alternative);
-          builder.addKeyValuePair("Key Benefits They Get", brand_communication.primary_core_message.the_key_benefits_they_get);
-          builder.addKeyValuePair("Our Key Differences", brand_communication.primary_core_message.our_key_differences);
+          builder.addKeyValuePair(
+            "Who We Serve",
+            brand_communication.primary_core_message.who_we_serve
+          );
+          builder.addKeyValuePair(
+            "Where They Need Help",
+            brand_communication.primary_core_message.where_they_need_help
+          );
+          builder.addKeyValuePair(
+            "Their Market Alternative",
+            brand_communication.primary_core_message.their_market_alternative
+          );
+          builder.addKeyValuePair(
+            "Key Benefits They Get",
+            brand_communication.primary_core_message.the_key_benefits_they_get
+          );
+          builder.addKeyValuePair(
+            "Our Key Differences",
+            brand_communication.primary_core_message.our_key_differences
+          );
         }
       }
 
       // Brand Strategy Section
       if (brand_strategy) {
         builder.addSectionTitle("Brand Strategy", true);
-        
+
         if (brand_strategy.brand_substance) {
           builder.addSectionTitle("Brand Substance");
-          
+
           if (brand_strategy.brand_substance.our_purpose) {
             builder.addKeyValuePair(
               brand_strategy.brand_substance.our_purpose.title || "Our Purpose",
@@ -319,57 +345,92 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
             );
             builder.addKeyValuePair(
               "What Customers Mean to Us",
-              brand_strategy.brand_substance.our_purpose.what_our_customers_mean_to_us
+              brand_strategy.brand_substance.our_purpose
+                .what_our_customers_mean_to_us
             );
             builder.addKeyValuePair(
               "We Believe In Something Bigger",
-              brand_strategy.brand_substance.our_purpose.we_believe_in_something_bigger_than_ourselves
+              brand_strategy.brand_substance.our_purpose
+                .we_believe_in_something_bigger_than_ourselves
             );
           }
-          
+
           if (brand_strategy.brand_substance.our_vision) {
-            builder.addKeyValuePair("Our Vision", brand_strategy.brand_substance.our_vision.our_vision_is_bright);
+            builder.addKeyValuePair(
+              "Our Vision",
+              brand_strategy.brand_substance.our_vision.our_vision_is_bright
+            );
           }
-          
+
           if (brand_strategy.brand_substance.our_mission) {
-            builder.addKeyValuePair("Our Mission", brand_strategy.brand_substance.our_mission.we_are_committed_to);
+            builder.addKeyValuePair(
+              "Our Mission",
+              brand_strategy.brand_substance.our_mission.we_are_committed_to
+            );
           }
-          
+
           if (brand_strategy.brand_substance.our_values) {
-            builder.addKeyValuePair("Our Values", brand_strategy.brand_substance.our_values.values);
-            builder.addKeyValuePair("Values in Action", brand_strategy.brand_substance.our_values.how_we_do_wellness_business);
+            builder.addKeyValuePair(
+              "Our Values",
+              brand_strategy.brand_substance.our_values.values
+            );
+            builder.addKeyValuePair(
+              "Values in Action",
+              brand_strategy.brand_substance.our_values
+                .how_we_do_wellness_business
+            );
           }
         }
-        
+
         // Use the special customer persona method
         if (brand_strategy.our_position) {
           builder.addCustomerPersona(brand_strategy.our_position);
         }
-        
-        builder.addKeyValuePair("Competitive Analysis", brand_strategy.top_competitors);
-        
+
+        builder.addKeyValuePair(
+          "Competitive Analysis",
+          brand_strategy.top_competitors
+        );
+
         if (brand_strategy.why_we_are_different) {
           builder.addSectionTitle("What Makes Us Different");
-          builder.addKeyValuePair("Positioning Statement", brand_strategy.why_we_are_different.positioning_statement, true);
-          builder.addKeyValuePair("The Difference We Provide", brand_strategy.why_we_are_different.the_difference_we_provide);
+          builder.addKeyValuePair(
+            "Positioning Statement",
+            brand_strategy.why_we_are_different.positioning_statement,
+            true
+          );
+          builder.addKeyValuePair(
+            "The Difference We Provide",
+            brand_strategy.why_we_are_different.the_difference_we_provide
+          );
         }
       }
 
       // Brand Identity Section
       if (brand_identity) {
         builder.addSectionTitle("Brand Identity", true);
-        
-        builder.addKeyValuePair("About The Brand", brand_identity.about_the_brand, true);
-        
+
+        builder.addKeyValuePair(
+          "About The Brand",
+          brand_identity.about_the_brand,
+          true
+        );
+
         // Color Palettes
         if (brand_identity.primary_colors?.length > 0) {
-          builder.addColorPalette(brand_identity.primary_colors, "Primary Colors");
+          builder.addColorPalette(
+            brand_identity.primary_colors,
+            "Primary Colors"
+          );
         }
-        
+
         if (brand_identity.secondary_colors?.length > 0) {
-          builder.addColorPalette(brand_identity.secondary_colors, "Secondary Colors");
+          builder.addColorPalette(
+            brand_identity.secondary_colors,
+            "Secondary Colors"
+          );
         }
-        
+
         // Typography
         if (brand_identity.typography?.length > 0) {
           builder.addSectionTitle("Typography");
@@ -380,7 +441,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
             );
           });
         }
-        
+
         // Logo images
         if (brand_identity.logos?.length > 0) {
           await builder.addLogosWithImages(brand_identity.logos);
@@ -388,7 +449,10 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
       }
 
       // Marketing & Social Media Section
-      if (marketing_and_social_media_strategy && contentCalendarEntries.length > 0) {
+      if (
+        marketing_and_social_media_strategy &&
+        contentCalendarEntries.length > 0
+      ) {
         builder.addSectionTitle("Marketing & Social Media Strategy", true);
         builder.addContentCalendarSample(contentCalendarEntries, 5);
       }
@@ -401,11 +465,12 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
         true
       );
 
-      builder.save(`${brand_communication?.brand_name || 'brand_blueprint'}_with_logos.pdf`);
+      builder.save(
+        `${brand_communication?.brand_name || "brand_blueprint"}_with_logos.pdf`
+      );
       toast.success("Professional PDF with logos generated successfully!", {
         id: "pdf-generation-prog",
       });
-      
     } catch (error) {
       console.error("Error generating PDF with images:", error);
       toast.error("Sorry, an error occurred while generating the PDF.", {
@@ -1007,32 +1072,46 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
   );
 };
 
-
-const KeyValueDisplay: React.FC<{ 
-  label: string; 
-  value: string | string[] | undefined | null; 
-  className?: string; 
-  isHtml?: boolean 
+const KeyValueDisplay: React.FC<{
+  label: string;
+  value: string | string[] | undefined | null;
+  className?: string;
+  isHtml?: boolean;
 }> = ({ label, value, className = "", isHtml = false }) => {
-  const displayValue = value === undefined || value === null || 
-                     (typeof value === 'string' && value.trim() === "") || 
-                     (Array.isArray(value) && value.length === 0)
-    ? <p className="text-gray-500 italic text-sm print:text-xs">Not available</p>
-    : Array.isArray(value)
-    ? (
-        <ul className="list-disc list-inside text-gray-700 space-y-1 pl-1 print:text-sm print:space-y-0.5">
-          {value.map((item, i) => <li key={i} className="text-gray-700 leading-relaxed print:text-sm">{item}</li>)}
-        </ul>
-      )
-    : isHtml
-    ? <div className="text-gray-700 leading-relaxed prose prose-sm max-w-none print:text-sm print:prose-xs" dangerouslySetInnerHTML={{ __html: value }} />
-    : <p className="text-gray-700 leading-relaxed whitespace-pre-wrap print:text-sm">{value}</p>;
+  const displayValue =
+    value === undefined ||
+    value === null ||
+    (typeof value === "string" && value.trim() === "") ||
+    (Array.isArray(value) && value.length === 0) ? (
+      <p className="text-gray-500 italic text-sm print:text-xs">
+        Not available
+      </p>
+    ) : Array.isArray(value) ? (
+      <ul className="list-disc list-inside text-gray-700 space-y-1 pl-1 print:text-sm print:space-y-0.5">
+        {value.map((item, i) => (
+          <li key={i} className="text-gray-700 leading-relaxed print:text-sm">
+            {item}
+          </li>
+        ))}
+      </ul>
+    ) : isHtml ? (
+      <div
+        className="text-gray-700 leading-relaxed prose prose-sm max-w-none print:text-sm print:prose-xs"
+        dangerouslySetInnerHTML={{ __html: value }}
+      />
+    ) : (
+      <p className="text-gray-700 leading-relaxed whitespace-pre-wrap print:text-sm">
+        {value}
+      </p>
+    );
 
   return (
     <div className={`mb-4 print:mb-2 ${className}`}>
-      <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1.5 print:text-xs print:mb-1">{label}</h4>
+      <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1.5 print:text-xs print:mb-1">
+        {label}
+      </h4>
       {displayValue}
     </div>
   );
 };
-export default ResultsDisplay;
+export default React.memo(ResultsDisplay);

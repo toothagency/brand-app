@@ -2,24 +2,16 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Cookies from "js-cookie";
 import axios, { AxiosError } from "axios";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Eye,
-  EyeOff,
-  Loader2,
-  AlertCircle,
-} from "lucide-react";
+import { Eye, AlertCircle } from "lucide-react";
+import dynamic from "next/dynamic";
+import Providers from "../../providers";
 
 // --- ADJUST PATHS AS NEEDED ---
 import type {
-  StepDefinition,
   QuestionDefinition,
   FormData,
   InitialBrandObject, // For current brand session
   DetailedBrandObject, // For final results
-  CreateBrandResponse,
-  CreateBrandRequest,
   SubmitAnswerPayload,
   FetchSuggestionsPayload,
   BackendErrorData,
@@ -33,16 +25,24 @@ import {
   useGetBrandResults,
 } from "./hooks/formHooks";
 
-// Sub-component imports
-import FormHeader from "./components/form/FormHeader";
-import StepNavigation from "./components/form/StepNavigation";
-import FormProgressBar from "./components/form/FormProgressBar";
-import QuestionArea from "./components/form/QuestionArea";
-import ContextPanel from "./components/form/ContextPanel";
-import LoadingScreen from "./components/common/LoadingScreen";
-import ResultsDisplay from "./components/results/ResultsDisplay"; // Will use DetailedBrandObject
-import QuickStats from "./components/form/QuickStats";
-import toast from "react-hot-toast"; // Assuming you have react-hot-toast installed
+// Sub-component imports (dynamically loaded for performance)
+const FormHeader = dynamic(() => import("./components/form/FormHeader"));
+const StepNavigation = dynamic(
+  () => import("./components/form/StepNavigation")
+);
+const FormProgressBar = dynamic(
+  () => import("./components/form/FormProgressBar")
+);
+const QuestionArea = dynamic(() => import("./components/form/QuestionArea"));
+const ContextPanel = dynamic(() => import("./components/form/ContextPanel"));
+const LoadingScreen = dynamic(
+  () => import("./components/common/LoadingScreen")
+);
+const ResultsDisplay = dynamic(
+  () => import("./components/results/ResultsDisplay")
+);
+const QuickStats = dynamic(() => import("./components/form/QuickStats"));
+import toast from "react-hot-toast";
 // --- END ADJUST PATHS ---
 
 const getCurrentUser = (): { userId: string; [key: string]: any } | null => {
@@ -294,43 +294,56 @@ const FullBrandingForm: React.FC = () => {
       : 0;
   }, [formData]);
 
+  // Debounce function for API calls
+  function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
+    let timeout: NodeJS.Timeout;
+    return (...args: Parameters<T>) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), wait);
+    };
+  }
+
+  // Replace getSuggestionsForCurrentQuestion with debounced version
   const getSuggestionsForCurrentQuestion = useCallback(
-    async (
-      questionDef: QuestionDefinition,
-      stepIndex: number,
-      questionIndexInStep: number
-    ) => {
-      if (!questionDef || !currentUser?.userId || !activeBrandSession?.id) {
+    debounce(
+      async (
+        questionDef: QuestionDefinition,
+        stepIndex: number,
+        questionIndexInStep: number
+      ) => {
+        if (!questionDef || !currentUser?.userId || !activeBrandSession?.id) {
+          setSuggestions([]);
+          setIsLoadingSuggestions(false);
+          return;
+        }
+        if (stepIndex === 0 && questionIndexInStep === 0) {
+          // No suggestions for S1Q1
+          setSuggestions([]);
+          setShowSuggestionsUI(false);
+          setIsLoadingSuggestions(false);
+          return;
+        }
+        setIsLoadingSuggestions(true);
         setSuggestions([]);
-        setIsLoadingSuggestions(false);
-        return;
-      }
-      if (stepIndex === 0 && questionIndexInStep === 0) {
-        // No suggestions for S1Q1
-        setSuggestions([]);
-        setShowSuggestionsUI(false);
-        setIsLoadingSuggestions(false);
-        return;
-      }
-      setIsLoadingSuggestions(true);
-      setSuggestions([]);
-      try {
-        const payload: FetchSuggestionsPayload = {
-          question: questionIndexInStep + 1,
-          section: stepIndex + 1,
-          brandId: activeBrandSession.id,
-          userId: currentUser.userId,
-        };
-        setSuggestions(await fetchBrandingSuggestionsAPI(payload));
-      } catch (error) {
-        console.error("Failed to fetch suggestions:", error);
-        toast.error("Could not fetch suggestions. Please retry later");
-        setSuggestions([]);
-        setShowSuggestionsUI(false);
-      } finally {
-        setIsLoadingSuggestions(false);
-      }
-    },
+        try {
+          const payload: FetchSuggestionsPayload = {
+            question: questionIndexInStep + 1,
+            section: stepIndex + 1,
+            brandId: activeBrandSession.id,
+            userId: currentUser.userId,
+          };
+          setSuggestions(await fetchBrandingSuggestionsAPI(payload));
+        } catch (error) {
+          console.error("Failed to fetch suggestions:", error);
+          toast.error("Could not fetch suggestions.");
+          setSuggestions([]);
+          setShowSuggestionsUI(false);
+        } finally {
+          setIsLoadingSuggestions(false);
+        }
+      },
+      300 // 300ms debounce
+    ),
     [currentUser, activeBrandSession]
   );
 
@@ -446,9 +459,7 @@ const FullBrandingForm: React.FC = () => {
       console.log("Submit Answer Succeeded. Response:", submissionResponse); // What does this log?
 
       // Check the structure of submissionResponse
-      if (
-        !submissionResponse || submissionResponse.message  !== "passed"
-      ) {
+      if (!submissionResponse || submissionResponse.message !== "passed") {
         console.error(
           "Submission response is invalid or missing 'success' property:",
           submissionResponse
@@ -785,18 +796,18 @@ const FullBrandingForm: React.FC = () => {
   // Critical Error States (after initial loading attempts)
   if (!currentUser?.userId)
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-6 text-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col justify-center items-center p-6 text-center">
         {" "}
-        <AlertCircle className="w-16 h-16 text-red-500 mb-6" />{" "}
-        <h2 className="text-3xl font-bold text-gray-800 mb-3">
+        <AlertCircle className="w-16 h-16 text-red-500 dark:text-red-400 mb-6" />{" "}
+        <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-3">
           Authentication Required
         </h2>{" "}
-        <p className="text-lg text-gray-600 mb-8">
+        <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
           To access the AI Brand Builder, please log in.
         </p>{" "}
         <a
           href="/login"
-          className="px-8 py-3 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700"
+          className="px-8 py-3 bg-blue-600 dark:bg-blue-500 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
         >
           Go to Login
         </a>{" "}
@@ -804,16 +815,18 @@ const FullBrandingForm: React.FC = () => {
     );
   if (!activeBrandSession?.id && !createBrandMutation.isPending)
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-6 text-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col justify-center items-center p-6 text-center">
         {" "}
-        <AlertCircle className="w-16 h-16 text-orange-500 mb-6" />{" "}
-        <h2 className="text-3xl font-bold text-gray-800 mb-3">Session Error</h2>{" "}
-        <p className="text-lg text-gray-600 mb-8">
+        <AlertCircle className="w-16 h-16 text-orange-500 dark:text-orange-400 mb-6" />{" "}
+        <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-3">
+          Session Error
+        </h2>{" "}
+        <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
           Could not start or resume your branding session.
         </p>{" "}
         <button
           onClick={handleStartOver}
-          className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="px-8 py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600"
         >
           Try to Start Over
         </button>{" "}
@@ -837,19 +850,19 @@ const FullBrandingForm: React.FC = () => {
     );
   if (resultsError)
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-6 text-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col justify-center items-center p-6 text-center">
         {" "}
-        <AlertCircle className="w-16 h-16 text-red-600 mb-6" />{" "}
-        <h2 className="text-3xl font-bold text-gray-800 mb-3">
+        <AlertCircle className="w-16 h-16 text-red-600 dark:text-red-400 mb-6" />{" "}
+        <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-3">
           Error Generating Results
         </h2>{" "}
-        <p className="text-lg text-gray-600 mb-8 whitespace-pre-wrap">
+        <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 whitespace-pre-wrap">
           {resultsError}
         </p>{" "}
         <div className="flex gap-4">
           <button
             onClick={handleStartOver}
-            className="px-8 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+            className="px-8 py-3 bg-gray-600 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600"
           >
             Start Over
           </button>{" "}
@@ -861,7 +874,7 @@ const FullBrandingForm: React.FC = () => {
                   brandId: activeBrandSession.id!,
                 });
               }}
-              className="px-8 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600"
+              className="px-8 py-3 bg-green-500 dark:bg-green-600 text-white rounded-lg hover:bg-green-600 dark:hover:bg-green-500"
             >
               Retry
             </button>
@@ -882,16 +895,18 @@ const FullBrandingForm: React.FC = () => {
   // If form data isn't ready after all loading, show error
   if (!currentStepData || !currentQuestionData)
     return (
-      <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-6 text-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-gray-900 flex flex-col justify-center items-center p-6 text-center">
         {" "}
-        <AlertCircle className="w-16 h-16 text-red-600 mb-6" />{" "}
-        <h2 className="text-3xl font-bold text-gray-800 mb-3">Form Error</h2>{" "}
-        <p className="text-lg text-gray-600 mb-8">
+        <AlertCircle className="w-16 h-16 text-red-600 dark:text-red-400 mb-6" />{" "}
+        <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-3">
+          Form Error
+        </h2>{" "}
+        <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
           Error loading question content.
         </p>{" "}
         <button
           onClick={handleStartOver}
-          className="px-8 py-3 bg-red-600 text-white rounded-lg hover:bg-red-600"
+          className="px-8 py-3 bg-red-600 dark:bg-red-500 text-white rounded-lg hover:bg-red-700 dark:hover:bg-red-600"
         >
           Start Over
         </button>{" "}
@@ -899,7 +914,7 @@ const FullBrandingForm: React.FC = () => {
     );
 
   return (
-    <div className="min-h-screen mt-20 bg-gradient-to-br from-slate-100 to-sky-100 p-2 sm:p-4 md:p-6">
+    <div className="min-h-screen mt-20 bg-gradient-to-br from-slate-100 to-sky-100 dark:from-gray-900 dark:to-gray-800 p-2 sm:p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         <FormHeader
           title="Brand Form"
@@ -951,7 +966,7 @@ const FullBrandingForm: React.FC = () => {
             <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-50">
               <button
                 onClick={() => setShowContextPanel(true)}
-                className="bg-white rounded-full p-3 shadow-lg hover:shadow-xl text-blue-600 hover:text-blue-700"
+                className="bg-white dark:bg-gray-800 rounded-full p-3 shadow-lg hover:shadow-xl text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
                 aria-label="Show context panel"
               >
                 <Eye className="w-6 h-6" />
@@ -969,4 +984,10 @@ const FullBrandingForm: React.FC = () => {
     </div>
   );
 };
-export default FullBrandingForm;
+
+const FormPage = () => (
+  <Providers>
+    <FullBrandingForm />
+  </Providers>
+);
+export default FormPage;

@@ -26,14 +26,14 @@ const ContextPanel: React.FC<ContextPanelProps> = ({
 
   return (
     <div className="w-full md:w-80 lg:w-96">
-      <div className="bg-white rounded h-[600px] shadow-lg p-5 sticky top-4">
+      <div className="bg-white dark:bg-gray-800 rounded h-[600px] shadow-lg p-5 sticky top-4">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
             Your Brand Progress
           </h3>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
             aria-label="Hide context panel"
           >
             <EyeOff className="w-5 h-5" />
@@ -57,20 +57,20 @@ const ContextPanel: React.FC<ContextPanelProps> = ({
               <div key={stepIndex} className="">
                 <div className="flex items-center gap-2 mb-2">
                   <StepIcon
-                    className={`w-4 h-4 text-${step.color}-600 flex-shrink-0`}
+                    className={`w-4 h-4 text-${step.color}-600 dark:text-${step.color}-400 flex-shrink-0`}
                   />
-                  <span className="font-bold text-gray-700 text-sm">
+                  <span className="font-bold text-gray-700 dark:text-gray-300 text-sm">
                     {step.title}
                   </span>
                 </div>
                 <div className="space-y-1.5 pl-4 mt-2">
                   {stepAnswers.map((question) => (
                     <div key={question.id} className="text-xs">
-                      <span className="font-semibold text-gray-600">
+                      <span className="font-semibold text-gray-600 dark:text-gray-400">
                         {question.question.split("?")[0]}?{" "}
                         {/* Shorten question */}
                       </span>
-                      <p className="text-gray-500 mt-0.5 line-clamp-3 leading-snug">
+                      <p className="text-gray-500 dark:text-gray-500 mt-0.5 line-clamp-3 leading-snug">
                         {Array.isArray(formData[question.id])
                           ? (formData[question.id] as string[]).join(", ")
                           : (formData[question.id] as string)}
@@ -84,13 +84,13 @@ const ContextPanel: React.FC<ContextPanelProps> = ({
         </div>
 
         {/* Overall Progress */}
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <div className="text-xs text-gray-500 mb-1">
+        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">
             Completed: {answeredQuestionsCount} / {totalQuestions} questions
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
             <div
-              className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+              className="bg-blue-500 dark:bg-blue-400 h-2 rounded-full transition-all duration-300"
               style={{ width: `${overallProgress}%` }}
             ></div>
           </div>
@@ -100,4 +100,4 @@ const ContextPanel: React.FC<ContextPanelProps> = ({
   );
 };
 
-export default ContextPanel;
+export default React.memo(ContextPanel);

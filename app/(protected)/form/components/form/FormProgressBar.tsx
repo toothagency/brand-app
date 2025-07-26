@@ -22,23 +22,25 @@ const FormProgressBar: React.FC<ProgressBarProps> = ({
 }) => (
   <div className="mb-8 md:px-4 px-2">
     <div className="flex justify-between items-center mb-2 text-xs sm:text-sm">
-      <span className="font-medium text-gray-700">
+      <span className="font-medium text-gray-700 dark:text-gray-300">
         Step {currentStep} of {totalSteps}: {currentStepTitle}{" "}
-        <span className="text-gray-500">
+        <span className="text-gray-500 dark:text-gray-400">
           (Q{currentQuestionIndex + 1}/{totalQuestionsInStep})
         </span>
       </span>
-      <span className={`text-sm font-semibold text-blue-600`}>
+      <span
+        className={`text-sm font-semibold text-blue-600 dark:text-blue-400`}
+      >
         {Math.round(progress)}% Complete
       </span>
     </div>
-    <div className="w-full bg-gray-200 rounded-full h-2.5">
+    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
       <div
-        className={`bg-blue-600 h-2.5 rounded-full transition-all duration-500 ease-out`}
+        className={`bg-blue-600 dark:bg-blue-500 h-2.5 rounded-full transition-all duration-500 ease-out`}
         style={{ width: `${progress}%` }}
       ></div>
     </div>
   </div>
 );
 
-export default FormProgressBar;
+export default React.memo(FormProgressBar);
