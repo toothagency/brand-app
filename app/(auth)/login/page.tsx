@@ -5,7 +5,7 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
 // Import validation schema and type
 import { loginSchema, LoginValidations } from "../utils/validations";
 // Import the custom login hook
@@ -93,17 +93,23 @@ const LoginForm = () => {
   return (
     <div className="w-full max-w-sm space-y-8">
       <div className="text-center">
-        <Link
-          href="/"
-          className="flex-shrink-0 flex items-center justify-center space-x-2 w-full"
-        >
-          <div
-            className={`md:w-14 md:h-14 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg transition-all duration-300 `}
-          >
-            <img src="/Logo.png" alt="" />
-          </div>
-        </Link>
-        <h2 className="mt-6 text-2xl font-semibold text-gray-900 dark:text-white sm:text-3xl">
+      <Link
+              href="/"
+              className="flex-shrink-0 flex items-center justify-center space-x-2"
+              aria-label="Jara AI Brand Builder - Home"
+            >
+                 <div
+                  className={`w-36 rounded-lg flex items-center justify-center font-bold text-lg transition-all duration-300`}
+                >
+                  <Image
+                    src="/Logo.png"
+                    alt="Jara AI Brand Builder logo"
+                    width={1000}
+                    height={1000}
+                  />
+                </div>
+              </Link>
+        <h2 className="mt-4 text-2xl font-semibold text-gray-900 dark:text-white sm:text-3xl">
           Login to your account
         </h2>
         <p className="mt-3 text-base text-gray-600 dark:text-gray-400">

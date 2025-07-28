@@ -9,6 +9,7 @@ import { useSignup } from "../hooks/authHooks";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Providers from "../../providers";
+import Image from "next/image";
 
 const Register = () => {
   const router = useRouter();
@@ -91,17 +92,23 @@ const Register = () => {
         <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-12 lg:px-8">
           <div className="w-full max-w-sm space-y-8">
             <div className="text-center">
-              <Link
-                href="/"
-                className="flex-shrink-0 flex items-center justify-center space-x-2 w-full"
-              >
-                <div
-                  className={`md:w-14 md:h-14 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg transition-all duration-300 `}
+            <Link
+              href="/"
+              className="flex-shrink-0 flex items-center justify-center space-x-2"
+              aria-label="Jara AI Brand Builder - Home"
+            >
+                 <div
+                  className={`w-36 rounded-lg flex items-center justify-center font-bold text-lg transition-all duration-300`}
                 >
-                  <img src="/Logo.png" alt="" />
+                  <Image
+                    src="/Logo.png"
+                    alt="Jara AI Brand Builder logo"
+                    width={1000}
+                    height={1000}
+                  />
                 </div>
               </Link>
-              <h2 className="mt-6 text-2xl font-semibold text-gray-900 dark:text-white sm:text-3xl">
+              <h2 className="mt-4 text-2xl font-semibold text-gray-900 dark:text-white sm:text-3xl">
                 Create a new account
               </h2>
               <p className="mt-3 text-base text-gray-600 dark:text-gray-400">

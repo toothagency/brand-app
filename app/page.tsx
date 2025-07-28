@@ -76,7 +76,7 @@ export default function HomePage() {
       color: "bg-gradient-to-br from-pink-400 to-pink-500",
       image: "/images/Hanging T Shirt.jpg",
       alt: "Fashion-Store",
-      height: "h-80",
+      height: "h-56",
     },
     {
       color: "bg-gradient-to-br from-blue-400 to-blue-500",
@@ -88,35 +88,53 @@ export default function HomePage() {
       color: "bg-gradient-to-br from-orange-300 to-orange-400",
       image: "/images/10.jpg",
       alt: "Restaurant",
-      height: "h-56",
+      height: "h-48",
     },
     {
       color: "bg-gradient-to-br from-green-400 to-green-500",
       image: "/images/Luxury Gold Logo Mockup on Black Paper Texture.png",
       alt: "Organic-Brand",
-      height: "h-72",
+      height: "h-48",
     },
     {
       color: "bg-gradient-to-br from-red-400 to-red-500",
       image: "/images/marcel-strauss-kOzjvV0Wy8E-unsplash.jpg",
       alt: "Marketing-Agency",
-      height: "h-48",
+      height: "h-80",
     },
     {
       color: "bg-gradient-to-br from-teal-400 to-teal-500",
       image: "/images/christian-wiediger-8d8KfpYCQV0-unsplash.jpg",
       alt: "Business-Consulting",
-      height: "h-80",
+      height: "h-48",
     },
     {
       color: "bg-gradient-to-br from-purple-400 to-purple-500",
       image: "/images/nik-WUTpM4iPCVA-unsplash.jpg",
       alt: "Creative-Studio",
-      height: "h-56",
+      height: "h-80",
     },
     {
       color: "bg-gradient-to-br from-gray-400 to-gray-500",
       image: "/images/david-hurley-YBUj1dkt4Do-unsplash.jpg",
+      alt: "Energy-Company",
+      height: "h-80",
+    },
+    {
+      color: "bg-gradient-to-br from-gray-400 to-gray-500",
+      image: "/images/drink-462776_1280.jpg",
+      alt: "Energy-Company",
+      height: "h-48",
+    },
+    {
+      color: "bg-gradient-to-br from-gray-400 to-gray-500",
+      image: "/images/paul-steuber-SrrFCmYXHLg-unsplash.jpg",
+      alt: "Energy-Company",
+      height: "h-80",
+    },
+    {
+      color: "bg-gradient-to-br from-gray-400 to-gray-500",
+      image: "/images/mercedes-star-188957_1280.jpg",
       alt: "Energy-Company",
       height: "h-48",
     },
@@ -244,18 +262,26 @@ export default function HomePage() {
         />
         <meta name="twitter:image" content="/Logo.png" />
       </Head>
-      <div className="min-h-screen bg-white dark:bg-gray-900 flex flex-col">
+      <div className="min-h-screen bg-white dark:bg-gray-900 ">
         {/* Hero Section with Enhanced Background for Navbar Visibility */}
         <div className="relative md:h-screen bg-gradient-to-br from-slate-200 via-blue-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 pb-0">
           {/* Additional subtle pattern overlay for navbar contrast */}
           <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-white/20 dark:from-gray-900/40 dark:via-transparent dark:to-gray-900/20"></div>
 
-          <div className="container mx-auto px-6 pt-32 md:pt-24 pb-12 md:pb-20 relative z-10">
+          <div className="container mx-auto px-6 pt-48 lg:pt-24 pb-12 md:pb-20 relative z-10">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Left Content */}
-              <div className="space-y-8">
+              <div
+                className="space-y-8"
+                data-aos="fade-right"
+                data-aos-delay="200"
+              >
                 <div className="space-y-6">
-                  <h1 className="text-5xl lg:text-6xl text-center md:text-left font-extrabold text-gray-900 dark:text-white leading-tight">
+                  <h1
+                    className="text-5xl lg:text-6xl text-center lg:text-left font-extrabold text-gray-900 dark:text-white leading-tight"
+                    data-aos="fade-up"
+                    data-aos-delay="300"
+                  >
                     <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text font-semibold text-transparent">
                       AI-powered
                     </span>{" "}
@@ -265,14 +291,23 @@ export default function HomePage() {
                     </span>
                   </h1>
 
-                  <p className="text-xl md:w-[90%] text-center md:text-left text-gray-600 dark:text-gray-300 leading-relaxed">
-                    From logos, brand kit to social media content. We give you
-                    everything you need to launch today.
+                  <p
+                    className="text-xl md:w-[90%] text-center lg:text-left text-gray-600 dark:text-gray-300 leading-relaxed"
+                    data-aos="fade-up"
+                    data-aos-delay="400"
+                  >
+                    Instantly create your brand, logo, and marketing assets with
+                    AI. No design skills needed—just launch and grow your
+                    business.
                   </p>
                 </div>
 
                 {/* Get Started Button with improved loading state */}
-                <div className="flex justify-center md:justify-start">
+                <div
+                  className="flex justify-center lg:justify-start"
+                  data-aos="fade-up"
+                  data-aos-delay="500"
+                >
                   <button
                     onClick={handleGetStarted}
                     disabled={isLoading || isRedirecting}
@@ -294,7 +329,11 @@ export default function HomePage() {
 
                 {/* Error Message */}
                 {error && (
-                  <div className="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-4 py-2 rounded-lg border border-red-200 dark:border-red-800">
+                  <div
+                    className="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-4 py-2 rounded-lg border border-red-200 dark:border-red-800"
+                    data-aos="fade-up"
+                    data-aos-delay="600"
+                  >
                     {error}
                   </div>
                 )}
@@ -302,11 +341,11 @@ export default function HomePage() {
 
               {/* Right Content - Only show animation when page is loaded */}
               <div
-                className={`relative h-[70vh] md:h-[90vh] max-h-screen transform md:rotate-3 [mask-image:linear-gradient(to_bottom,transparent_5%,black_20%,black_80%,transparent_95%)] ${
-                  isPageLoaded ? "opacity-100" : "opacity-0"
-                } transition-opacity duration-500`}
+                className={`relative h-[70vh] md:h-[90vh] max-h-screen transform [mask-image:linear-gradient(to_bottom,transparent_5%,black_20%,black_80%,transparent_95%)] transition-opacity duration-500`}
+                data-aos="fade-left"
+                data-aos-delay="400"
               >
-                {/* Reduced columns from 3 to 2 for better performance */}
+                {/* 2 columns with right slant effect - reduced width */}
                 <div className="grid grid-cols-2 gap-4 h-full overflow-hidden relative">
                   {cardColumns.map((column, columnIndex) => (
                     <div
@@ -323,15 +362,15 @@ export default function HomePage() {
                       {[...column, ...column].map((card, cardIndex) => (
                         <div
                           key={`${columnIndex}-${cardIndex}`}
-                          className={`${card.height} rounded overflow-hidden transform hover:scale-105 hover:-rotate-3 transition-all duration-300 shadow-lg hover:shadow-2xl cursor-pointer flex-shrink-0 relative group`}
+                          className={`${card.height} rounded overflow-hidden transform hover:scale-105 hover:rotate-3 transition-all duration-300 shadow-lg hover:shadow-2xl cursor-pointer flex-shrink-0 relative group`}
                         >
                           {/* Use Next.js Image component for better optimization */}
-                          <div className="w-full h-full relative">
+                          <div className="w-full h-full relative ">
                             <Image
                               src={card.image}
                               alt={card.alt}
                               fill
-                              sizes="(max-width: 768px) 100vw, 50vw"
+                              sizes="(max-width: 768px) 100vw, 40vw"
                               className="object-cover"
                               loading={cardIndex < 4 ? "eager" : "lazy"}
                               priority={cardIndex < 2}
@@ -357,7 +396,7 @@ export default function HomePage() {
           {/* What You Get Section */}
           <section className="bg-white dark:bg-gray-900 py-12 md:py-20">
             <div className="container mx-auto px-6">
-              <div className="text-center mb-12 md:mb-16">
+              <div className="text-center mb-12 md:mb-16" data-aos="fade-up">
                 <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
                   What you get
                 </h2>
@@ -377,6 +416,8 @@ export default function HomePage() {
                     className={`grid lg:grid-cols-2 gap-12 items-center ${
                       index % 2 === 1 ? "lg:grid-flow-col-dense" : ""
                     }`}
+                    data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
+                    data-aos-delay={index * 200}
                   >
                     {/* Content */}
                     <div
@@ -384,23 +425,44 @@ export default function HomePage() {
                         index % 2 === 1 ? "lg:col-start-2" : ""
                       }`}
                     >
-                      <div className="flex items-center gap-4">
+                      <div
+                        className="flex items-center gap-4"
+                        data-aos="fade-up"
+                        data-aos-delay={index * 200 + 100}
+                      >
                         <span className="text-3xl font-bold text-gray-300 dark:text-gray-600">
                           {feature.number}
                         </span>
                         {feature.icon}
                       </div>
 
-                      <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
+                      <h3
+                        className="text-3xl font-bold text-gray-900 dark:text-white"
+                        data-aos="fade-up"
+                        data-aos-delay={index * 200 + 200}
+                      >
                         {feature.title}
                       </h3>
-                      <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+                      <p
+                        className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed"
+                        data-aos="fade-up"
+                        data-aos-delay={index * 200 + 300}
+                      >
                         {feature.description}
                       </p>
 
-                      <div className="grid grid-cols-2 gap-3">
+                      <div
+                        className="grid grid-cols-2 gap-3"
+                        data-aos="fade-up"
+                        data-aos-delay={index * 200 + 400}
+                      >
                         {feature.items.map((item, idx) => (
-                          <div key={idx} className="flex items-center gap-2">
+                          <div
+                            key={idx}
+                            className="flex items-center gap-2"
+                            data-aos="fade-up"
+                            data-aos-delay={index * 200 + 400 + idx * 50}
+                          >
                             <CircleCheckBig className="w-5 h-5 text-green-500" />
                             <span className="text-gray-700 dark:text-gray-300">
                               {item}
@@ -415,6 +477,8 @@ export default function HomePage() {
                       className={`${
                         index % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : ""
                       }`}
+                      data-aos={index % 2 === 0 ? "fade-left" : "fade-right"}
+                      data-aos-delay={index * 200 + 300}
                     >
                       {feature.type === "grid" ? (
                         // Grid layout for Feature 02 (Logo Design)
@@ -424,6 +488,10 @@ export default function HomePage() {
                               <div
                                 key={imgIndex}
                                 className="relative rounded-xl overflow-hidden shadow-lg group hover:shadow-xl transition-all duration-300"
+                                data-aos="zoom-in"
+                                data-aos-delay={
+                                  index * 200 + 400 + imgIndex * 100
+                                }
                               >
                                 {/* Use Next.js Image for grid images */}
                                 <div className="relative w-full h-40">
@@ -443,7 +511,11 @@ export default function HomePage() {
                           </div>
 
                           {/* Feature number overlay for grid */}
-                          <div className="absolute -top-3 -left-3 w-12 h-12 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center z-10">
+                          <div
+                            className="absolute -top-3 -left-3 w-12 h-12 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center z-10"
+                            data-aos="zoom-in"
+                            data-aos-delay={index * 200 + 600}
+                          >
                             <span className="text-lg font-bold text-purple-600 dark:text-purple-400">
                               {feature.number}
                             </span>
@@ -468,7 +540,11 @@ export default function HomePage() {
                           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
 
                           {/* Feature number overlay */}
-                          <div className="absolute top-6 left-6 w-12 h-12 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <div
+                            className="absolute top-6 left-6 w-12 h-12 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full flex items-center justify-center"
+                            data-aos="zoom-in"
+                            data-aos-delay={index * 200 + 600}
+                          >
                             <span className="text-lg font-bold text-gray-800 dark:text-gray-200">
                               {feature.number}
                             </span>
@@ -482,11 +558,200 @@ export default function HomePage() {
             </div>
           </section>
 
+          {/* How It Works Section */}
+          <section className="bg-gray-50 dark:bg-gray-800 py-16 md:py-20">
+            <div className="container mx-auto px-6">
+              <div className="text-center mb-12 md:mb-16" data-aos="fade-up">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                  How It Works
+                </h2>
+                <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                  Create your complete brand identity in just 4 simple steps. No
+                  design experience required.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-4 gap-8 mb-12">
+                <div
+                  className="text-center"
+                  data-aos="fade-up"
+                  data-aos-delay="100"
+                >
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                    01
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    Answer Questions
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm">
+                    Tell us about your business and preferences
+                  </p>
+                </div>
+
+                <div
+                  className="text-center"
+                  data-aos="fade-up"
+                  data-aos-delay="200"
+                >
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                    02
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    AI Generates Options
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm">
+                    Get multiple professional logo variations
+                  </p>
+                </div>
+
+                <div
+                  className="text-center"
+                  data-aos="fade-up"
+                  data-aos-delay="300"
+                >
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                    03
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    Customize & Refine
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm">
+                    Adjust colors, fonts, and elements
+                  </p>
+                </div>
+
+                <div
+                  className="text-center"
+                  data-aos="fade-up"
+                  data-aos-delay="400"
+                >
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                    04
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    Download & Launch
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm">
+                    Get your complete brand kit instantly
+                  </p>
+                </div>
+              </div>
+
+              <div
+                className="text-center"
+                data-aos="fade-up"
+                data-aos-delay="500"
+              >
+                <Link
+                  href="/how-it-works"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-full font-semibold hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 transform hover:scale-105 shadow-lg"
+                >
+                  Learn More About the Process
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+              </div>
+            </div>
+          </section>
+
+          {/* FAQ Section */}
+          <section className="py-20 bg-gray-50 dark:bg-gray-800">
+            <div className="container mx-auto px-6">
+              <div className="text-center mb-16" data-aos="fade-up">
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                  Frequently Asked Questions
+                </h2>
+                <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                  Everything you need to know about Jara AI
+                </p>
+              </div>
+
+              <div className="max-w-4xl mx-auto space-y-6">
+                <div
+                  className="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-lg"
+                  data-aos="fade-up"
+                  data-aos-delay="100"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                    What is Jara AI?
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    Jara AI is a tool that is specifically designed to help you
+                    build your brand from scratch in just 10 minutes.
+                  </p>
+                </div>
+
+                <div
+                  className="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-lg"
+                  data-aos="fade-up"
+                  data-aos-delay="200"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                    How do I use Jara AI?
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    Simply sign up, answer a few guided questions, and Jara AI
+                    will generate your logo, brand colours, overall strategy,
+                    and a downloadable brand blueprint.
+                  </p>
+                </div>
+
+                <div
+                  className="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-lg"
+                  data-aos="fade-up"
+                  data-aos-delay="300"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                    How long does it take to build a brand with Jara AI?
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    Building a brand with Jara takes 10 minutes. No more.
+                  </p>
+                </div>
+
+                <div
+                  className="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-lg"
+                  data-aos="fade-up"
+                  data-aos-delay="400"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                    How much does Jara AI cost?
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    Less than a designer, less than a brand strategist, and less
+                    than a marketing specialist.
+                  </p>
+                </div>
+
+                <div
+                  className="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-lg"
+                  data-aos="fade-up"
+                  data-aos-delay="500"
+                >
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                    What are the benefits of Jara AI?
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    Jara is fast, affordable, beginner-friendly, and helps
+                    business owners create a professional brand without needing
+                    a branding expert.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Final CTA Section */}
-          <section className="bg-gradient-to-r from-orange-400 via-pink-500 to-blue-600 py-12 md:py-20 mt-0">
+          <section
+            className="bg-gradient-to-r from-orange-400 via-pink-500 to-blue-600 py-12 md:py-20 mt-0"
+            data-aos="fade-up"
+          >
             <div className="container mx-auto px-6 text-center">
               <div className="max-w-2xl mx-auto space-y-8">
-                <h2 className="text-4xl lg:text-5xl font-bold text-white">
+                <h2
+                  className="text-4xl lg:text-5xl font-bold text-white"
+                  data-aos="fade-up"
+                  data-aos-delay="200"
+                >
                   Automate Your Branding with AI
                 </h2>
 
@@ -494,6 +759,8 @@ export default function HomePage() {
                   onClick={handleGetStarted}
                   disabled={isLoading || isRedirecting}
                   className="px-12 py-4 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-full font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-lg disabled:opacity-70 disabled:transform-none disabled:cursor-not-allowed flex items-center gap-3 mx-auto"
+                  data-aos="fade-up"
+                  data-aos-delay="400"
                 >
                   {isRedirecting ? (
                     <>
@@ -509,7 +776,11 @@ export default function HomePage() {
                 </button>
 
                 {/* Trust Indicators */}
-                <div className="flex justify-center items-center gap-6 pt-8">
+                <div
+                  className="flex justify-center items-center gap-6 pt-8"
+                  data-aos="fade-up"
+                  data-aos-delay="600"
+                >
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
                       <Star
