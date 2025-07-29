@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,8 +8,6 @@
     text-wrap: balance;
   }
 }
-
-
 
 @layer base {
   :root {
@@ -67,24 +65,26 @@
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
+    overflow-x: hidden;
+  }
+  html {
+    overflow-x: hidden;
   }
 }
 
-*{
-    font-family: "Lato", sans-serif;
+* {
+  font-family: "Lato", sans-serif;
   font-weight: 400;
   font-style: normal;
 }
 
-/* From Uiverse.io by catraco */ 
+/* From Uiverse.io by catraco */
 .spinner {
   --size: 30px;
   --first: #005bba;
@@ -123,5 +123,25 @@
 @keyframes spin {
   100% {
     transform: rotate(360deg);
+  }
+}
+
+/* AOS overflow prevention */
+[data-aos] {
+  overflow: hidden;
+}
+
+.aos-animate {
+  overflow: visible;
+}
+
+/* Prevent horizontal scroll on mobile */
+@media (max-width: 768px) {
+  [data-aos] {
+    overflow: hidden !important;
+  }
+
+  .aos-animate {
+    overflow: visible !important;
   }
 }

@@ -177,9 +177,9 @@ export default function AboutPage() {
                 </div>
               </div>
               <div data-aos="fade-left">
-                <div className="relative overflow-hidden">
-                  <div className="w-full h-96 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl shadow-2xl transform rotate-3 scale-110"></div>
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl shadow-2xl transform -rotate-3 scale-110"></div>
+                <div className="relative">
+                <div className="w-full h-96 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl shadow-2xl transform rotate-3"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl shadow-2xl transform -rotate-3"></div>
                   <div className="absolute inset-0 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl flex items-center justify-center">
                     <div className="text-center p-8">
                       <Target className="w-16 h-16 text-blue-600 mx-auto mb-4" />
