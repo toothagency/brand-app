@@ -141,7 +141,7 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out ${navbarClasses}`}
+      className={`fixed w-screen top-0 left-0 z-50 transition-all duration-300 ease-in-out ${navbarClasses}`}
       role="navigation"
       aria-label="Main navigation"
     >
