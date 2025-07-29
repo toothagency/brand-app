@@ -6,6 +6,7 @@ export interface FormData { [key: string]: string | string[]; }
 export type QuestionType = "textarea" | "text" | "select" | "checkbox";
 export interface QuestionOption { label: string; value: string; }
 export interface QuestionDefinition {
+  description: any;
   id: string; question: string; subtitle: string; placeholder?: string;
   type: QuestionType; required: boolean; category: string; options?: string[] | QuestionOption[];
 }
