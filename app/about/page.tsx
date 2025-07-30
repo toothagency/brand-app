@@ -138,7 +138,7 @@ export default function AboutPage() {
         {/* Mission Section */}
         <section className="py-20 bg-gray-50 dark:bg-gray-800">
           <div className="container mx-auto px-6">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="grid lg:grid-cols-2 gap-16 text-center lg:text-left items-center">
               <div data-aos="fade-right">
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">
                   Our Mission

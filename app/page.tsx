@@ -264,12 +264,57 @@ export default function HomePage() {
       </Head>
       <div className="min-h-screen bg-white dark:bg-gray-900 ">
         {/* Hero Section with Enhanced Background for Navbar Visibility */}
-        <div className="relative md:h-screen bg-gradient-to-br from-slate-200 via-blue-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 pb-0">
+        <div className="relative lg:h-screen bg-gradient-to-br from-slate-200 via-blue-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 pb-0">
           {/* Additional subtle pattern overlay for navbar contrast */}
           <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-white/20 dark:from-gray-900/40 dark:via-transparent dark:to-gray-900/20"></div>
 
-          <div className="container mx-auto px-6 pt-48 lg:pt-24 pb-12 md:pb-20 relative z-10">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className=" pt-36 lg:pt-24 pb-12 md:pb-20 relative z-10">
+              <div
+                className={`relative block lg:hidden transform my-8 h-40vh max-h-screen transition-opacity duration-500`}
+                data-aos="fade-left"
+                data-aos-delay="400"
+              >
+                {/* 2 columns with right slant effect - reduced width */}
+                <div className="flex gap-8 overflow-hidden relative [mask-image:linear-gradient(to_bottom,transparent_5%,black_20%,black_80%,transparent_95%)]">
+                  {cardColumns.map((column, columnIndex) => (
+                    <div
+                      key={columnIndex}
+                      className={` flex  ${
+                        isPageLoaded
+                          ? columnIndex === 0
+                            ? "animate-scroll-right-infinite"
+                            : "animate-scroll-left-infinite"
+                          : ""
+                      }`}
+                    >
+                      {/* Only duplicate once instead of twice for better performance */}
+                      {[...column, ...column].map((card, cardIndex) => (
+                        <div
+                          key={`${columnIndex}-${cardIndex}`}
+                          className={`size-52 rounded overflow-hidden transform hover:scale-105 hover:rotate-3 transition-all duration-300 shadow-lg hover:shadow-2xl cursor-pointer flex-shrink-0 relative group`}
+                        >
+                          {/* Use Next.js Image component for better optimization */}
+                          <div className="w-full h-full relative ">
+                            <Image
+                              src={card.image}
+                              alt={card.alt}
+                              fill
+                              sizes="(max-width: 768px) 100vw, 40vw"
+                              className="object-cover object-center "
+                              loading={cardIndex < 4 ? "eager" : "lazy"}
+                              priority={cardIndex < 2}
+                            />
+                          </div>
+
+                          {/* Enhanced gradient overlay for hover effect */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Left Content */}
               <div
                 className="space-y-8"
@@ -341,12 +386,12 @@ export default function HomePage() {
 
               {/* Right Content - Only show animation when page is loaded */}
               <div
-                className={`relative h-[70vh] md:h-[90vh] max-h-screen transform [mask-image:linear-gradient(to_bottom,transparent_5%,black_20%,black_80%,transparent_95%)] transition-opacity duration-500`}
+                className={`relative hidden lg:block h-[70vh] transform md:h-[90vh] max-h-screen transition-opacity duration-500`}
                 data-aos="fade-left"
                 data-aos-delay="400"
               >
                 {/* 2 columns with right slant effect - reduced width */}
-                <div className="grid grid-cols-2 gap-4 h-full overflow-hidden relative">
+                <div className="grid  grid-cols-2 gap-4 h-full overflow-hidden relative [mask-image:linear-gradient(to_bottom,transparent_5%,black_20%,black_80%,transparent_95%)]">
                   {cardColumns.map((column, columnIndex) => (
                     <div
                       key={columnIndex}
@@ -371,7 +416,7 @@ export default function HomePage() {
                               alt={card.alt}
                               fill
                               sizes="(max-width: 768px) 100vw, 40vw"
-                              className="object-cover"
+                              className="object-cover object-center"
                               loading={cardIndex < 4 ? "eager" : "lazy"}
                               priority={cardIndex < 2}
                             />
@@ -810,6 +855,26 @@ export default function HomePage() {
               ); /* Reduced from -33.333% for better performance */
             }
           }
+          @keyframes scroll-right-infinite {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(
+                -50%
+              ); /* Reduced from -33.333% for better performance */
+            }
+          }
+          @keyframes scroll-left-infinite {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(
+                -50%
+              ); /* Reduced from -33.333% for better performance */
+            }
+          }
 
           @keyframes scroll-down-infinite {
             0% {
@@ -820,6 +885,14 @@ export default function HomePage() {
             100% {
               transform: translateY(0);
             }
+          }
+          .animate-scroll-left-infinite {
+            animation: scroll-left-infinite 40s linear infinite; /* Slowed down from 30s to 40s */
+            will-change: transform; /* Hint to browser to optimize */
+          }
+          .animate-scroll-right-infinite {
+            animation: scroll-right-infinite 40s linear infinite; /* Slowed down from 30s to 40s */
+            will-change: transform; /* Hint to browser to optimize */
           }
 
           .animate-scroll-up-infinite {
