@@ -291,7 +291,7 @@ export default function HomePage() {
                       {[...column, ...column].map((card, cardIndex) => (
                         <div
                           key={`${columnIndex}-${cardIndex}`}
-                          className={`size-52 rounded overflow-hidden transform hover:scale-105 hover:rotate-3 transition-all duration-300 shadow-lg hover:shadow-2xl cursor-pointer flex-shrink-0 relative group`}
+                          className={`size-52 md:size-72 rounded overflow-hidden transform hover:scale-105 hover:rotate-3 transition-all duration-300 shadow-lg hover:shadow-2xl cursor-pointer flex-shrink-0 relative group`}
                         >
                           {/* Use Next.js Image component for better optimization */}
                           <div className="w-full h-full relative ">
