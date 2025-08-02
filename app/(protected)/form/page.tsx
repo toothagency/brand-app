@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import axios, { AxiosError } from "axios";
 import { Eye, AlertCircle } from "lucide-react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import Providers from "../../providers";
 
 // --- ADJUST PATHS AS NEEDED ---
@@ -38,9 +39,7 @@ const ContextPanel = dynamic(() => import("./components/form/ContextPanel"));
 const LoadingScreen = dynamic(
   () => import("./components/common/LoadingScreen")
 );
-const ResultsDisplay = dynamic(
-  () => import("./components/results/ResultsDisplay")
-);
+
 const QuickStats = dynamic(() => import("./components/form/QuickStats"));
 import toast from "react-hot-toast";
 // --- END ADJUST PATHS ---
@@ -60,12 +59,10 @@ const getCurrentUser = (): { userId: string; [key: string]: any } | null => {
 };
 
 const FullBrandingForm: React.FC = () => {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [formData, setFormData] = useState<FormData>({});
-  const [showResults, setShowResults] = useState(false);
-  const [detailedBrandResult, setDetailedBrandResult] =
-    useState<DetailedBrandObject | null>(null);
   const [showContextPanel, setShowContextPanel] = useState(true);
 
   const [currentUser, setCurrentUser] = useState<{
@@ -464,7 +461,7 @@ const FullBrandingForm: React.FC = () => {
           "Submission response is invalid or missing 'success' property:",
           submissionResponse
         );
-       
+
         setCurrentQuestionError("Invalid response from server after saving.");
         return; // Stop further execution
       }
@@ -474,7 +471,7 @@ const FullBrandingForm: React.FC = () => {
           "Submission was not successful according to backend:",
           submissionResponse.message
         );
-       
+
         setCurrentQuestionError(
           submissionResponse.message ||
             "Backend indicated save was not successful."
@@ -482,7 +479,6 @@ const FullBrandingForm: React.FC = () => {
         // Potentially stop here if a non-successful save should prevent result fetching
         // return; // Uncomment if you want to stop if submissionResponse.success is false
       } else {
-       
       }
 
       // --- Code execution reaches here if submitAnswerMutation was "successful" ---
@@ -498,8 +494,6 @@ const FullBrandingForm: React.FC = () => {
         setResultsError(null); // Clear previous results errors
 
         // Re-add a loading toast here if you removed it for getBrandResultsMutation
-      
-       
 
         console.log(
           "LOG A: Last question submitted. Preparing to fetch brand results."
@@ -516,15 +510,18 @@ const FullBrandingForm: React.FC = () => {
             { brandId: activeBrandSession.id },
             {
               onSuccess: (detailedBrandObj: DetailedBrandObject) => {
-                
                 console.log("SUCCESS (getBrandResults):", detailedBrandObj);
-                setDetailedBrandResult(detailedBrandObj);
-                setShowResults(true);
-                
+
+                // Store the brand data temporarily and redirect to results page
+                localStorage.setItem(
+                  "currentBrandData",
+                  JSON.stringify(detailedBrandObj)
+                );
+                router.push(`/brand-results?brandId=${activeBrandSession.id}`);
               },
               onError: (error: any) => {
                 // Temporarily 'any' for deep logging
-             
+
                 console.error(
                   "ERROR (getBrandResultsMutation onError): Raw error object:",
                   error
@@ -550,18 +547,16 @@ const FullBrandingForm: React.FC = () => {
                       "Network or API error during results fetch.";
                   }
                 }
-              
+
                 setResultsError(specificErrorMessage);
-                setShowResults(false);
               },
             }
           );
         } else {
-          
           const errorMsg =
             "Session error: Cannot fetch results (brand/user ID missing before getBrandResults call).";
           console.error(errorMsg, { activeBrandSession, currentUser });
-          
+
           setResultsError(errorMsg); // This would set the UI error
           // If this block is hit, the "passed" message is not from getBrandResultsMutation's onError
         }
@@ -572,7 +567,6 @@ const FullBrandingForm: React.FC = () => {
         "ERROR in nextQuestion's main try...catch block:",
         errorFromSubmitOrLogic
       );
-    
 
       let errorMessage =
         "An unexpected error occurred after submitting your answer.";
@@ -596,7 +590,6 @@ const FullBrandingForm: React.FC = () => {
           "Failed to process your answer.";
       }
 
-      
       // Decide if this should set currentQuestionError or resultsError
       // If it's after the *last* question's submission, it's more like a resultsError
       if (isLastQuestionOfAll) {
@@ -881,15 +874,6 @@ const FullBrandingForm: React.FC = () => {
           )}
         </div>{" "}
       </div>
-    );
-
-  if (showResults && detailedBrandResult)
-    return (
-      <ResultsDisplay
-        brandData={detailedBrandResult}
-        onEdit={() => setShowResults(false)}
-        onStartOver={handleStartOver}
-      />
     );
 
   // If form data isn't ready after all loading, show error

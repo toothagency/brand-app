@@ -46,6 +46,7 @@ import type {
 import PdfBuilderWithImages from "../form/EnhancedPdfBuilder";
 import { useCreateBrand } from "../../hooks/formHooks";
 import Cookies from "js-cookie";
+import PaymentModal from "./PaymentModal";
 
 interface ResultsDisplayProps {
   brandData: DetailedBrandObject;
@@ -212,6 +213,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
   const [showAllCalendarEntries, setShowAllCalendarEntries] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const createBrandMutation = useCreateBrand();
 
   const {
@@ -555,7 +557,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
             {" "}
             {/* Buttons hidden in PDF */}
             <Button
-              onClick={handleDownloadPdfProgrammatic}
+              onClick={() => setShowPaymentModal(true)}
               disabled={isGeneratingPdf}
               size="lg"
               className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
@@ -1040,18 +1042,29 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
         {/* End of space-y-6 for sections */}
       </div>{" "}
       {/* End of max-w-5xl */}
-     
       {showPopover && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
             <div className="flex justify-between items-center mb-4">
-
-            <h3 className="text-lg font-semibold ">Edit or Start Over?</h3>
-            <Button variant="outline" className="p-2 w-6 h-6" onClick={handlePopoverClose}> <X className="w-4 h-4" /></Button>
+              <h3 className="text-lg font-semibold ">Edit or Start Over?</h3>
+              <Button
+                variant="outline"
+                className="p-2 w-6 h-6"
+                onClick={handlePopoverClose}
+              >
+                {" "}
+                <X className="w-4 h-4" />
+              </Button>
             </div>
-            <p className="mb-6">Do you want to Edit this brand or Create A New Brand ?</p>
+            <p className="mb-6">
+              Do you want to Edit this brand or Create A New Brand ?
+            </p>
             <div className="flex justify-end gap-4">
-              <Button onClick={handleEdit} variant="secondary" disabled={isSaving}>
+              <Button
+                onClick={handleEdit}
+                variant="secondary"
+                disabled={isSaving}
+              >
                 Edit
               </Button>
               <Button onClick={handleStartOverYes} disabled={isSaving}>
@@ -1068,6 +1081,13 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
           </div>
         </div>
       )}
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        onDownloadBlueprint={handleDownloadPdfProgrammatic}
+        brandName={brand_communication?.brand_name}
+      />
     </div>
   );
 };

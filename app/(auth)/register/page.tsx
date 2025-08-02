@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Providers from "../../providers";
 import Image from "next/image";
+import GoogleSignInButton from "../../components/GoogleSignInButton";
 
 const Register = () => {
   const router = useRouter();
@@ -92,12 +93,12 @@ const Register = () => {
         <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-12 lg:px-8">
           <div className="w-full max-w-sm space-y-8">
             <div className="text-center">
-            <Link
-              href="/"
-              className="flex-shrink-0 flex items-center justify-center space-x-2"
-              aria-label="Jara AI Brand Builder - Home"
-            >
-                 <div
+              <Link
+                href="/"
+                className="flex-shrink-0 flex items-center justify-center space-x-2"
+                aria-label="Jara AI Brand Builder - Home"
+              >
+                <div
                   className={`w-36 rounded-lg flex items-center justify-center font-bold text-lg transition-all duration-300`}
                 >
                   <Image
@@ -336,6 +337,21 @@ const Register = () => {
                   </button>
                 </div>
               </form>
+
+              {/* Divider */}
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300 dark:border-gray-600" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="bg-white dark:bg-gray-900 px-2 text-gray-500 dark:text-gray-400">
+                    Or continue with
+                  </span>
+                </div>
+              </div>
+
+              {/* Google Sign-In Button */}
+              <GoogleSignInButton />
             </div>
             <div>
               <p className="text-center text-sm text-gray-500 dark:text-gray-400">

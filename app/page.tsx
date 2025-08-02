@@ -269,51 +269,51 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-white/20 dark:from-gray-900/40 dark:via-transparent dark:to-gray-900/20"></div>
 
           <div className=" pt-36 lg:pt-24 pb-12 md:pb-20 relative z-10">
-              <div
-                className={`relative block lg:hidden transform my-8 h-40vh max-h-screen transition-opacity duration-500`}
-                data-aos="fade-left"
-                data-aos-delay="400"
-              >
-                {/* 2 columns with right slant effect - reduced width */}
-                <div className="flex gap-8 overflow-hidden relative [mask-image:linear-gradient(to_bottom,transparent_5%,black_20%,black_80%,transparent_95%)]">
-                  {cardColumns.map((column, columnIndex) => (
-                    <div
-                      key={columnIndex}
-                      className={` flex  ${
-                        isPageLoaded
-                          ? columnIndex === 0
-                            ? "animate-scroll-right-infinite"
-                            : "animate-scroll-left-infinite"
-                          : ""
-                      }`}
-                    >
-                      {/* Only duplicate once instead of twice for better performance */}
-                      {[...column, ...column].map((card, cardIndex) => (
-                        <div
-                          key={`${columnIndex}-${cardIndex}`}
-                          className={`size-52 md:size-72 rounded overflow-hidden transform hover:scale-105 hover:rotate-3 transition-all duration-300 shadow-lg hover:shadow-2xl cursor-pointer flex-shrink-0 relative group`}
-                        >
-                          {/* Use Next.js Image component for better optimization */}
-                          <div className="w-full h-full relative ">
-                            <Image
-                              src={card.image}
-                              alt={card.alt}
-                              fill
-                              sizes="(max-width: 768px) 100vw, 40vw"
-                              className="object-cover object-center "
-                              loading={cardIndex < 4 ? "eager" : "lazy"}
-                              priority={cardIndex < 2}
-                            />
-                          </div>
-
-                          {/* Enhanced gradient overlay for hover effect */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div
+              className={`relative block lg:hidden transform my-8 h-40vh max-h-screen transition-opacity duration-500`}
+              data-aos="fade-left"
+              data-aos-delay="400"
+            >
+              {/* 2 columns with right slant effect - reduced width */}
+              <div className="flex gap-8 overflow-hidden relative [mask-image:linear-gradient(to_bottom,transparent_5%,black_20%,black_80%,transparent_95%)]">
+                {cardColumns.map((column, columnIndex) => (
+                  <div
+                    key={columnIndex}
+                    className={` flex  ${
+                      isPageLoaded
+                        ? columnIndex === 0
+                          ? "animate-scroll-right-infinite"
+                          : "animate-scroll-left-infinite"
+                        : ""
+                    }`}
+                  >
+                    {/* Only duplicate once instead of twice for better performance */}
+                    {[...column, ...column].map((card, cardIndex) => (
+                      <div
+                        key={`${columnIndex}-${cardIndex}`}
+                        className={`size-52 md:size-72 rounded overflow-hidden transform hover:scale-105 hover:rotate-3 transition-all duration-300 shadow-lg hover:shadow-2xl cursor-pointer flex-shrink-0 relative group`}
+                      >
+                        {/* Use Next.js Image component for better optimization */}
+                        <div className="w-full h-full relative ">
+                          <Image
+                            src={card.image}
+                            alt={card.alt}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 40vw"
+                            className="object-cover object-center "
+                            loading={cardIndex < 4 ? "eager" : "lazy"}
+                            priority={cardIndex < 2}
+                          />
                         </div>
-                      ))}
-                    </div>
-                  ))}
-                </div>
+
+                        {/* Enhanced gradient overlay for hover effect */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      </div>
+                    ))}
+                  </div>
+                ))}
               </div>
+            </div>
             <div className="container mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               {/* Left Content */}
               <div
