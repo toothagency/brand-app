@@ -20,6 +20,7 @@ import Cookies from "js-cookie";
 import { usePayUnitPayment } from "../hooks/usePayUnitPayment";
 import Providers from "../providers";
 import ErrorBoundary from "../components/ErrorBoundary";
+import { Suspense } from "react";
 
 // Force dynamic rendering for this page
 export const dynamic = "force-dynamic";
@@ -356,7 +357,20 @@ const PaymentPage = () => {
   return (
     <Providers>
       <ErrorBoundary>
-        <PaymentPageContent />
+        <Suspense
+          fallback={
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+              <Card className="w-full max-w-md">
+                <CardContent className="p-8 text-center">
+                  <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-blue-600" />
+                  <h2 className="text-xl font-semibold mb-2">Loading...</h2>
+                </CardContent>
+              </Card>
+            </div>
+          }
+        >
+          <PaymentPageContent />
+        </Suspense>
       </ErrorBoundary>
     </Providers>
   );

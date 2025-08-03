@@ -18,6 +18,7 @@ import { usePayUnitPayment } from "../hooks/usePayUnitPayment";
 import { useFinalResults } from "../hooks/useFinalResults";
 import Providers from "../providers";
 import ErrorBoundary from "../components/ErrorBoundary";
+import { Suspense } from "react";
 
 // Force dynamic rendering for this page
 export const dynamic = "force-dynamic";
@@ -386,7 +387,20 @@ const PaymentSuccessPage = () => {
   return (
     <Providers>
       <ErrorBoundary>
-        <PaymentSuccessContent />
+        <Suspense
+          fallback={
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+              <Card className="w-full max-w-md">
+                <CardContent className="p-8 text-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                  <h2 className="text-xl font-semibold mb-2">Loading...</h2>
+                </CardContent>
+              </Card>
+            </div>
+          }
+        >
+          <PaymentSuccessContent />
+        </Suspense>
       </ErrorBoundary>
     </Providers>
   );

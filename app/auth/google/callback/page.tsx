@@ -8,11 +8,13 @@ import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
 import axios from "@/app/configs/axiosConfigs";
 import ErrorBoundary from "@/app/components/ErrorBoundary";
+import { Suspense } from "react";
 
 // Force dynamic rendering for this page
 export const dynamic = "force-dynamic";
 
-const GoogleCallbackPage = () => {
+// Inner component that uses useSearchParams
+const GoogleCallbackContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<"loading" | "success" | "error">(
@@ -111,66 +113,86 @@ const GoogleCallbackPage = () => {
   }
 
   return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardContent className="p-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            {status === "loading" && (
+              <>
+                <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-blue-600" />
+                <h2 className="text-xl font-semibold mb-2">
+                  Processing Authentication
+                </h2>
+                <p className="text-gray-600">{message}</p>
+              </>
+            )}
+
+            {status === "success" && (
+              <>
+                <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-600" />
+                <h2 className="text-xl font-semibold mb-2 text-green-800">
+                  Success!
+                </h2>
+                <p className="text-gray-600 mb-4">{message}</p>
+                <p className="text-sm text-gray-500">
+                  Redirecting you to the form...
+                </p>
+              </>
+            )}
+
+            {status === "error" && (
+              <>
+                <XCircle className="w-12 h-12 mx-auto mb-4 text-red-600" />
+                <h2 className="text-xl font-semibold mb-2 text-red-800">
+                  Authentication Failed
+                </h2>
+                <p className="text-gray-600 mb-6">{message}</p>
+                <div className="space-y-2">
+                  <Button
+                    onClick={() => router.push("/login")}
+                    className="w-full bg-blue-600 hover:bg-blue-700"
+                  >
+                    Try Again
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => router.push("/")}
+                    className="w-full"
+                  >
+                    Go Home
+                  </Button>
+                </div>
+              </>
+            )}
+          </motion.div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+// Main page component
+const GoogleCallbackPage = () => {
+  return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardContent className="p-8 text-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              {status === "loading" && (
-                <>
-                  <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-blue-600" />
-                  <h2 className="text-xl font-semibold mb-2">
-                    Processing Authentication
-                  </h2>
-                  <p className="text-gray-600">{message}</p>
-                </>
-              )}
-
-              {status === "success" && (
-                <>
-                  <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-600" />
-                  <h2 className="text-xl font-semibold mb-2 text-green-800">
-                    Success!
-                  </h2>
-                  <p className="text-gray-600 mb-4">{message}</p>
-                  <p className="text-sm text-gray-500">
-                    Redirecting you to the form...
-                  </p>
-                </>
-              )}
-
-              {status === "error" && (
-                <>
-                  <XCircle className="w-12 h-12 mx-auto mb-4 text-red-600" />
-                  <h2 className="text-xl font-semibold mb-2 text-red-800">
-                    Authentication Failed
-                  </h2>
-                  <p className="text-gray-600 mb-6">{message}</p>
-                  <div className="space-y-2">
-                    <Button
-                      onClick={() => router.push("/login")}
-                      className="w-full bg-blue-600 hover:bg-blue-700"
-                    >
-                      Try Again
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={() => router.push("/")}
-                      className="w-full"
-                    >
-                      Go Home
-                    </Button>
-                  </div>
-                </>
-              )}
-            </motion.div>
-          </CardContent>
-        </Card>
-      </div>
+      <Suspense
+        fallback={
+          <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+            <Card className="w-full max-w-md">
+              <CardContent className="p-8 text-center">
+                <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-blue-600" />
+                <h2 className="text-xl font-semibold mb-2">Loading...</h2>
+              </CardContent>
+            </Card>
+          </div>
+        }
+      >
+        <GoogleCallbackContent />
+      </Suspense>
     </ErrorBoundary>
   );
 };

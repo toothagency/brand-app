@@ -10,6 +10,7 @@ import ResultsDisplay from "../(protected)/form/components/results/ResultsDispla
 import { useGetBrand } from "../hooks/useGetBrand";
 import Providers from "../providers";
 import ErrorBoundary from "../components/ErrorBoundary";
+import { Suspense } from "react";
 
 // Force dynamic rendering for this page
 export const dynamic = "force-dynamic";
@@ -358,7 +359,20 @@ const BrandResultsPage = () => {
   return (
     <Providers>
       <ErrorBoundary>
-        <BrandResultsContent />
+        <Suspense
+          fallback={
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+              <Card className="w-full max-w-md">
+                <CardContent className="p-8 text-center">
+                  <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-blue-600" />
+                  <h2 className="text-xl font-semibold mb-2">Loading...</h2>
+                </CardContent>
+              </Card>
+            </div>
+          }
+        >
+          <BrandResultsContent />
+        </Suspense>
       </ErrorBoundary>
     </Providers>
   );
