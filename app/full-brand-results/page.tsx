@@ -1,18 +1,37 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Download, Image as ImageIcon, FileText, Palette, Target, MessageSquare, CalendarDays, CheckCircle, ArrowLeft } from "lucide-react";
+import {
+  Download,
+  Image as ImageIcon,
+  FileText,
+  Palette,
+  Target,
+  MessageSquare,
+  CalendarDays,
+  CheckCircle,
+  ArrowLeft,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
+import ErrorBoundary from "../components/ErrorBoundary";
+
+// Force dynamic rendering for this page
+export const dynamic = "force-dynamic";
 
 const FullBrandResults = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [brandData, setBrandData] = useState<any>(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const dataParam = searchParams.get("data");
@@ -34,6 +53,18 @@ const FullBrandResults = () => {
     toast.success(`${assetType} download started`);
     console.log(`Downloading ${assetType}:`, assetUrl);
   };
+
+  // Don't render anything until component is mounted
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -75,14 +106,16 @@ const FullBrandResults = () => {
               <ArrowLeft className="w-4 h-4 mr-2" />
               Home
             </Button>
-            
+
             <div className="flex items-center justify-center mb-4">
               <div className="p-3 bg-green-100 rounded-full mr-3">
                 <CheckCircle className="w-6 h-6 text-green-600" />
               </div>
-              <h1 className="text-4xl font-bold text-gray-900">Complete Brand Kit</h1>
+              <h1 className="text-4xl font-bold text-gray-900">
+                Complete Brand Kit
+              </h1>
             </div>
-            
+
             <p className="text-lg text-gray-600 mb-2">
               Your brand is ready! Download all assets below.
             </p>
@@ -97,8 +130,13 @@ const FullBrandResults = () => {
               <div className="flex items-center gap-3">
                 <CheckCircle className="w-6 h-6 text-green-600" />
                 <div>
-                  <h3 className="font-semibold text-green-900">Payment Successful!</h3>
-                  <p className="text-green-700">Your complete brand kit has been generated and is ready for download.</p>
+                  <h3 className="font-semibold text-green-900">
+                    Payment Successful!
+                  </h3>
+                  <p className="text-green-700">
+                    Your complete brand kit has been generated and is ready for
+                    download.
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -117,33 +155,54 @@ const FullBrandResults = () => {
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Primary Logo (AI)</span>
+                    <span className="text-sm text-gray-600">
+                      Primary Logo (AI)
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Primary Logo AI", brandData.logos?.primary?.ai)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Primary Logo AI",
+                          brandData.logos?.primary?.ai
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
                     </Button>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Primary Logo (SVG)</span>
+                    <span className="text-sm text-gray-600">
+                      Primary Logo (SVG)
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Primary Logo SVG", brandData.logos?.primary?.svg)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Primary Logo SVG",
+                          brandData.logos?.primary?.svg
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
                     </Button>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Primary Logo (PNG)</span>
+                    <span className="text-sm text-gray-600">
+                      Primary Logo (PNG)
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Primary Logo PNG", brandData.logos?.primary?.png)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Primary Logo PNG",
+                          brandData.logos?.primary?.png
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
@@ -164,11 +223,18 @@ const FullBrandResults = () => {
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Complete Guidelines (PDF)</span>
+                    <span className="text-sm text-gray-600">
+                      Complete Guidelines (PDF)
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Brand Guidelines PDF", brandData.guidelines?.pdf)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Brand Guidelines PDF",
+                          brandData.guidelines?.pdf
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
@@ -179,18 +245,30 @@ const FullBrandResults = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Color Palette", brandData.guidelines?.colors)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Color Palette",
+                          brandData.guidelines?.colors
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
                     </Button>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Typography Guide</span>
+                    <span className="text-sm text-gray-600">
+                      Typography Guide
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Typography Guide", brandData.guidelines?.typography)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Typography Guide",
+                          brandData.guidelines?.typography
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
@@ -211,33 +289,54 @@ const FullBrandResults = () => {
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Instagram Posts (50+ designs)</span>
+                    <span className="text-sm text-gray-600">
+                      Instagram Posts (50+ designs)
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Instagram Templates", brandData.socialMedia?.instagram)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Instagram Templates",
+                          brandData.socialMedia?.instagram
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
                     </Button>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Facebook Covers</span>
+                    <span className="text-sm text-gray-600">
+                      Facebook Covers
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Facebook Covers", brandData.socialMedia?.facebook)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Facebook Covers",
+                          brandData.socialMedia?.facebook
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
                     </Button>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">LinkedIn Banners</span>
+                    <span className="text-sm text-gray-600">
+                      LinkedIn Banners
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("LinkedIn Banners", brandData.socialMedia?.linkedin)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "LinkedIn Banners",
+                          brandData.socialMedia?.linkedin
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
@@ -258,33 +357,54 @@ const FullBrandResults = () => {
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Standard Business Card</span>
+                    <span className="text-sm text-gray-600">
+                      Standard Business Card
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Standard Business Card", brandData.businessCards?.standard)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Standard Business Card",
+                          brandData.businessCards?.standard
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
                     </Button>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Premium Business Card</span>
+                    <span className="text-sm text-gray-600">
+                      Premium Business Card
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Premium Business Card", brandData.businessCards?.premium)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Premium Business Card",
+                          brandData.businessCards?.premium
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
                     </Button>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Print-Ready Files</span>
+                    <span className="text-sm text-gray-600">
+                      Print-Ready Files
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Print-Ready Files", brandData.businessCards?.printReady)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Print-Ready Files",
+                          brandData.businessCards?.printReady
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
@@ -305,11 +425,18 @@ const FullBrandResults = () => {
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Homepage Design</span>
+                    <span className="text-sm text-gray-600">
+                      Homepage Design
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Homepage Design", brandData.website?.homepage)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Homepage Design",
+                          brandData.website?.homepage
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
@@ -320,7 +447,12 @@ const FullBrandResults = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("About Page", brandData.website?.about)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "About Page",
+                          brandData.website?.about
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
@@ -331,7 +463,12 @@ const FullBrandResults = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Contact Page", brandData.website?.contact)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Contact Page",
+                          brandData.website?.contact
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
@@ -352,33 +489,54 @@ const FullBrandResults = () => {
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">HTML Email Signature</span>
+                    <span className="text-sm text-gray-600">
+                      HTML Email Signature
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("HTML Email Signature", brandData.emailSignatures?.html)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "HTML Email Signature",
+                          brandData.emailSignatures?.html
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
                     </Button>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Outlook Signature</span>
+                    <span className="text-sm text-gray-600">
+                      Outlook Signature
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Outlook Signature", brandData.emailSignatures?.outlook)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Outlook Signature",
+                          brandData.emailSignatures?.outlook
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
                     </Button>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-sm text-gray-600">Gmail Signature</span>
+                    <span className="text-sm text-gray-600">
+                      Gmail Signature
+                    </span>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDownloadAsset("Gmail Signature", brandData.emailSignatures?.gmail)}
+                      onClick={() =>
+                        handleDownloadAsset(
+                          "Gmail Signature",
+                          brandData.emailSignatures?.gmail
+                        )
+                      }
                     >
                       <Download className="w-4 h-4 mr-1" />
                       Download
@@ -409,8 +567,9 @@ const FullBrandResults = () => {
             <CardContent className="p-6">
               <h3 className="font-semibold text-blue-900 mb-2">Need Help?</h3>
               <p className="text-blue-700 mb-3">
-                You have lifetime access to these assets and priority support. 
-                If you need any modifications or have questions, our team is here to help.
+                You have lifetime access to these assets and priority support.
+                If you need any modifications or have questions, our team is
+                here to help.
               </p>
               <div className="flex gap-4">
                 <Button variant="outline" size="sm">
@@ -428,4 +587,12 @@ const FullBrandResults = () => {
   );
 };
 
-export default FullBrandResults; 
+const FullBrandResultsPage = () => {
+  return (
+    <ErrorBoundary>
+      <FullBrandResults />
+    </ErrorBoundary>
+  );
+};
+
+export default FullBrandResultsPage;

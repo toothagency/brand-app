@@ -9,15 +9,24 @@ import { toast } from "react-hot-toast";
 import ResultsDisplay from "../(protected)/form/components/results/ResultsDisplay";
 import { useGetBrand } from "../hooks/useGetBrand";
 import Providers from "../providers";
+import ErrorBoundary from "../components/ErrorBoundary";
+
+// Force dynamic rendering for this page
+export const dynamic = "force-dynamic";
 
 const BrandResultsContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   const { getBrand } = useGetBrand();
   const brandId = searchParams.get("brandId");
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const fetchBrandData = async () => {
@@ -72,6 +81,20 @@ const BrandResultsContent = () => {
     setIsLoading(true);
     // The useEffect will trigger again
   };
+
+  // Don't render anything until component is mounted
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-8 text-center">
+            <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-blue-600" />
+            <h2 className="text-xl font-semibold mb-2">Loading...</h2>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -179,7 +202,6 @@ const BrandResultsContent = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex flex-col sm:flex-row space-y-3 text-center sm:text-left items-center justify-between">
             <div className="flex items-center space-x-4">
-             
               <div className="">
                 <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
                   {brandData.brand_communication?.brand_name || "Your Brand"}
@@ -335,7 +357,9 @@ const BrandResultsContent = () => {
 const BrandResultsPage = () => {
   return (
     <Providers>
-      <BrandResultsContent />
+      <ErrorBoundary>
+        <BrandResultsContent />
+      </ErrorBoundary>
     </Providers>
   );
 };

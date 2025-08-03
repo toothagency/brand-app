@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   CreditCard,
@@ -16,12 +16,21 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { usePayUnitPayment } from "../hooks/usePayUnitPayment";
 import Providers from "../providers";
+import ErrorBoundary from "../components/ErrorBoundary";
+
+// Force dynamic rendering for this page
+export const dynamic = "force-dynamic";
 
 const InitializePaymentContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isInitializing, setIsInitializing] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const { initializePayment } = usePayUnitPayment();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Get brand data from URL params
   const brandData = searchParams.get("brandData")
@@ -82,6 +91,18 @@ const InitializePaymentContent = () => {
       setIsInitializing(false);
     }
   };
+
+  // Don't render anything until component is mounted
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading payment page...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
@@ -288,7 +309,9 @@ const InitializePaymentContent = () => {
 const InitializePaymentPage = () => {
   return (
     <Providers>
-      <InitializePaymentContent />
+      <ErrorBoundary>
+        <InitializePaymentContent />
+      </ErrorBoundary>
     </Providers>
   );
 };

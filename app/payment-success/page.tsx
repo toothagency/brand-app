@@ -17,6 +17,10 @@ import { toast } from "react-hot-toast";
 import { usePayUnitPayment } from "../hooks/usePayUnitPayment";
 import { useFinalResults } from "../hooks/useFinalResults";
 import Providers from "../providers";
+import ErrorBoundary from "../components/ErrorBoundary";
+
+// Force dynamic rendering for this page
+export const dynamic = "force-dynamic";
 
 const PaymentSuccessContent = () => {
   const router = useRouter();
@@ -27,11 +31,16 @@ const PaymentSuccessContent = () => {
   const [transactionData, setTransactionData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isGeneratingResults, setIsGeneratingResults] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   const { getPaymentStatus } = usePayUnitPayment();
   const finalResultsMutation = useFinalResults();
 
   const transactionId = searchParams.get("transactionId");
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const checkPaymentStatus = async () => {
@@ -179,6 +188,20 @@ const PaymentSuccessContent = () => {
         return "We're checking your payment status...";
     }
   };
+
+  // Don't render anything until component is mounted
+  if (!isMounted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-8 text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <h2 className="text-xl font-semibold mb-2">Loading...</h2>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -362,7 +385,9 @@ const PaymentSuccessContent = () => {
 const PaymentSuccessPage = () => {
   return (
     <Providers>
-      <PaymentSuccessContent />
+      <ErrorBoundary>
+        <PaymentSuccessContent />
+      </ErrorBoundary>
     </Providers>
   );
 };
