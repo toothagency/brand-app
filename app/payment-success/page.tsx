@@ -61,7 +61,7 @@ const PaymentSuccessContent = () => {
           } else if (status === "FAILED") {
             toast.error("Payment failed. Please try again.");
           } else if (status === "PENDING") {
-            toast.info("Payment is still pending. Please check your phone.");
+            toast.custom("Payment is still pending. Please check your phone.");
           }
         }
       } catch (error) {
