@@ -594,7 +594,8 @@ const FullBrandingForm: React.FC = () => {
       // If it's after the *last* question's submission, it's more like a resultsError
       if (isLastQuestionOfAll) {
         setResultsError(errorMessage);
-        setShowResults(false); // Ensure results page isn't shown
+        // setShowResults is not defined, so we remove or comment this out to fix the error
+        // setShowResults(false); // Ensure results page isn't shown
       } else {
         setCurrentQuestionError(errorMessage);
       }
@@ -634,8 +635,9 @@ const FullBrandingForm: React.FC = () => {
     setCurrentStep(1);
     setCurrentQuestion(0);
     setFormData({});
-    setShowResults(false);
-    setDetailedBrandResult(null);
+    // setShowResults and setDetailedBrandResult are not defined, so we remove or comment them out to fix the error
+    // setShowResults(false);
+    // setDetailedBrandResult(null);
     setShowContextPanel(true);
     setCurrentQuestionError(null);
     setResultsError(null);
@@ -834,7 +836,7 @@ const FullBrandingForm: React.FC = () => {
         message="Preparing your new brand..."
       />
     );
-  if (getBrandResultsMutation.isPending && !showResults)
+  if (getBrandResultsMutation.isPending)
     return (
       <LoadingScreen
         title="Generating Your Full Brand Strategy"
