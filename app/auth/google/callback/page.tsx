@@ -6,7 +6,7 @@ import { Loader2, CheckCircle, XCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
-import axios from "../../configs/axiosConfigs";
+import axios from "@/app/configs/axiosConfigs";
 
 const GoogleCallbackPage = () => {
   const router = useRouter();
