@@ -787,7 +787,7 @@ export default function HomePage() {
 
           {/* Final CTA Section */}
           <section
-            className="bg-gradient-to-r bg-[#3467AA]  py-12 md:py-20 mt-0"
+            className="bg-gradient-to-r bg-[#F5A819]  py-12 md:py-20 mt-0"
             data-aos="fade-up"
           >
             <div className="container mx-auto px-6 text-center">
@@ -830,7 +830,7 @@ export default function HomePage() {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className="w-5 h-5 text-[#F5A819] fill-current"
+                        className="w-5 h-5 text-[#3467AA] fill-current"
                       />
                     ))}
                   </div>
