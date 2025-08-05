@@ -40,20 +40,17 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
   const handlePurchaseFull = () => {
     setIsProcessing(true);
-    // Redirect to payment page with brand data
+    // Redirect to WhatsApp with brand data
     setTimeout(() => {
       setIsProcessing(false);
       onClose();
-      // Pass brand data to payment page
-      const brandDataParam = encodeURIComponent(
-        JSON.stringify({
-          id: brandId || "temp-brand-id", // Use actual brand ID if available
-          brand_communication: {
-            brand_name: brandName,
-          },
-        })
-      );
-      window.location.href = `/initialize-payment?brandData=${brandDataParam}`;
+      // Create WhatsApp message with brand data
+      const message = `Hi! I'm interested in purchasing the Complete Brand Kit for my brand "${brandName}". Brand ID: ${
+        brandId || "temp-brand-id"
+      }`;
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappUrl = `https://wa.me/+237679900875?text=${encodedMessage}`;
+      window.open(whatsappUrl, "_blank");
     }, 1000);
   };
 
