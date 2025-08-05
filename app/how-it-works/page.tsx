@@ -24,7 +24,7 @@ export default function HowItWorksPage() {
       title: "Answer Simple Questions",
       description:
         "Tell us about your business, industry, and preferences. Our AI asks targeted questions to understand your brand vision.",
-      icon: <MessageSquare className="w-8 h-8 text-blue-600" />,
+      icon: <MessageSquare className="w-8 h-8 text-[#3467AA]" />,
       details: [
         "Business type and industry",
         "Target audience and market",
@@ -39,7 +39,7 @@ export default function HowItWorksPage() {
       title: "AI Generates Your Options",
       description:
         "Our advanced AI analyzes your responses and creates multiple professional logo and brand identity options.",
-      icon: <Sparkles className="w-8 h-8 text-purple-600" />,
+      icon: <Sparkles className="w-8 h-8 text-[#3467AA]" />,
       details: [
         "Multiple logo variations",
         "Color palette suggestions",
@@ -49,27 +49,13 @@ export default function HowItWorksPage() {
       image: "/images/how-it-works/step2.jpg",
       timeEstimate: "30 seconds",
     },
+
     {
       number: "03",
-      title: "Customize & Refine",
-      description:
-        "Choose your favorite option and customize colors, fonts, and elements to perfectly match your vision.",
-      icon: <Palette className="w-8 h-8 text-green-600" />,
-      details: [
-        "Adjust colors and fonts",
-        "Modify logo elements",
-        "Preview on different backgrounds",
-        "Get real-time feedback",
-      ],
-      image: "/images/how-it-works/step3.jpg",
-      timeEstimate: "5-10 minutes",
-    },
-    {
-      number: "04",
       title: "Download & Launch",
       description:
         "Download your complete brand kit with all the files you need to start using your new brand immediately.",
-      icon: <Download className="w-8 h-8 text-orange-600" />,
+      icon: <Download className="w-8 h-8 text-[#3467AA]" />,
       details: [
         "High-resolution logo files",
         "Social media templates",
@@ -117,14 +103,11 @@ export default function HowItWorksPage() {
       <main className="min-h-screen bg-white dark:bg-gray-900">
         {/* Hero Section */}
         <section className="relative py-48 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"></div>
+          <div className="absolute inset-0 bg-[#3467AA]/5 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"></div>
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-4xl mx-auto text-center" data-aos="fade-up">
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-                How It{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Works
-                </span>
+                How It <span className="text-[#3467AA]">Works</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
                 Create your complete brand identity in just 4 simple steps. No
@@ -133,7 +116,7 @@ export default function HowItWorksPage() {
               <div className="flex justify-center">
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-[#3467AA] text-white rounded-full font-semibold hover:bg-[#3467AA]/90 transition-all duration-300 transform hover:scale-105"
                 >
                   Start Your Brand
                   <ArrowRight className="w-5 h-5" />
@@ -150,12 +133,12 @@ export default function HowItWorksPage() {
               {features.map((feature, index) => (
                 <div
                   key={index}
-                  className="text-center p-6 rounded-xl bg-white dark:bg-gray-700 shadow-lg"
+                  className="text-center p-6 rounded-xl "
                   data-aos="fade-up"
                   data-aos-delay={index * 100}
                 >
                   <div className="flex justify-center mb-4">
-                    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-600">
+                    <div className="w-12 h-12 bg-[#3467AA]/10 dark:bg-white rounded-full flex items-center justify-center text-[#3467AA]">
                       {feature.icon}
                     </div>
                   </div>
@@ -201,7 +184,7 @@ export default function HowItWorksPage() {
                     }`}
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                      <div className="w-16 h-16 bg-[#3467AA] rounded-full flex items-center justify-center text-white font-bold text-xl">
                         {step.number}
                       </div>
                       <div className="flex items-center gap-3">
@@ -223,7 +206,7 @@ export default function HowItWorksPage() {
                     <div className="space-y-3">
                       {step.details.map((detail, idx) => (
                         <div key={idx} className="flex items-center gap-3">
-                          <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
+                          <CheckCircle className="w-5 h-5 text-[#3467AA] flex-shrink-0" />
                           <span className="text-gray-700 dark:text-gray-300">
                             {detail}
                           </span>
@@ -239,9 +222,9 @@ export default function HowItWorksPage() {
                     }`}
                   >
                     <div className="relative rounded-2xl overflow-hidden shadow-2xl group">
-                      <div className="relative w-full h-80 lg:h-96 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 flex items-center justify-center">
+                      <div className="relative w-full h-80 lg:h-96 bg-[#3467AA]/10 dark:bg-[#3467AA]/20 flex items-center justify-center">
                         <div className="text-center p-8">
-                          <div className="w-24 h-24 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                          <div className="w-24 h-24 bg-[#F5A819] rounded-full flex items-center justify-center mx-auto mb-6">
                             {step.icon}
                           </div>
                           <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
@@ -275,7 +258,7 @@ export default function HowItWorksPage() {
             <div className="max-w-4xl mx-auto">
               <div className="relative">
                 {/* Timeline Line */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-600 to-purple-600"></div>
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-[#3467AA]"></div>
 
                 {/* Timeline Items */}
                 <div className="space-y-12">
@@ -301,7 +284,7 @@ export default function HowItWorksPage() {
                           <p className="text-gray-600 dark:text-gray-300 mb-3">
                             {step.description}
                           </p>
-                          <span className="inline-block bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-3 py-1 rounded-full text-sm font-medium">
+                          <span className="inline-block bg-[#3467AA]/10 dark:bg-[#3467AA]/20 text-[#3467AA] px-3 py-1 rounded-full text-sm font-medium">
                             {step.timeEstimate}
                           </span>
                         </div>
@@ -309,7 +292,7 @@ export default function HowItWorksPage() {
 
                       {/* Timeline Dot */}
                       <div className="relative z-10">
-                        <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full border-4 border-white dark:border-gray-800 shadow-lg"></div>
+                        <div className="w-8 h-8 bg-[#F5A819] rounded-full border-4 border-white dark:border-gray-800 shadow-lg"></div>
                       </div>
 
                       {/* Empty space for alignment */}
@@ -337,8 +320,8 @@ export default function HowItWorksPage() {
 
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    <div className="w-8 h-8 bg-[#3467AA]/10 dark:bg-[#3467AA]/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <CheckCircle className="w-5 h-5 text-[#3467AA]" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
@@ -352,8 +335,8 @@ export default function HowItWorksPage() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    <div className="w-8 h-8 bg-[#3467AA]/10 dark:bg-[#3467AA]/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <CheckCircle className="w-5 h-5 text-[#3467AA]" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
@@ -367,8 +350,8 @@ export default function HowItWorksPage() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    <div className="w-8 h-8 bg-[#3467AA]/10 dark:bg-[#3467AA]/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <CheckCircle className="w-5 h-5 text-[#3467AA]" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
@@ -381,8 +364,8 @@ export default function HowItWorksPage() {
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    <div className="w-8 h-8 bg-[#3467AA]/10 dark:bg-[#3467AA]/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <CheckCircle className="w-5 h-5 text-[#3467AA]" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
@@ -398,11 +381,11 @@ export default function HowItWorksPage() {
 
               <div data-aos="fade-left">
                 <div className="relative">
-                  <div className="w-full h-96 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl shadow-2xl transform rotate-3"></div>
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl shadow-2xl transform -rotate-3"></div>
+                  <div className="w-full h-96 bg-[#3467AA] rounded-2xl shadow-2xl transform rotate-3"></div>
+                  <div className="absolute inset-0 bg-[#F5A819] rounded-2xl shadow-2xl transform -rotate-3"></div>
                   <div className="absolute inset-0 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl flex items-center justify-center">
                     <div className="text-center p-8">
-                      <Download className="w-16 h-16 text-blue-600 mx-auto mb-4" />
+                      <Download className="w-16 h-16 text-[#3467AA] mx-auto mb-4" />
                       <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                         Complete Brand Kit
                       </h3>
@@ -418,7 +401,7 @@ export default function HowItWorksPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-orange-400 via-pink-500 to-blue-600">
+        <section className="py-20 bg-[#F5A819]">
           <div className="container mx-auto px-6 text-center">
             <div className="max-w-2xl mx-auto" data-aos="fade-up">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">

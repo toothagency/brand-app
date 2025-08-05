@@ -14,6 +14,9 @@ export interface Brand {
   marketing_and_social_media_strategy: string;
   name: string;
   userId: string;
+
+  premium:boolean,
+  payment_status:boolean
 }
 
 interface BrandContextType {

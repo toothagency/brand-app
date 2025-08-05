@@ -68,34 +68,34 @@ export default function ContactPage() {
       icon: <Mail className="w-6 h-6" />,
       title: "Email Us",
       description: "Get in touch via email",
-      contact: "hello@jaraai.com",
-      link: "mailto:hello@jaraai.com",
-      color: "bg-blue-100 dark:bg-blue-900/30 text-blue-600",
+      contact: "agencytooth@gmail.com",
+      link: "mailto:agencytooth@gmail.com",
+      color: "bg-[#3467AA]/10 dark:bg-[#3467AA]/20 text-[#3467AA]",
     },
-    {
-      icon: <Phone className="w-6 h-6" />,
-      title: "Call Us",
-      description: "Speak with our team",
-      contact: "+1 (555) 123-4567",
-      link: "tel:+15551234567",
-      color: "bg-green-100 dark:bg-green-900/30 text-green-600",
-    },
-    {
-      icon: <Globe className="w-6 h-6" />,
-      title: "Live Chat",
-      description: "Chat with support",
-      contact: "Available 24/7",
-      link: "#",
-      color: "bg-purple-100 dark:bg-purple-900/30 text-purple-600",
-    },
+    // {
+    //   icon: <Phone className="w-6 h-6" />,
+    //   title: "Call Us",
+    //   description: "Speak with our team",
+    //   contact: "+237 6",
+    //   link: "tel:+15551234567",
+    //   color: "bg-[#F5A819]/10 dark:bg-[#F5A819]/20 text-[#F5A819]",
+    // },
+    // {
+    //   icon: <Globe className="w-6 h-6" />,
+    //   title: "Live Chat",
+    //   description: "Chat with support",
+    //   contact: "Available 24/7",
+    //   link: "#",
+    //   color: "bg-[#3467AA]/10 dark:bg-[#3467AA]/20 text-[#3467AA]",
+    // },
   ];
 
   const officeInfo = [
-    {
-      icon: <MapPin className="w-5 h-5" />,
-      title: "Headquarters",
-      details: "123 Innovation Drive, Tech City, TC 12345",
-    },
+    // {
+    //   icon: <MapPin className="w-5 h-5" />,
+    //   title: "Headquarters",
+    //   details: "123 Innovation Drive, Tech City, TC 12345",
+    // },
     {
       icon: <Clock className="w-5 h-5" />,
       title: "Business Hours",
@@ -121,14 +121,11 @@ export default function ContactPage() {
       <main className="min-h-screen bg-white dark:bg-gray-900">
         {/* Hero Section */}
         <section className="relative py-48 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"></div>
+          <div className="absolute inset-0 bg-[#3467AA]/5 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"></div>
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-4xl mx-auto text-center" data-aos="fade-up">
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-1 lg:mb-6">
-                Get in{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Touch
-                </span>
+                Get in <span className="text-[#3467AA]">Touch</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
                 Have questions about Jara AI? We're here to help you build the
@@ -136,19 +133,19 @@ export default function ContactPage() {
               </p>
               <div className="flex justify-center items-center gap-4 mb-2 lg:mb-8">
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <CheckCircle className="w-5 h-5 text-[#3467AA]" />
                   <span className="text-gray-600 dark:text-gray-300">
                     24/7 Support
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <CheckCircle className="w-5 h-5 text-[#3467AA]" />
                   <span className="text-gray-600 dark:text-gray-300">
                     Quick Response
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <CheckCircle className="w-5 h-5 text-[#3467AA]" />
                   <span className="text-gray-600 dark:text-gray-300">
                     Expert Team
                   </span>
@@ -192,7 +189,7 @@ export default function ContactPage() {
                   </p>
                   <a
                     href={method.link}
-                    className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                    className="inline-flex items-center gap-2 text-[#3467AA] dark:text-[#3467AA] font-semibold hover:text-[#3467AA]/80 dark:hover:text-[#3467AA]/80 transition-colors"
                   >
                     {method.contact}
                     <ArrowRight className="w-4 h-4" />
@@ -236,7 +233,7 @@ export default function ContactPage() {
                             name="name"
                             value={formData.name}
                             onChange={handleInputChange}
-                            className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-600 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                            className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-600 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3467AA] focus:border-transparent transition-all duration-200"
                             placeholder="Your full name"
                             required
                           />
@@ -256,7 +253,7 @@ export default function ContactPage() {
                             name="email"
                             value={formData.email}
                             onChange={handleInputChange}
-                            className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-600 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                            className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-600 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3467AA] focus:border-transparent transition-all duration-200"
                             placeholder="your.email@example.com"
                             required
                           />
@@ -275,7 +272,7 @@ export default function ContactPage() {
                           name="subject"
                           value={formData.subject}
                           onChange={handleInputChange}
-                          className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-600 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                          className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-600 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3467AA] focus:border-transparent transition-all duration-200"
                         >
                           <option value="">Select a subject</option>
                           <option value="general">General Inquiry</option>
@@ -300,7 +297,7 @@ export default function ContactPage() {
                           value={formData.message}
                           onChange={handleInputChange}
                           rows={5}
-                          className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-600 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
+                          className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-600 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3467AA] focus:border-transparent transition-all duration-200 resize-none"
                           placeholder="Tell us how we can help you..."
                           required
                         />
@@ -332,7 +329,7 @@ export default function ContactPage() {
 
                       <button
                         type="submit"
-                        className="w-full py-4 px-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 focus:outline-none transition-all duration-300 transform hover:scale-105 disabled:opacity-60 disabled:transform-none flex items-center justify-center gap-2"
+                        className="w-full py-4 px-6 bg-[#3467AA] text-white font-semibold rounded-xl hover:bg-[#3467AA]/90 focus:ring-2 focus:ring-[#3467AA]/50 dark:focus:ring-[#3467AA]/50 focus:outline-none transition-all duration-300 transform hover:scale-105 disabled:opacity-60 disabled:transform-none flex items-center justify-center gap-2"
                         disabled={loading}
                       >
                         {loading ? (
@@ -370,7 +367,7 @@ export default function ContactPage() {
                           key={index}
                           className="flex flex-col lg:flex-row items-center lg:items-start gap-4"
                         >
-                          <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center flex-shrink-0">
+                          <div className="w-12 h-12 bg-[#3467AA]/10 dark:bg-[#3467AA]/20 rounded-full flex items-center justify-center flex-shrink-0">
                             {info.icon}
                           </div>
                           <div className="text-center lg:text-left">
@@ -396,7 +393,7 @@ export default function ContactPage() {
                       </p>
                       <a
                         href="/#faq"
-                        className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
+                        className="inline-flex items-center gap-2 text-[#3467AA] dark:text-[#3467AA] font-semibold hover:text-[#3467AA]/80 dark:hover:text-[#3467AA]/80 transition-colors"
                       >
                         View FAQ
                         <ArrowRight className="w-4 h-4" />
@@ -404,7 +401,6 @@ export default function ContactPage() {
                     </div>
 
                     {/* Illustration */}
-                   
                   </div>
                 </div>
               </div>
@@ -413,7 +409,7 @@ export default function ContactPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-orange-400 via-pink-500 to-blue-600">
+        <section className="py-20 bg-[#F5A819]">
           <div className="container mx-auto px-6 text-center">
             <div className="max-w-2xl mx-auto" data-aos="fade-up">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">

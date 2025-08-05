@@ -1,15 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import axios from '../configs/axiosConfigs';
+import { FullBrandResponse } from '../(protected)/form/utils/types';
 
-interface FullBrandResponse {
-    success: boolean;
-    message: string;
-    full_brand: {
-        brand: any;
-        brand_assets: any;
-        social_media_content: any;
-    };
-}
+
 
 const callGetFullResultsAPI = async (brandId: string): Promise<FullBrandResponse> => {
     try {

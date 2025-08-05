@@ -71,7 +71,7 @@ export default function FeedbackPage() {
       <main className="min-h-screen bg-white dark:bg-gray-900">
         {/* Hero Section */}
         <section className="relative py-48 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"></div>
+          <div className="absolute inset-0 bg-[#3467AA]/5 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"></div>
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-4xl mx-auto text-center" data-aos="fade-up">
               {/* <div className="flex justify-center mb-6">
@@ -80,10 +80,7 @@ export default function FeedbackPage() {
                 </div>
               </div> */}
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-1 lg:mb-6">
-                We Value Your{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Feedback
-                </span>
+                We Value Your <span className="text-[#3467AA]">Feedback</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
                 Help us improve Jara AI Brand Builder. Your insights shape the
@@ -91,19 +88,19 @@ export default function FeedbackPage() {
               </p>
               <div className="flex justify-center items-center gap-4 mb-2 lg:mb-8">
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <CheckCircle className="w-5 h-5 text-[#3467AA]" />
                   <span className="text-gray-600 dark:text-gray-300">
                     Quick & Easy
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <CheckCircle className="w-5 h-5 text-[#3467AA]" />
                   <span className="text-gray-600 dark:text-gray-300">
                     Anonymous Option
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <CheckCircle className="w-5 h-5 text-[#3467AA]" />
                   <span className="text-gray-600 dark:text-gray-300">
                     We Listen
                   </span>
@@ -146,7 +143,7 @@ export default function FeedbackPage() {
                         <input
                           id="feedback-name"
                           type="text"
-                          className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                          className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 focus:outline-none focus:ring-2 focus:ring-[#3467AA] focus:border-transparent transition-all duration-200"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           autoComplete="name"
@@ -168,7 +165,7 @@ export default function FeedbackPage() {
                         <input
                           id="feedback-email"
                           type="email"
-                          className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                          className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 focus:outline-none focus:ring-2 focus:ring-[#3467AA] focus:border-transparent transition-all duration-200"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           autoComplete="email"
@@ -192,7 +189,7 @@ export default function FeedbackPage() {
                         </label>
                         <textarea
                           id="feedback-message"
-                          className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 min-h-[120px] resize-none"
+                          className="w-full rounded-xl border-0 bg-gray-50 dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 focus:outline-none focus:ring-2 focus:ring-[#3467AA] focus:border-transparent transition-all duration-200 min-h-[120px] resize-none"
                           value={feedback}
                           onChange={(e) => setFeedback(e.target.value)}
                           required
@@ -266,7 +263,7 @@ CREATE POLICY "Allow public reads" ON feedback
 
                       <button
                         type="submit"
-                        className="w-full py-4 px-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 focus:ring-2 focus:ring-blue-400 dark:focus:ring-blue-300 focus:outline-none transition-all duration-300 transform hover:scale-105 disabled:opacity-60 disabled:transform-none flex items-center justify-center gap-2"
+                        className="w-full py-4 px-6 bg-[#3467AA] text-white font-semibold rounded-xl hover:bg-[#3467AA]/90 focus:ring-2 focus:ring-[#3467AA]/50 dark:focus:ring-[#3467AA]/50 focus:outline-none transition-all duration-300 transform hover:scale-105 disabled:opacity-60 disabled:transform-none flex items-center justify-center gap-2"
                         disabled={loading}
                         aria-describedby={
                           loading ? "submitting-feedback" : undefined
@@ -308,8 +305,8 @@ CREATE POLICY "Allow public reads" ON feedback
 
                     <div className="space-y-6">
                       <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4">
-                        <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center flex-shrink-0">
-                          <CheckCircle className="w-6 h-6 text-blue-600" />
+                        <div className="w-12 h-12  rounded-full flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-6 h-6 text-[#3467AA]" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
@@ -322,8 +319,8 @@ CREATE POLICY "Allow public reads" ON feedback
                       </div>
 
                       <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4">
-                        <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center flex-shrink-0">
-                          <MessageSquare className="w-6 h-6 text-purple-600" />
+                        <div className="w-12 h-12  rounded-full flex items-center justify-center flex-shrink-0">
+                          <MessageSquare className="w-6 h-6 text-[#F5A819]" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
@@ -337,8 +334,8 @@ CREATE POLICY "Allow public reads" ON feedback
                       </div>
 
                       <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4">
-                        <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center flex-shrink-0">
-                          <ArrowRight className="w-6 h-6 text-green-600" />
+                        <div className="w-12 h-12  rounded-full flex items-center justify-center flex-shrink-0">
+                          <ArrowRight className="w-6 h-6 text-[#3467AA]" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
@@ -353,9 +350,7 @@ CREATE POLICY "Allow public reads" ON feedback
 
                     {/* Illustration */}
                     <div className="mt-12 lg:flex justify-center hidden  lg:justify-start">
-                      <div className="w-64 h-64 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl flex items-center justify-center">
-                        <MessageSquare className="w-24 h-24 text-blue-600 dark:text-blue-400" />
-                      </div>
+                      <div className="w-64 h-64  flex items-center justify-center"></div>
                     </div>
                   </div>
                 </div>
@@ -365,7 +360,7 @@ CREATE POLICY "Allow public reads" ON feedback
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-orange-400 via-pink-500 to-blue-600">
+        <section className="py-20 bg-[#F5A819]">
           <div className="container mx-auto px-6 text-center">
             <div className="max-w-2xl mx-auto" data-aos="fade-up">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">

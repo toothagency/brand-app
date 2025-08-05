@@ -13,7 +13,6 @@ import {
   Users,
   Download,
   Palette,
-  
 } from "lucide-react";
 
 export default function PricingPage() {
@@ -43,7 +42,7 @@ export default function PricingPage() {
       ],
       cta: "Start Free Trial",
       popular: false,
-      icon: <Sparkles className="w-8 h-8 text-blue-600" />,
+      icon: <Sparkles className="w-8 h-8 text-[#3467AA]" />,
     },
     {
       name: "Complete Brand Kit",
@@ -71,7 +70,7 @@ export default function PricingPage() {
       notIncluded: [],
       cta: "Unlock Full Brand Kit",
       popular: true,
-      icon: <Crown className="w-8 h-8 text-yellow-600" />,
+      icon: <Crown className="w-8 h-8 text-[#F5A819]" />,
     },
   ];
 
@@ -111,35 +110,33 @@ export default function PricingPage() {
       <main className="min-h-screen bg-white dark:bg-gray-900">
         {/* Hero Section */}
         <section className="relative py-48  overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"></div>
+          <div className="absolute inset-0 bg-[#3467AA]/5 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"></div>
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-4xl mx-auto text-center" data-aos="fade-up">
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
                 Try Free,{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Pay Once
-                </span>{" "}
-                for Everything
+                <span className="text-[#3467AA]">Pay Once Per Brand</span> for
+                Everything
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
                 Complete the form to see your brand preview, then unlock
-                everything with one payment.
+                everything with one payment per brand.
               </p>
               <div className="flex justify-center items-center gap-4 mb-8">
                 <div className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-green-500" />
+                  <Check className="w-5 h-5 text-[#3467AA]" />
                   <span className="text-gray-600 dark:text-gray-300">
                     No hidden fees
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-green-500" />
+                  <Check className="w-5 h-5 text-[#3467AA]" />
                   <span className="text-gray-600 dark:text-gray-300">
                     Cancel anytime
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Check className="w-5 h-5 text-green-500" />
+                  <Check className="w-5 h-5 text-[#3467AA]" />
                   <span className="text-gray-600 dark:text-gray-300">
                     Instant access
                   </span>
@@ -161,7 +158,7 @@ export default function PricingPage() {
                   data-aos-delay={index * 100}
                 >
                   <div className="flex justify-center mb-4">
-                    <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-600">
+                    <div className="w-12 h-12 bg-[#3467AA]/10 dark:bg-[#3467AA]/20 rounded-full flex items-center justify-center text-[#3467AA]">
                       {feature.icon}
                     </div>
                   </div>
@@ -186,7 +183,7 @@ export default function PricingPage() {
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                 Complete the form to see your brand preview, then unlock the
-                complete brand kit with one payment.
+                complete brand kit with one payment per brand.
               </p>
             </div>
 
@@ -197,7 +194,7 @@ export default function PricingPage() {
                     key={index}
                     className={`relative p-8 rounded-2xl border-2 transition-all duration-300 hover:shadow-2xl ${
                       plan.popular
-                        ? "border-purple-500 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20"
+                        ? "border-[#F5A819] bg-[#F5A819]/5 dark:bg-[#F5A819]/10"
                         : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
                     }`}
                     data-aos="fade-up"
@@ -205,7 +202,7 @@ export default function PricingPage() {
                   >
                     {plan.popular && (
                       <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                        <span className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-full text-sm font-semibold">
+                        <span className="bg-[#F5A819] text-white px-6 py-2 rounded-full text-sm font-semibold">
                           Most Popular
                         </span>
                       </div>
@@ -216,8 +213,8 @@ export default function PricingPage() {
                         <div
                           className={`w-16 h-16 rounded-full flex items-center justify-center ${
                             plan.popular
-                              ? "bg-gradient-to-r from-purple-600 to-blue-600"
-                              : "bg-blue-100 dark:bg-blue-900/30"
+                              ? "bg-[#F5A819]"
+                              : "bg-[#3467AA]/10 dark:bg-[#3467AA]/20"
                           }`}
                         >
                           <div className="text-white">{plan.icon}</div>
@@ -240,7 +237,7 @@ export default function PricingPage() {
                             <span className="text-2xl text-gray-400 line-through">
                               {plan.originalPrice}
                             </span>
-                            <span className="bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 px-3 py-1 rounded-full text-sm font-semibold">
+                            <span className="bg-[#3467AA]/10 dark:bg-[#3467AA]/20 text-[#3467AA] px-3 py-1 rounded-full text-sm font-semibold">
                               Save 10,000 XAF
                             </span>
                           </div>
@@ -250,7 +247,9 @@ export default function PricingPage() {
                           </span>
                         )}
                         <p className="text-gray-600 dark:text-gray-300 mt-2">
-                          {plan.price === "0 XAF" ? "Forever" : "One-time payment"}
+                          {plan.price === "0 XAF"
+                            ? "Forever"
+                            : "One-time payment per brand"}
                         </p>
                       </div>
 
@@ -258,8 +257,8 @@ export default function PricingPage() {
                         href={plan.price === "0 XAF" ? "/" : "/"}
                         className={`w-full py-4 px-6 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 ${
                           plan.popular
-                            ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700"
-                            : "bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600"
+                            ? "bg-[#F5A819] text-white hover:bg-[#F5A819]/90"
+                            : "bg-[#3467AA] text-white hover:bg-[#3467AA]/90"
                         }`}
                       >
                         {plan.cta}
@@ -272,7 +271,7 @@ export default function PricingPage() {
                       </h4>
                       {plan.features.map((feature, idx) => (
                         <div key={idx} className="flex items-center gap-3">
-                          <Check className="w-5 h-5 text-green-500 flex-shrink-0" />
+                          <Check className="w-5 h-5 text-[#3467AA] flex-shrink-0" />
                           <span className="text-gray-700 dark:text-gray-300">
                             {feature}
                           </span>
@@ -286,7 +285,7 @@ export default function PricingPage() {
                           </h4>
                           {plan.notIncluded.map((feature, idx) => (
                             <div key={idx} className="flex items-center gap-3">
-                              <X className="w-5 h-5 text-red-500 flex-shrink-0" />
+                              <X className="w-5 h-5 text-gray-400 flex-shrink-0" />
                               <span className="text-gray-500 dark:text-gray-400">
                                 {feature}
                               </span>
@@ -324,7 +323,7 @@ export default function PricingPage() {
                     <th className="text-center p-6 font-semibold text-gray-900 dark:text-white">
                       Free Trial
                     </th>
-                    <th className="text-center p-6 font-semibold text-purple-600 dark:text-purple-400">
+                    <th className="text-center p-6 font-semibold text-[#F5A819] dark:text-[#F5A819]">
                       Complete Brand Kit
                     </th>
                   </tr>
@@ -337,7 +336,7 @@ export default function PricingPage() {
                     <td className="p-6 text-center text-gray-700 dark:text-gray-300">
                       Recommendations only
                     </td>
-                    <td className="p-6 text-center text-green-600 dark:text-green-400 font-semibold">
+                    <td className="p-6 text-center text-[#3467AA] dark:text-[#3467AA] font-semibold">
                       Full downloads
                     </td>
                   </tr>
@@ -348,7 +347,7 @@ export default function PricingPage() {
                     <td className="p-6 text-center text-gray-700 dark:text-gray-300">
                       PNG only
                     </td>
-                    <td className="p-6 text-center text-green-600 dark:text-green-400 font-semibold">
+                    <td className="p-6 text-center text-[#3467AA] dark:text-[#3467AA] font-semibold">
                       All formats
                     </td>
                   </tr>
@@ -356,8 +355,8 @@ export default function PricingPage() {
                     <td className="p-6 text-gray-700 dark:text-gray-300">
                       Brand Kit
                     </td>
-                    <td className="p-6 text-center text-red-500">✗</td>
-                    <td className="p-6 text-center text-green-600 dark:text-green-400">
+                    <td className="p-6 text-center text-gray-400">✗</td>
+                    <td className="p-6 text-center text-[#3467AA] dark:text-[#3467AA]">
                       ✓
                     </td>
                   </tr>
@@ -365,8 +364,8 @@ export default function PricingPage() {
                     <td className="p-6 text-gray-700 dark:text-gray-300">
                       Social Templates
                     </td>
-                    <td className="p-6 text-center text-red-500">✗</td>
-                    <td className="p-6 text-center text-green-600 dark:text-green-400">
+                    <td className="p-6 text-center text-gray-400">✗</td>
+                    <td className="p-6 text-center text-[#3467AA] dark:text-[#3467AA]">
                       ✓
                     </td>
                   </tr>
@@ -374,8 +373,8 @@ export default function PricingPage() {
                     <td className="p-6 text-gray-700 dark:text-gray-300">
                       Business Cards
                     </td>
-                    <td className="p-6 text-center text-red-500">✗</td>
-                    <td className="p-6 text-center text-green-600 dark:text-green-400">
+                    <td className="p-6 text-center text-gray-400">✗</td>
+                    <td className="p-6 text-center text-[#3467AA] dark:text-[#3467AA]">
                       ✓
                     </td>
                   </tr>
@@ -383,8 +382,8 @@ export default function PricingPage() {
                     <td className="p-6 text-gray-700 dark:text-gray-300">
                       Priority Support
                     </td>
-                    <td className="p-6 text-center text-red-500">✗</td>
-                    <td className="p-6 text-center text-green-600 dark:text-green-400">
+                    <td className="p-6 text-center text-gray-400">✗</td>
+                    <td className="p-6 text-center text-[#3467AA] dark:text-[#3467AA]">
                       ✓
                     </td>
                   </tr>
@@ -396,7 +395,7 @@ export default function PricingPage() {
                       0 XAF
                     </td>
                     <td className="p-6 text-center">
-                      <span className="text-green-600 dark:text-green-400 font-semibold">
+                      <span className="text-[#3467AA] dark:text-[#3467AA] font-semibold">
                         10,000 XAF
                       </span>
                       <div className="text-sm text-gray-500 line-through">
@@ -444,8 +443,8 @@ export default function PricingPage() {
                 <p className="text-gray-600 dark:text-gray-300">
                   After completing the form and seeing your brand preview, you
                   can choose to unlock the complete brand kit with a one-time
-                  payment of 10,000 XAF. This gives you lifetime access to all
-                  files and assets.
+                  payment of 10,000 XAF per brand. This gives you lifetime
+                  access to all files and assets for that specific brand.
                 </p>
               </div>
 
@@ -457,8 +456,8 @@ export default function PricingPage() {
                   Is the 10,000 XAF price really a discount?
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  Absolutely! Our Complete Brand Kit normally costs 20,000 XAF, but
-                  we're offering it at 50% off for a limited time. This
+                  Absolutely! Our Complete Brand Kit normally costs 20,000 XAF,
+                  but we're offering it at 50% off for a limited time. This
                   represents the value of professional branding services that
                   would cost much more from agencies.
                 </p>
@@ -482,7 +481,7 @@ export default function PricingPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-orange-400 via-pink-500 to-blue-600">
+        <section className="py-20 bg-[#F5A819]">
           <div className="container mx-auto px-6 text-center">
             <div className="max-w-2xl mx-auto" data-aos="fade-up">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
@@ -490,7 +489,7 @@ export default function PricingPage() {
               </h2>
               <p className="text-xl text-white/90 mb-8">
                 Complete the form to see your brand recommendations, then unlock
-                everything with one payment. Save 10,000 XAF today!
+                everything with one payment per brand. Save 10,000 XAF today!
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
@@ -502,7 +501,7 @@ export default function PricingPage() {
                 </Link>
                 <Link
                   href="/form"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-purple-600 text-white rounded-full font-semibold hover:bg-purple-700 transition-all duration-300 transform hover:scale-105"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-[#3467AA] text-white rounded-full font-semibold hover:bg-[#3467AA]/90 transition-all duration-300 transform hover:scale-105"
                 >
                   Unlock Complete Brand Kit - Save 10,000 XAF
                   <ArrowRight className="w-5 h-5" />

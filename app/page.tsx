@@ -161,7 +161,7 @@ export default function HomePage() {
         "Customer & Competitors Analysis",
         "Differentiation Strategy",
       ],
-      icon: <Sparkles className="w-8 h-8 text-blue-600" />,
+      icon: <Sparkles className="w-8 h-8 text-[#3467AA]" />,
       image:
         "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=400&fit=crop&crop=center",
       imageAlt: "Strategic planning and brainstorming session",
@@ -178,7 +178,7 @@ export default function HomePage() {
         "Brand Kits",
         "Brand Guidelines",
       ],
-      icon: <Palette className="w-8 h-8 text-purple-600" />,
+      icon: <Palette className="w-8 h-8 text-[#F5A819]" />,
       images: [
         {
           src: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=300&h=200&fit=crop&crop=center",
@@ -205,7 +205,7 @@ export default function HomePage() {
       description:
         "Automate your brand's daily content needs. Design, customize, and publish scroll-stopping posts across platforms in just a few clicks.",
       items: ["Posts", "Carousels", "Reels", "Infographics"],
-      icon: <Share2 className="w-8 h-8 text-green-600" />,
+      icon: <Share2 className="w-8 h-8 text-[#3467AA]" />,
       image: "/images/SM 5.jpg",
       imageAlt: "Social media content creation and management",
       type: "single",
@@ -221,7 +221,7 @@ export default function HomePage() {
         "Brand Guide",
         "Brand and Marketing Strategy",
       ],
-      icon: <FolderOpen className="w-8 h-8 text-orange-600" />,
+      icon: <FolderOpen className="w-8 h-8 text-[#F5A819]" />,
       image: "/images/online-marketing-branding-concept-laptop-screen.jpg",
       imageAlt: "Digital asset management and file organization",
       type: "single",
@@ -264,7 +264,7 @@ export default function HomePage() {
       </Head>
       <div className="min-h-screen bg-white dark:bg-gray-900 ">
         {/* Hero Section with Enhanced Background for Navbar Visibility */}
-        <div className="relative lg:h-screen bg-gradient-to-br from-slate-200 via-blue-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 pb-0">
+        <div className="relative lg:h-screen bg-gradient-to-br from-[#3467AA]/10 via-[#F5A819]/5 to-white dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 pb-0">
           {/* Additional subtle pattern overlay for navbar contrast */}
           <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-white/20 dark:from-gray-900/40 dark:via-transparent dark:to-gray-900/20"></div>
 
@@ -327,11 +327,11 @@ export default function HomePage() {
                     data-aos="fade-up"
                     data-aos-delay="300"
                   >
-                    <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text font-semibold text-transparent">
+                    <span className="bg-[#3467AA]  bg-clip-text font-semibold text-transparent">
                       AI-powered
                     </span>{" "}
                     brand design at{" "}
-                    <span className="bg-gradient-to-r font-semibold from-orange-500 to-pink-500 bg-clip-text text-transparent">
+                    <span className="bg-[#F5A819] font-semibold bg-clip-text text-transparent">
                       lightning speed
                     </span>
                   </h1>
@@ -356,7 +356,7 @@ export default function HomePage() {
                   <button
                     onClick={handleGetStarted}
                     disabled={isLoading || isRedirecting}
-                    className="px-10 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-3 text-lg disabled:opacity-70 disabled:transform-none disabled:cursor-not-allowed relative"
+                    className="px-10 py-4 bg-gradient-to-r from-[#3467AA] to-[#3467AA]/90 text-white rounded-full font-semibold hover:from-[#3467AA]/90 hover:to-[#3467AA] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-3 text-lg disabled:opacity-70 disabled:transform-none disabled:cursor-not-allowed relative"
                   >
                     {isRedirecting ? (
                       <>
@@ -445,7 +445,7 @@ export default function HomePage() {
                 <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
                   What you get
                 </h2>
-                <h3 className="text-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                <h3 className="text-2xl font-semibold bg-gradient-to-r bg-[#3467AA] bg-clip-text text-transparent mb-2">
                   Automated Branding & Marketing in One Place
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
@@ -508,7 +508,7 @@ export default function HomePage() {
                             data-aos="fade-up"
                             data-aos-delay={index * 200 + 400 + idx * 50}
                           >
-                            <CircleCheckBig className="w-5 h-5 text-green-500" />
+                            <CircleCheckBig className="w-5 h-5 text-[#3467AA]" />
                             <span className="text-gray-700 dark:text-gray-300">
                               {item}
                             </span>
@@ -561,7 +561,7 @@ export default function HomePage() {
                             data-aos="zoom-in"
                             data-aos-delay={index * 200 + 600}
                           >
-                            <span className="text-lg font-bold text-purple-600 dark:text-purple-400">
+                            <span className="text-lg font-bold text-[#F5A819] dark:text-[#F5A819]">
                               {feature.number}
                             </span>
                           </div>
@@ -622,7 +622,7 @@ export default function HomePage() {
                   data-aos="fade-up"
                   data-aos-delay="100"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-r bg-[#3467AA] rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
                     01
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
@@ -638,7 +638,7 @@ export default function HomePage() {
                   data-aos="fade-up"
                   data-aos-delay="200"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-r bg-[#3467AA] rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
                     02
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
@@ -654,7 +654,7 @@ export default function HomePage() {
                   data-aos="fade-up"
                   data-aos-delay="300"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-r bg-[#3467AA] rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
                     03
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
@@ -670,7 +670,7 @@ export default function HomePage() {
                   data-aos="fade-up"
                   data-aos-delay="400"
                 >
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                  <div className="w-16 h-16 bg-gradient-to-r bg-[#3467AA] rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
                     04
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
@@ -787,7 +787,7 @@ export default function HomePage() {
 
           {/* Final CTA Section */}
           <section
-            className="bg-gradient-to-r from-orange-400 via-pink-500 to-blue-600 py-12 md:py-20 mt-0"
+            className="bg-gradient-to-r bg-[#3467AA]  py-12 md:py-20 mt-0"
             data-aos="fade-up"
           >
             <div className="container mx-auto px-6 text-center">
@@ -830,7 +830,7 @@ export default function HomePage() {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className="w-5 h-5 text-yellow-300 fill-current"
+                        className="w-5 h-5 text-[#F5A819] fill-current"
                       />
                     ))}
                   </div>

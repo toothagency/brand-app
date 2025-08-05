@@ -20,25 +20,25 @@ import {
 export default function AboutPage() {
   const values = [
     {
-      icon: <Sparkles className="w-8 h-8 text-blue-600" />,
+      icon: <Sparkles className="w-8 h-8 text-[#3467AA]" />,
       title: "Innovation First",
       description:
         "We push the boundaries of AI technology to deliver cutting-edge branding solutions that set our clients apart.",
     },
     {
-      icon: <Heart className="w-8 h-8 text-red-600" />,
+      icon: <Heart className="w-8 h-8 text-[#F5A819]" />,
       title: "Customer Success",
       description:
         "Your success is our success. We're committed to helping every business achieve their branding goals.",
     },
     {
-      icon: <Shield className="w-8 h-8 text-green-600" />,
+      icon: <Shield className="w-8 h-8 text-[#3467AA]" />,
       title: "Quality & Trust",
       description:
         "We maintain the highest standards of quality and security in everything we do.",
     },
     {
-      icon: <Globe className="w-8 h-8 text-purple-600" />,
+      icon: <Globe className="w-8 h-8 text-[#F5A819]" />,
       title: "Global Impact",
       description:
         "We empower businesses worldwide to create meaningful connections with their audiences.",
@@ -108,14 +108,11 @@ export default function AboutPage() {
       <main className="min-h-screen bg-white dark:bg-gray-900">
         {/* Hero Section */}
         <section className="relative py-48 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"></div>
+          <div className="absolute inset-0 bg-[#3467AA]/5 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"></div>
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-4xl mx-auto text-center" data-aos="fade-up">
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-                About{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  Jara AI
-                </span>
+                About <span className="text-[#3467AA]">Jara AI</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
                 We're on a mission to democratize branding and make professional
@@ -125,7 +122,7 @@ export default function AboutPage() {
               <div className="flex justify-center">
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-[#3467AA] text-white rounded-full font-semibold hover:bg-[#3467AA]/90 transition-all duration-300 transform hover:scale-105"
                 >
                   Start Building Your Brand
                   <ArrowRight className="w-5 h-5" />
@@ -157,19 +154,19 @@ export default function AboutPage() {
                 </p>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <CheckCircle className="w-6 h-6 text-green-500" />
+                    <CheckCircle className="w-6 h-6 text-[#3467AA]" />
                     <span className="text-gray-700 dark:text-gray-300">
                       AI-powered design in minutes
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <CheckCircle className="w-6 h-6 text-green-500" />
+                    <CheckCircle className="w-6 h-6 text-[#3467AA]" />
                     <span className="text-gray-700 dark:text-gray-300">
                       Professional quality at affordable prices
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <CheckCircle className="w-6 h-6 text-green-500" />
+                    <CheckCircle className="w-6 h-6 text-[#3467AA]" />
                     <span className="text-gray-700 dark:text-gray-300">
                       No design skills required
                     </span>
@@ -178,11 +175,11 @@ export default function AboutPage() {
               </div>
               <div data-aos="fade-left">
                 <div className="relative">
-                <div className="w-full h-96 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl shadow-2xl transform rotate-3"></div>
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-500 rounded-2xl shadow-2xl transform -rotate-3"></div>
+                  <div className="w-full h-96 bg-[#3467AA] rounded-2xl shadow-2xl transform rotate-3"></div>
+                  <div className="absolute inset-0 bg-[#F5A819] rounded-2xl shadow-2xl transform -rotate-3"></div>
                   <div className="absolute inset-0 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl flex items-center justify-center">
                     <div className="text-center p-8">
-                      <Target className="w-16 h-16 text-blue-600 mx-auto mb-4" />
+                      <Target className="w-16 h-16 text-[#3467AA] mx-auto mb-4" />
                       <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                         Democratizing Design
                       </h3>
@@ -198,7 +195,7 @@ export default function AboutPage() {
         </section>
 
         {/* Stats Section */}
-        <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
+        <section className="py-20 bg-[#3467AA]">
           <div className="container mx-auto px-6">
             <div className="grid md:grid-cols-4 gap-8">
               {stats.map((stat, index) => (
@@ -257,7 +254,7 @@ export default function AboutPage() {
         </section>
 
         {/* Team Section */}
-        <section className="py-20 bg-gray-50 dark:bg-gray-800">
+        {/* <section className="py-20 bg-gray-50 dark:bg-gray-800">
           <div className="container mx-auto px-6">
             <div className="text-center mb-16" data-aos="fade-up">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
@@ -277,7 +274,7 @@ export default function AboutPage() {
                   data-aos-delay={index * 100}
                 >
                   <div className="relative mb-6">
-                    <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-blue-400 to-purple-500 p-1">
+                    <div className="w-32 h-32 mx-auto rounded-full bg-[#3467AA] p-1">
                       <div className="w-full h-full rounded-full bg-white dark:bg-gray-700 flex items-center justify-center">
                         <Users className="w-12 h-12 text-gray-400" />
                       </div>
@@ -286,7 +283,7 @@ export default function AboutPage() {
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
                     {member.name}
                   </h3>
-                  <p className="text-blue-600 dark:text-blue-400 font-medium mb-3">
+                  <p className="text-[#3467AA] dark:text-[#3467AA] font-medium mb-3">
                     {member.role}
                   </p>
                   <p className="text-gray-600 dark:text-gray-300 text-sm">
@@ -296,7 +293,7 @@ export default function AboutPage() {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Story Section */}
         <section className="py-20 bg-white dark:bg-gray-900">
@@ -343,7 +340,7 @@ export default function AboutPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-gradient-to-r from-orange-400 via-pink-500 to-blue-600">
+        <section className="py-20 bg-[#F5A819]">
           <div className="container mx-auto px-6 text-center">
             <div className="max-w-2xl mx-auto" data-aos="fade-up">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">

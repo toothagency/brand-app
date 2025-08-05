@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import apiClient from '../configs/axiosConfigs';
 import { getCurrentUser } from '../(auth)/hooks/authHooks';
 import { Brand } from '../contexts/BrandContext';
+import { DetailedBrandObject } from '../(protected)/form/utils/types';
 
 // Types
 interface CreateBrandResponse {
@@ -18,7 +19,7 @@ interface CreateBrandRequest {
 
 interface UserBrandsResponse {
   userId: string;
-  brands: Brand[];
+  brands: DetailedBrandObject[];
 }
 
 interface DeleteBrandRequest {

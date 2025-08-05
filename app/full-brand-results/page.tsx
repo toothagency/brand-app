@@ -40,6 +40,7 @@ import { useGetFullResults } from "../hooks/useGetFullResults";
 import Providers from "../providers";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { Suspense } from "react";
+import { FullBrand } from "../(protected)/form/utils/types";
 
 // Force dynamic rendering for this page
 export const dynamic = "force-dynamic";
@@ -49,7 +50,7 @@ const FullBrandResultsContent = () => {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
-  const [fullBrandData, setFullBrandData] = useState<any>(null);
+  const [fullBrandData, setFullBrandData] = useState<FullBrand | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
 
   const { getFullResults } = useGetFullResults();
@@ -175,7 +176,7 @@ const FullBrandResultsContent = () => {
     );
   }
 
-  const { brand, brand_assets, social_media_content } = fullBrandData;
+  const { brand, brand_assets } = fullBrandData;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
@@ -294,7 +295,7 @@ const FullBrandResultsContent = () => {
                 <Card>
                   <CardContent className="p-6 text-center">
                     <div className="text-2xl font-bold text-blue-600 mb-2">
-                      {brand_assets?.full_brand_identity?.logos?.length || 0}
+                      {brand.logo.length || 0}
                     </div>
                     <div className="text-sm text-gray-600">Logo Variants</div>
                   </CardContent>
@@ -311,7 +312,7 @@ const FullBrandResultsContent = () => {
                 <Card>
                   <CardContent className="p-6 text-center">
                     <div className="text-2xl font-bold text-purple-600 mb-2">
-                      {social_media_content?.ready_made_posts?.length || 0}
+                      {brand_assets.social_media_content?.ready_made_posts?.length || 0}
                     </div>
                     <div className="text-sm text-gray-600">Social Posts</div>
                   </CardContent>
@@ -782,7 +783,7 @@ const FullBrandResultsContent = () => {
             )}
 
           {/* Social Media Tab */}
-          {activeTab === "social-media" && social_media_content && (
+          {activeTab === "social-media" && brand_assets.social_media_content && (
             <div className="space-y-8">
               {/* Ready Made Posts */}
               <Card>
@@ -794,7 +795,7 @@ const FullBrandResultsContent = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    {social_media_content.ready_made_posts.map(
+                    {brand_assets.social_media_content.ready_made_posts.map(
                       (post: any, index: number) => (
                         <div key={index} className="border rounded-lg p-6">
                           <div className="flex items-center justify-between mb-4">
@@ -841,7 +842,7 @@ const FullBrandResultsContent = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {social_media_content.ad_copies.map(
+                    {brand_assets.social_media_content.ad_copies.map(
                       (ad: string, index: number) => (
                         <div key={index} className="border rounded-lg p-4">
                           <div className="flex items-center justify-between mb-2">
