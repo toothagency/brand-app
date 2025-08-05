@@ -339,7 +339,7 @@ const Register = () => {
               </form>
 
               {/* Divider */}
-              <div className="relative my-6">
+              {/* <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300 dark:border-gray-600" />
                 </div>
@@ -348,10 +348,10 @@ const Register = () => {
                     Or continue with
                   </span>
                 </div>
-              </div>
+              </div> */}
 
               {/* Google Sign-In Button */}
-              <GoogleSignInButton />
+              {/* <GoogleSignInButton /> */}
             </div>
             <div>
               <p className="text-center text-sm text-gray-500 dark:text-gray-400">
