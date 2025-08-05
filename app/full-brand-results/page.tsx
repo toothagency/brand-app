@@ -213,7 +213,7 @@ const FullBrandResultsContent = () => {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white mt-12 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex space-x-8 overflow-x-auto">
             {tabs.map((tab) => {
@@ -446,6 +446,86 @@ const FullBrandResultsContent = () => {
                                 handleDownloadAsset(
                                   tshirt.image_url,
                                   `tshirt_${index + 1}`
+                                )
+                              }
+                              className="w-full"
+                              size="sm"
+                            >
+                              <Download className="w-4 h-4 mr-2" />
+                              Download
+                            </Button>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+              {brand_assets?.full_brand_identity?.cap_mockups && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Users className="w-5 h-5 text-purple-600" />
+                      Cap Mockups
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {brand_assets.full_brand_identity.t_shirt_mockups.map(
+                        (cap: any, index: number) => (
+                          <div key={index} className="space-y-4">
+                            <div className="border rounded-lg p-4 bg-white">
+                              <img
+                                src={cap.image_url}
+                                alt={`cap ${index + 1}`}
+                                className="w-full h-64 object-contain"
+                              />
+                            </div>
+                            <Button
+                              onClick={() =>
+                                handleDownloadAsset(
+                                  cap.image_url,
+                                  `cap_${index + 1}`
+                                )
+                              }
+                              className="w-full"
+                              size="sm"
+                            >
+                              <Download className="w-4 h-4 mr-2" />
+                              Download
+                            </Button>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+              {brand_assets?.full_brand_identity?.letterheads && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Users className="w-5 h-5 text-purple-600" />
+                      Letterheads
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {brand_assets.full_brand_identity.letterheads.map(
+                        (tshirt: any, index: number) => (
+                          <div key={index} className="space-y-4">
+                            <div className="border rounded-lg p-4 bg-white">
+                              <img
+                                src={tshirt.image_url}
+                                alt={`letterhead${index + 1}`}
+                                className="w-full h-64 object-contain"
+                              />
+                            </div>
+                            <Button
+                              onClick={() =>
+                                handleDownloadAsset(
+                                  tshirt.image_url,
+                                  `letterhead_${index + 1}`
                                 )
                               }
                               className="w-full"

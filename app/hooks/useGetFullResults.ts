@@ -13,7 +13,7 @@ interface FullBrandResponse {
 
 const callGetFullResultsAPI = async (brandId: string): Promise<FullBrandResponse> => {
     try {
-        const response = await axios.get(`/get_full_results/${brandId}`, {
+        const response = await axios.get(`/get_full_brand/${brandId}`, {
             headers: { 'Content-Type': 'application/json' },
         });
         return response.data;
