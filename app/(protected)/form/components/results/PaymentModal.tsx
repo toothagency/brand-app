@@ -12,6 +12,7 @@ interface PaymentModalProps {
   onClose: () => void;
   onDownloadBlueprint: () => void;
   brandName?: string;
+  brandId?: string;
 }
 
 const PaymentModal: React.FC<PaymentModalProps> = ({
@@ -19,6 +20,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   onClose,
   onDownloadBlueprint,
   brandName = "your brand",
+  brandId,
 }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedOption, setSelectedOption] = useState<"blueprint" | "full">(
@@ -45,7 +47,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       // Pass brand data to payment page
       const brandDataParam = encodeURIComponent(
         JSON.stringify({
-          id: "temp-brand-id", // You can replace this with actual brand ID
+          id: brandId || "temp-brand-id", // Use actual brand ID if available
           brand_communication: {
             brand_name: brandName,
           },
@@ -108,7 +110,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm"
             onClick={onClose}
           />
 

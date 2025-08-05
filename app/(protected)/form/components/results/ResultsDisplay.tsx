@@ -87,14 +87,14 @@ const SectionCard: React.FC<{
   return (
     <Card className="w-full overflow-hidden print:shadow-none print:border-none">
       <CardHeader
-        className="cursor-pointer hover:bg-slate-50 transition-colors p-4 sm:p-6 print:py-3 print:px-2"
+        className="cursor-pointer hover:bg-slate-100 dark:hover:bg-gray-900 bg-slate-50 dark:bg-gray-800 transition-colors p-4 sm:p-6 print:py-3 print:px-2"
         onClick={() => toggleSection(sectionKey)}
         role="button"
         aria-expanded={expandedSections[sectionKey]}
         aria-controls={contentId}
       >
         <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl text-gray-800 print:text-lg">
+          <CardTitle className="flex items-center gap-2 text-xl sm:text-2xl text-gray-800 dark:text-white print:text-lg">
             {icon}
             {title}
           </CardTitle>
@@ -120,7 +120,7 @@ const SectionCard: React.FC<{
             id={contentId}
             className="print:!h-auto print:!opacity-100 print:!overflow-visible" // Ensure visible for print
           >
-            <CardContent className="pt-0 p-4 sm:p-6 print:p-2">
+            <CardContent className="pt-0 p-4 sm:p-6 print:p-2 bg-slate-50 dark:bg-gray-800 ">
               {children}
             </CardContent>
           </motion.section>
@@ -137,35 +137,35 @@ const ColorPaletteDisplay: React.FC<{
 }> = ({ colors, title }) => {
   if (!colors || colors.length === 0) {
     return (
-      <p className="text-sm text-gray-500 italic">
+      <p className="text-sm text-gray-500 dark:text-gray-400 italic">
         No {title.toLowerCase()} specified.
       </p>
     );
   }
   return (
     <div className="mb-6">
-      <h4 className="font-semibold text-lg mb-3 text-gray-700 print:text-base">
+      <h4 className="font-semibold text-lg mb-3 text-gray-700 dark:text-white print:text-base">
         {title}
       </h4>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 print:grid-cols-2">
         {colors.map((color, index) => (
           <div
             key={index}
-            className="flex items-start space-x-3 p-3 bg-slate-50 rounded-lg border border-slate-200 print:p-2 print:gap-2"
+            className="flex items-start space-x-3 p-3 bg-slate-50 dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 print:p-2 print:gap-2"
           >
             <div
-              className="w-12 h-12 sm:w-16 sm:h-16 rounded-md border-2 border-gray-200 shadow-sm flex-shrink-0 print:w-10 print:h-10"
+              className="w-12 h-12 sm:w-16 sm:h-16 rounded-md border-2 border-gray-200 dark:border-gray-600 shadow-sm flex-shrink-0 print:w-10 print:h-10"
               style={{ backgroundColor: color.hex_value }}
             />
             <div className="flex-1">
-              <h5 className="font-medium text-gray-900 print:text-sm">
+              <h5 className="font-medium text-gray-900 dark:text-white print:text-sm">
                 {color.color_name}
               </h5>
-              <p className="text-sm text-gray-600 font-mono print:text-xs">
+              <p className="text-sm text-gray-600 dark:text-gray-300 font-mono print:text-xs">
                 {color.hex_value}
               </p>
               {color.description && (
-                <p className="text-xs text-gray-500 mt-1 print:hidden">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 print:hidden">
                   {color.description}
                 </p>
               )}
@@ -217,6 +217,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
   const createBrandMutation = useCreateBrand();
 
   const {
+    id,
     brand_communication,
     brand_strategy,
     brand_identity,
@@ -535,7 +536,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
 
   // --- UI Rendering ---
   return (
-    <div className="min-h-screen mt-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4 sm:p-6 md:p-8 print:bg-white">
+    <div className="min-h-screen mt-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4 sm:p-6 md:p-8 print:bg-white">
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -543,12 +544,12 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
           transition={{ duration: 0.5 }}
           className="text-center pt-8 pb-12 print:pt-4 print:pb-6"
         >
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 print:text-3xl">
+          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4 print:text-3xl">
             Your Brand Blueprint
           </h1>
-          <p className="text-lg sm:text-xl text-gray-600 mb-8 print:text-base">
+          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 print:text-base">
             Comprehensive strategy for{" "}
-            <span className="font-semibold text-blue-600">
+            <span className="font-semibold text-blue-600 dark:text-blue-400">
               {brand_communication?.brand_name || "your business"}
             </span>
           </p>
@@ -594,35 +595,35 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                 expandedSections={expandedSections}
                 toggleSection={toggleSection}
               >
-                <div className="space-y-6">
+                <div className="space-y-6 bg-slate-50 dark:bg-gray-800">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="font-semibold text-gray-500 uppercase text-xs tracking-wider mb-1">
+                      <h4 className="font-semibold dark:text-gray-400 text-gray-500 uppercase text-xs tracking-wider mb-1">
                         Brand Name
                       </h4>
-                      <p className="text-2xl font-bold text-blue-700">
+                      <p className="text-2xl font-bold text-blue-700 dark:text-blue-400">
                         {brand_communication.brand_name}
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-500 uppercase text-xs tracking-wider mb-1">
+                      <h4 className="font-semibold text-gray-500 dark:text-gray-400 uppercase text-xs tracking-wider mb-1">
                         Brand Tagline
                       </h4>
-                      <p className="text-lg italic text-gray-700">
+                      <p className="text-lg italic text-gray-700 dark:text-gray-300">
                         "{brand_communication.brand_tagline}"
                       </p>
                     </div>
                   </div>
                   {brand_communication.primary_core_message && (
-                    <Card className="bg-slate-50/50">
+                    <Card className="bg-slate-50/50 dark:bg-slate-800/50 dark:text-white dark:border-gray-700">
                       <CardHeader>
-                        <CardTitle className="text-lg text-slate-800">
+                        <CardTitle className="text-lg text-slate-800 dark:text-white">
                           Primary Core Message
                         </CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-4 text-sm text-slate-700">
+                      <CardContent className="space-y-4 text-sm ">
                         <p>
-                          <strong className="text-slate-600">
+                          <strong className="text-slate-600 dark:text-white">
                             Who We Serve:
                           </strong>{" "}
                           {
@@ -631,7 +632,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                           }
                         </p>
                         <p>
-                          <strong className="text-slate-600">
+                          <strong className="text-slate-600 dark:text-white">
                             Where They Need Help:
                           </strong>{" "}
                           {
@@ -640,7 +641,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                           }
                         </p>
                         <p>
-                          <strong className="text-slate-600">
+                          <strong className="text-slate-600 dark:text-white">
                             Market Alternative:
                           </strong>{" "}
                           {
@@ -649,7 +650,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                           }
                         </p>
                         <p>
-                          <strong className="text-slate-600">
+                          <strong className="text-slate-600 dark:text-white">
                             Key Benefits:
                           </strong>{" "}
                           {
@@ -658,7 +659,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                           }
                         </p>
                         <p>
-                          <strong className="text-slate-600">
+                          <strong className="text-slate-600 dark:text-white">
                             Our Key Differences:
                           </strong>{" "}
                           {
@@ -1043,10 +1044,12 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
       </div>{" "}
       {/* End of max-w-5xl */}
       {showPopover && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
-          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 dark:bg-black/50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-sm">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold ">Edit or Start Over?</h3>
+              <h3 className="text-lg font-semibold dark:text-white">
+                Edit or Start Over?
+              </h3>
               <Button
                 variant="outline"
                 className="p-2 w-6 h-6"
@@ -1056,7 +1059,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                 <X className="w-4 h-4" />
               </Button>
             </div>
-            <p className="mb-6">
+            <p className="mb-6 dark:text-gray-300">
               Do you want to Edit this brand or Create A New Brand ?
             </p>
             <div className="flex justify-end gap-4">
@@ -1072,7 +1075,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
               </Button>
             </div>
             <button
-              className="absolute top-2 right-3 text-gray-400 hover:text-gray-600"
+              className="absolute top-2 right-3 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
               onClick={handlePopoverClose}
               aria-label="Close"
             >
@@ -1087,6 +1090,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
         onClose={() => setShowPaymentModal(false)}
         onDownloadBlueprint={handleDownloadPdfProgrammatic}
         brandName={brand_communication?.brand_name}
+        brandId={id}
       />
     </div>
   );
@@ -1103,31 +1107,34 @@ const KeyValueDisplay: React.FC<{
     value === null ||
     (typeof value === "string" && value.trim() === "") ||
     (Array.isArray(value) && value.length === 0) ? (
-      <p className="text-gray-500 italic text-sm print:text-xs">
+      <p className="text-gray-500 dark:text-gray-400 italic text-sm print:text-xs">
         Not available
       </p>
     ) : Array.isArray(value) ? (
-      <ul className="list-disc list-inside text-gray-700 space-y-1 pl-1 print:text-sm print:space-y-0.5">
+      <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-1 pl-1 print:text-sm print:space-y-0.5">
         {value.map((item, i) => (
-          <li key={i} className="text-gray-700 leading-relaxed print:text-sm">
+          <li
+            key={i}
+            className="text-gray-700 dark:text-gray-300 leading-relaxed print:text-sm"
+          >
             {item}
           </li>
         ))}
       </ul>
     ) : isHtml ? (
       <div
-        className="text-gray-700 leading-relaxed prose prose-sm max-w-none print:text-sm print:prose-xs"
+        className="text-gray-700 dark:text-gray-300 leading-relaxed prose prose-sm max-w-none print:text-sm print:prose-xs"
         dangerouslySetInnerHTML={{ __html: value }}
       />
     ) : (
-      <p className="text-gray-700 leading-relaxed whitespace-pre-wrap print:text-sm">
+      <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap print:text-sm">
         {value}
       </p>
     );
 
   return (
     <div className={`mb-4 print:mb-2 ${className}`}>
-      <h4 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1.5 print:text-xs print:mb-1">
+      <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5 print:text-xs print:mb-1">
         {label}
       </h4>
       {displayValue}

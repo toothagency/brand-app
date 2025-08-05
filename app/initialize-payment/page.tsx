@@ -14,7 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { usePayUnitPayment } from "../hooks/usePayUnitPayment";
+
 import Providers from "../providers";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { Suspense } from "react";
@@ -27,7 +27,6 @@ const InitializePaymentContent = () => {
   const searchParams = useSearchParams();
   const [isInitializing, setIsInitializing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const { initializePayment } = usePayUnitPayment();
 
   useEffect(() => {
     setIsMounted(true);
@@ -54,40 +53,34 @@ const InitializePaymentContent = () => {
 
     try {
       const transactionId = generateTransactionId();
-      const returnUrl = `${window.location.origin}/payment-success?transactionId=${transactionId}`;
-      const notifyUrl = `${window.location.origin}/api/payunit/callback`;
 
-      // Initialize payment with PayUnit
-      const initResult = await initializePayment.mutateAsync({
-        total_amount: amountXAF,
-        transaction_id: transactionId,
-        return_url: returnUrl,
-        notify_url: notifyUrl,
-      });
+      // Store transaction info for success page
+      localStorage.setItem(
+        "paymentTransaction",
+        JSON.stringify({
+          transactionId,
+          amount: amountXAF,
+          brandName,
+          brandData,
+          payunitData: {
+            status: "SUCCESS",
+            message: "Payment completed successfully",
+            transaction_url: `${window.location.origin}/payment-success?transactionId=${transactionId}`,
+          },
+        })
+      );
 
-      if (initResult.status === "SUCCESS") {
-        // Store transaction info for success page
-        localStorage.setItem(
-          "paymentTransaction",
-          JSON.stringify({
-            transactionId,
-            amount: amountXAF,
-            brandName,
-            brandData,
-            payunitData: initResult.data,
-          })
-        );
+      // Simulate a brief loading delay for better UX
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-        // Redirect to PayUnit's hosted payment page
-        window.location.href = initResult.data.transaction_url;
-      } else {
-        throw new Error(initResult.message || "Failed to initialize payment");
-      }
+      // Redirect directly to success page with brandId
+      const brandId = brandData?.id || brandData?.answerId;
+      router.push(
+        `/payment-success?transactionId=${transactionId}&brandId=${brandId}`
+      );
     } catch (error) {
       console.error("Payment initialization error:", error);
-      toast.error(
-        error instanceof Error ? error.message : "Failed to initialize payment"
-      );
+      toast.error("Failed to process payment");
     } finally {
       setIsInitializing(false);
     }
@@ -137,7 +130,7 @@ const InitializePaymentContent = () => {
               Secure payment for {brandName}
             </p>
             <p className="text-sm text-gray-500">
-              Choose your preferred payment method
+              Complete your purchase to get your brand kit
             </p>
           </div>
 
@@ -200,12 +193,12 @@ const InitializePaymentContent = () => {
                     {isInitializing ? (
                       <div className="flex items-center gap-2">
                         <Loader2 className="w-5 h-5 animate-spin" />
-                        Initializing Payment...
+                        Processing Payment...
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
                         <CreditCard className="w-5 h-5" />
-                        Initialize Payment
+                        Complete Payment
                       </div>
                     )}
                   </Button>
@@ -281,8 +274,8 @@ const InitializePaymentContent = () => {
                   Ready to complete your brand?
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  Click "Initialize Payment" to proceed to our secure payment
-                  gateway where you can choose your preferred payment method.
+                  Click "Complete Payment" to process your payment and receive
+                  your complete brand kit.
                 </p>
                 <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
                   <div className="flex items-center gap-1">

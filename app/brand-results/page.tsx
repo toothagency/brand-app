@@ -86,11 +86,13 @@ const BrandResultsContent = () => {
   // Don't render anything until component is mounted
   if (!isMounted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
             <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-blue-600" />
-            <h2 className="text-xl font-semibold mb-2">Loading...</h2>
+            <h2 className="text-xl font-semibold mb-2 dark:text-white">
+              Loading...
+            </h2>
           </CardContent>
         </Card>
       </div>
@@ -99,12 +101,16 @@ const BrandResultsContent = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
             <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-blue-600" />
-            <h2 className="text-xl font-semibold mb-2">Loading Your Brand</h2>
-            <p className="text-gray-600">Fetching your brand results...</p>
+            <h2 className="text-xl font-semibold mb-2 dark:text-white">
+              Loading Your Brand
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300">
+              Fetching your brand results...
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -113,12 +119,14 @@ const BrandResultsContent = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
-            <AlertCircle className="w-12 h-12 mx-auto mb-4 text-red-600" />
-            <h2 className="text-xl font-semibold mb-2">Error Loading Brand</h2>
-            <p className="text-gray-600 mb-6">{error}</p>
+            <AlertCircle className="w-12 h-12 mx-auto mb-4 text-red-600 dark:text-red-400" />
+            <h2 className="text-xl font-semibold mb-2 dark:text-white">
+              Error Loading Brand
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">{error}</p>
             <div className="space-y-2">
               <Button
                 onClick={handleRetry}
@@ -146,12 +154,14 @@ const BrandResultsContent = () => {
   const brandDataString = localStorage.getItem("currentBrandData");
   if (!brandDataString) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
-            <AlertCircle className="w-12 h-12 mx-auto mb-4 text-red-600" />
-            <h2 className="text-xl font-semibold mb-2">Brand Data Not Found</h2>
-            <p className="text-gray-600 mb-6">
+            <AlertCircle className="w-12 h-12 mx-auto mb-4 text-red-600 dark:text-red-400" />
+            <h2 className="text-xl font-semibold mb-2 dark:text-white">
+              Brand Data Not Found
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
               The brand data could not be loaded. Please try generating your
               brand again.
             </p>
@@ -174,12 +184,14 @@ const BrandResultsContent = () => {
   } catch (error) {
     console.error("Error parsing brand data:", error);
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
-            <AlertCircle className="w-12 h-12 mx-auto mb-4 text-red-600" />
-            <h2 className="text-xl font-semibold mb-2">Invalid Brand Data</h2>
-            <p className="text-gray-600 mb-6">
+            <AlertCircle className="w-12 h-12 mx-auto mb-4 text-red-600 dark:text-red-400" />
+            <h2 className="text-xl font-semibold mb-2 dark:text-white">
+              Invalid Brand Data
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
               The brand data is corrupted. Please try generating your brand
               again.
             </p>
@@ -197,17 +209,17 @@ const BrandResultsContent = () => {
   }
 
   return (
-    <div className="min-h-screen mt-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen mt-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
       {/* Enhanced Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex flex-col sm:flex-row space-y-3 text-center sm:text-left items-center justify-between">
             <div className="flex items-center space-x-4">
               <div className="">
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
                   {brandData.brand_communication?.brand_name || "Your Brand"}
                 </h1>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-300">
                   Brand Strategy & Identity
                 </p>
               </div>
@@ -238,19 +250,19 @@ const BrandResultsContent = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="bg-white rounded-2xl shadow-lg p-8 mb-8"
+          className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 mb-8"
         >
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                 {brandData.brand_communication?.brand_name}
               </h2>
-              <p className="text-xl text-gray-600 mb-6 italic">
+              <p className="text-xl text-gray-600 dark:text-gray-300 mb-6 italic">
                 "{brandData.brand_communication?.brand_tagline}"
               </p>
               <div className="space-y-4">
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
                     Primary Colors
                   </h3>
                   <div className="flex space-x-3">
@@ -261,10 +273,10 @@ const BrandResultsContent = () => {
                           className="flex items-center space-x-2"
                         >
                           <div
-                            className="w-8 h-8 rounded-full border-2 border-gray-200"
+                            className="w-8 h-8 rounded-full border-2 border-gray-200 dark:border-gray-600"
                             style={{ backgroundColor: color.hex_value }}
                           />
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-gray-600 dark:text-gray-300">
                             {color.color_name}
                           </span>
                         </div>
@@ -273,13 +285,16 @@ const BrandResultsContent = () => {
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
                     Typography
                   </h3>
                   <div className="space-y-2">
                     {brandData.brand_identity?.typography?.map(
                       (font: any, index: number) => (
-                        <div key={index} className="text-sm text-gray-600">
+                        <div
+                          key={index}
+                          className="text-sm text-gray-600 dark:text-gray-300"
+                        >
                           <span className="font-medium">
                             {font.font_family}
                           </span>{" "}
@@ -292,10 +307,10 @@ const BrandResultsContent = () => {
               </div>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-4">
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
                 About the Brand
               </h3>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                 {brandData.brand_identity?.about_the_brand}
               </p>
             </div>

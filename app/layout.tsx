@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import { Toaster } from "react-hot-toast";
 import AOSInit from "./components/AOSInit";
 import Footer from "./components/footer";
+import Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "Jara AI Brand Builder",
@@ -22,8 +23,11 @@ export default function RootLayout({
         <AOSInit />
         <Toaster />
         <Navbar />
-        <BrandProvider>{children}</BrandProvider>
+        <Providers>
+          <BrandProvider>{children}</BrandProvider>
+        </Providers>
         <Footer />
+        <script type="text/javascript" src="https://www.monetbil.com/widget/v2/monetbil.min.js"></script>
       </body>
     </html>
   );

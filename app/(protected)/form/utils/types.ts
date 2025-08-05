@@ -44,7 +44,7 @@ export interface BrandObjectStrategy { brand_substance: BrandObjectStrategySubst
 export interface BrandObjectMarketingAndSocialMediaStrategy { content_calender: string; }
 
 export interface DetailedBrandObject { // This is the main object from get_brand_results
-  brandId: string;
+  id: string;
   brand_communication: BrandObjectCommunication;
   brand_identity: BrandObjectIdentity;
   brand_strategy: BrandObjectStrategy;

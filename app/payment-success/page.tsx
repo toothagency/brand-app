@@ -8,17 +8,27 @@ import {
   Download,
   ArrowLeft,
   Smartphone,
+  User,
+  Mail,
+  Phone,
+  Globe,
+  Building,
+  Image,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { usePayUnitPayment } from "../hooks/usePayUnitPayment";
+
 import { useFinalResults } from "../hooks/useFinalResults";
+import { useGetBrand } from "../hooks/useGetBrand";
 import Providers from "../providers";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { Suspense } from "react";
+import { getCurrentUser } from "../(auth)/hooks/authHooks";
 
 // Force dynamic rendering for this page
 export const dynamic = "force-dynamic";
@@ -32,12 +42,26 @@ const PaymentSuccessContent = () => {
   const [transactionData, setTransactionData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isGeneratingResults, setIsGeneratingResults] = useState(false);
+  const [showGeneratingLoader, setShowGeneratingLoader] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [brandData, setBrandData] = useState<any>(null);
+  const [selectedLogo, setSelectedLogo] = useState<string>("");
 
-  const { getPaymentStatus } = usePayUnitPayment();
+  // Form state
+  const [formData, setFormData] = useState({
+    userName: "",
+    userEmail: "",
+    userPhoneNumbers: "",
+    registrationNumber: "",
+    website: "",
+  });
+
   const finalResultsMutation = useFinalResults();
-
+  const { getBrand } = useGetBrand();
+  const userId = getCurrentUser()?.userId;
   const transactionId = searchParams.get("transactionId");
+  const brandId = searchParams.get("brandId");
 
   useEffect(() => {
     setIsMounted(true);
@@ -55,28 +79,22 @@ const PaymentSuccessContent = () => {
         // Get stored transaction data
         const storedData = localStorage.getItem("paymentTransaction");
         if (storedData) {
-          setTransactionData(JSON.parse(storedData));
-        }
+          const parsedData = JSON.parse(storedData);
+          setTransactionData(parsedData);
 
-        // Check payment status with PayUnit
-        const statusResult = await getPaymentStatus.mutateAsync(transactionId);
-
-        if (statusResult.status === "SUCCESS") {
-          const status = statusResult.data.transaction_status;
-          setPaymentStatus(status);
-
-          if (status === "SUCCESS") {
-            toast.success("Payment successful! Generating your brand kit...");
-            await generateFinalResults();
-          } else if (status === "FAILED") {
-            toast.error("Payment failed. Please try again.");
-          } else if (status === "PENDING") {
-            toast.custom("Payment is still pending. Please check your phone.");
-          }
+          // Since we're bypassing payment gateway, treat as success
+          setPaymentStatus("SUCCESS");
+          toast.success(
+            "Payment successful! Please complete your information below."
+          );
+          setShowForm(true);
+        } else {
+          toast.error("Transaction data not found");
+          router.push("/");
         }
       } catch (error) {
-        console.error("Error checking payment status:", error);
-        toast.error("Error checking payment status");
+        console.error("Error processing payment:", error);
+        toast.error("Error processing payment");
       } finally {
         setIsLoading(false);
       }
@@ -85,58 +103,72 @@ const PaymentSuccessContent = () => {
     checkPaymentStatus();
   }, [transactionId]);
 
+  // Fetch brand data when brandId is available
+  useEffect(() => {
+    const fetchBrandData = async () => {
+      if (brandId) {
+        try {
+          const result = await getBrand.mutateAsync(brandId);
+          if (result.success) {
+            setBrandData(result.brand_results);
+            // Set default logo if available
+            if (
+              result.brand_results.brand_identity?.logos &&
+              result.brand_results.brand_identity?.logos.length > 0
+            ) {
+              setSelectedLogo(
+                result.brand_results.brand_identity.logos[0].image_url
+              );
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching brand data:", error);
+          toast.error("Failed to fetch brand data");
+        }
+      }
+    };
+
+    if (showForm && brandId) {
+      fetchBrandData();
+    }
+  }, [showForm, brandId]);
+
   const generateFinalResults = async () => {
     if (!transactionData?.brandData) {
       toast.error("Brand data not found");
       return;
     }
 
+    if (!selectedLogo) {
+      toast.error("Please select a logo option");
+      return;
+    }
+
     setIsGeneratingResults(true);
+    setShowGeneratingLoader(true);
 
     try {
-      // Get user data from cookies
-      const userDataCookie = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("userData="));
-
-      if (!userDataCookie) {
-        throw new Error("User not found");
-      }
-
-      const userData = JSON.parse(
-        decodeURIComponent(userDataCookie.split("=")[1])
-      );
-      const userId = userData?.userId;
-      const userName = userData?.name || "User";
-      const userEmail = userData?.email || "";
-
-      if (!userId) {
-        throw new Error("User ID not found");
-      }
+      // Generate a unique user ID
 
       // Call the backend endpoint to generate final results
       const result = await finalResultsMutation.mutateAsync({
         userId: userId,
-        brandId: transactionData.brandData?.id || "temp-brand-id",
-        userName: userName,
-        userEmail: userEmail,
-        userPhoneNumbers: "",
-        registrationNumber: "",
-        website: "",
-        brandLogo: "",
+        brandId: brandId || transactionData.brandData?.id || "temp-brand-id",
+        userName: formData.userName,
+        userEmail: formData.userEmail,
+        userPhoneNumbers: formData.userPhoneNumbers,
+        registrationNumber: formData.registrationNumber,
+        website: formData.website,
+        brandLogo: selectedLogo,
         others: {},
       });
 
       if (result.success) {
-        toast.success("Brand kit generated successfully!");
+        toast.success("Brand kit generated successfully! redirecting ...");
 
         // Redirect to full brand results page
         setTimeout(() => {
-          router.push(
-            `/full-brand-results?data=${encodeURIComponent(
-              JSON.stringify(result.results)
-            )}`
-          );
+          router.push(`/full-brand-results?brandId=${brandId}`);
         }, 2000);
       } else {
         throw new Error(result.message || "Failed to generate final results");
@@ -148,6 +180,7 @@ const PaymentSuccessContent = () => {
       );
     } finally {
       setIsGeneratingResults(false);
+      setShowGeneratingLoader(false);
     }
   };
 
@@ -180,7 +213,7 @@ const PaymentSuccessContent = () => {
   const getStatusMessage = () => {
     switch (paymentStatus) {
       case "SUCCESS":
-        return "Your payment has been confirmed. Generating your complete brand kit...";
+        return "Your payment has been confirmed. Please complete your information below to generate your brand kit.";
       case "FAILED":
         return "Your payment was not successful. Please try again or contact support.";
       case "PENDING":
@@ -193,11 +226,13 @@ const PaymentSuccessContent = () => {
   // Don't render anything until component is mounted
   if (!isMounted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <h2 className="text-xl font-semibold mb-2">Loading...</h2>
+            <h2 className="text-xl font-semibold mb-2 dark:text-white">
+              Loading...
+            </h2>
           </CardContent>
         </Card>
       </div>
@@ -206,14 +241,14 @@ const PaymentSuccessContent = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-            <h2 className="text-xl font-semibold mb-2">
+            <h2 className="text-xl font-semibold mb-2 dark:text-white">
               Checking Payment Status
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-300">
               Please wait while we verify your payment...
             </p>
           </CardContent>
@@ -223,7 +258,45 @@ const PaymentSuccessContent = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4">
+      {/* Generating Loader Overlay */}
+      {showGeneratingLoader && (
+        <div className="fixed inset-0 bg-black/50 dark:bg-gray-800 flex items-center justify-center z-50">
+          <Card className="w-full max-w-md mx-4">
+            <CardContent className="p-8 text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-6"></div>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+                Generating Your Complete Brand Kit
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                We're creating your comprehensive brand package with logos,
+                business cards, marketing materials, and more...
+              </p>
+              <div className="space-y-2">
+                <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                  <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+                  <span>Processing brand assets...</span>
+                </div>
+                <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                  <div
+                    className="w-2 h-2 bg-green-600 rounded-full animate-pulse"
+                    style={{ animationDelay: "0.5s" }}
+                  ></div>
+                  <span>Creating marketing materials...</span>
+                </div>
+                <div className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                  <div
+                    className="w-2 h-2 bg-purple-600 rounded-full animate-pulse"
+                    style={{ animationDelay: "1s" }}
+                  ></div>
+                  <span>Preparing your complete kit...</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       <div className="max-w-2xl mx-auto pt-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -245,7 +318,7 @@ const PaymentSuccessContent = () => {
               <div className="p-3 bg-blue-100 rounded-full mr-3">
                 <Smartphone className="w-6 h-6 text-blue-600" />
               </div>
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Payment Status
               </h1>
             </div>
@@ -256,12 +329,18 @@ const PaymentSuccessContent = () => {
             <CardContent className="p-8 text-center">
               <div className="mb-6">{getStatusIcon()}</div>
 
-              <h2 className="text-2xl font-bold mb-2">{getStatusTitle()}</h2>
-              <p className="text-gray-600 mb-6">{getStatusMessage()}</p>
+              <h2 className="text-2xl font-bold mb-2 dark:text-white">
+                {getStatusTitle()}
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                {getStatusMessage()}
+              </p>
 
               {transactionData && (
-                <div className="bg-gray-50 p-4 rounded-lg mb-6">
-                  <h3 className="font-semibold mb-2">Transaction Details</h3>
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg mb-6">
+                  <h3 className="font-semibold mb-2 dark:text-white">
+                    Transaction Details
+                  </h3>
                   <div className="text-sm space-y-1">
                     <div className="flex justify-between">
                       <span>Transaction ID:</span>
@@ -329,6 +408,202 @@ const PaymentSuccessContent = () => {
               )}
             </CardContent>
           </Card>
+
+          {/* User Information Form */}
+          {showForm && paymentStatus === "SUCCESS" && (
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <User className="w-5 h-5 text-blue-600" />
+                  Complete Your Information
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {/* Personal Information */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="userName"
+                        className="flex items-center gap-2"
+                      >
+                        <User className="w-4 h-4" />
+                        Full Name *
+                      </Label>
+                      <Input
+                        id="userName"
+                        type="text"
+                        placeholder="Enter your full name"
+                        value={formData.userName}
+                        onChange={(e) =>
+                          setFormData({ ...formData, userName: e.target.value })
+                        }
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="userEmail"
+                        className="flex items-center gap-2"
+                      >
+                        <Mail className="w-4 h-4" />
+                        Email Address *
+                      </Label>
+                      <Input
+                        id="userEmail"
+                        type="email"
+                        placeholder="Enter your email address"
+                        value={formData.userEmail}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            userEmail: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  {/* Contact Information */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="userPhoneNumbers"
+                        className="flex items-center gap-2"
+                      >
+                        <Phone className="w-4 h-4" />
+                        Phone Number
+                      </Label>
+                      <Input
+                        id="userPhoneNumbers"
+                        type="tel"
+                        placeholder="Enter your phone number"
+                        value={formData.userPhoneNumbers}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            userPhoneNumbers: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="website"
+                        className="flex items-center gap-2"
+                      >
+                        <Globe className="w-4 h-4" />
+                        Website
+                      </Label>
+                      <Input
+                        id="website"
+                        type="url"
+                        placeholder="Enter your website URL"
+                        value={formData.website}
+                        onChange={(e) =>
+                          setFormData({ ...formData, website: e.target.value })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  {/* Business Information */}
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="registrationNumber"
+                      className="flex items-center gap-2"
+                    >
+                      <Building className="w-4 h-4" />
+                      Registration Number
+                    </Label>
+                    <Input
+                      id="registrationNumber"
+                      type="text"
+                      placeholder="Enter your business registration number"
+                      value={formData.registrationNumber}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          registrationNumber: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+
+                  {/* Logo Selection */}
+                  {brandData?.brand_identity?.logos &&
+                    brandData.brand_identity.logos.length > 0 && (
+                      <div className="space-y-4">
+                        <Label className="flex items-center gap-2">
+                          <Image className="w-4 h-4" />
+                          Choose Your Logo *
+                        </Label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                          {brandData.brand_identity.logos.map(
+                            (logo: any, index: number) => (
+                              <div
+                                key={index}
+                                className={`relative border-2 rounded-lg p-1 cursor-pointer transition-all ${
+                                  selectedLogo === logo.image_url
+                                    ? "border-blue-500 bg-blue-50"
+                                    : "border-gray-200 hover:border-gray-300"
+                                }`}
+                                onClick={() => setSelectedLogo(logo.image_url)}
+                              >
+                                <img
+                                  src={logo.image_url}
+                                  alt={`Logo option ${index + 1}`}
+                                  className="w-full h-40 object-cover"
+                                  onError={(e) => {
+                                    e.currentTarget.style.display = "none";
+                                  }}
+                                />
+                                {selectedLogo === logo.image_url && (
+                                  <div className="absolute top-2 right-2">
+                                    <CheckCircle className="w-6 h-6 text-blue-600" />
+                                  </div>
+                                )}
+                                {/* <p className="text-center text-sm mt-2 font-medium">
+                                  {logo.description || `Option ${index + 1}`}
+                                </p> */}
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                  {/* Generate Button */}
+                  <div className="pt-4">
+                    <Button
+                      onClick={generateFinalResults}
+                      className="w-full bg-blue-600 hover:bg-blue-700"
+                      disabled={
+                        isGeneratingResults ||
+                        !formData.userName ||
+                        !formData.userEmail ||
+                        !selectedLogo
+                      }
+                      size="lg"
+                    >
+                      {isGeneratingResults ? (
+                        <div className="flex items-center gap-2">
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          Generating Complete Brand Kit...
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <Download className="w-5 h-5" />
+                          Generate Complete Brand Kit
+                        </div>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Instructions */}
           {paymentStatus === "PENDING" && (
