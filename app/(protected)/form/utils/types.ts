@@ -45,6 +45,8 @@ export interface BrandObjectMarketingAndSocialMediaStrategy { content_calender: 
 
 export interface DetailedBrandObject { // This is the main object from get_brand_results
   id: string;
+  brandId?: string;
+
   name: string;
 
   logo: string;

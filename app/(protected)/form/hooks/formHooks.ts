@@ -88,7 +88,7 @@ const createBrandAPI = async (payload: CreateBrandRequest): Promise<CreateBrandR
 
 const fetchBrandResultsAPI = async (userId: string, brandId: string): Promise<DetailedBrandObject> => { // <--- RETURN TYPE IS DetailedBrandObject
   const response = await axiosInstance.post<DetailedBrandObject>(`/get_results`, { userId: userId, brandId: brandId }); // Expect DetailedBrandObject
-  if (!response.data?.id) { // Check a key property of DetailedBrandObject
+  if (!response.data?.brandId) { // Check a key property of DetailedBrandObject
     throw new Error("Backend did not return a valid detailed brand object with brandId.");
   }
   return response.data;
