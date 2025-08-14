@@ -45,13 +45,9 @@ import type {
 } from "../../utils/types"; // Adjust path
 import PdfBuilderWithImages from "../form/EnhancedPdfBuilder";
 import { useCreateBrand } from "../../hooks/formHooks";
-import Cookies from "js-cookie";
-import PaymentModal from "./PaymentModal";
 
 interface ResultsDisplayProps {
   brandData: DetailedBrandObject;
-  onEdit: () => void; // For Edit button (just go back to form view)
-  onStartOver: () => void; // For Start Over (clear everything)
 }
 
 type CalendarEntry = {
@@ -193,11 +189,7 @@ const renderKeyValueForPdf = (
   }
 };
 
-const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
-  brandData,
-  onEdit,
-  onStartOver,
-}) => {
+const ResultsDisplay: React.FC<ResultsDisplayProps> = ({ brandData }) => {
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [expandedSections, setExpandedSections] = useState<
     Record<string, boolean>
@@ -212,9 +204,6 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
   >([]);
   const [showAllCalendarEntries, setShowAllCalendarEntries] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const createBrandMutation = useCreateBrand();
 
   const {
     id,
@@ -272,314 +261,12 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
     setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
-  const handleDownloadPdfProgrammatic = async () => {
-    setIsGeneratingPdf(true);
-    toast.loading(
-      "Generating your professional brand blueprint with images...",
-      {
-        id: "pdf-generation-prog",
-      }
-    );
-
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    try {
-      const builder = new PdfBuilderWithImages(brandData);
-
-      // Cover page
-      builder.addCoverPage(
-        "Brand Blueprint",
-        brand_communication?.brand_name,
-        brand_communication?.brand_tagline
-      );
-
-      // Brand Communication Section
-      if (brand_communication) {
-        builder.addSectionTitle("Brand Communication", true);
-
-        builder.addKeyValuePair(
-          "Brand Name",
-          brand_communication.brand_name,
-          true
-        );
-        builder.addKeyValuePair(
-          "Brand Tagline",
-          brand_communication.brand_tagline,
-          true
-        );
-
-        if (brand_communication.primary_core_message) {
-          builder.addSectionTitle("Primary Core Message");
-          builder.addKeyValuePair(
-            "Who We Serve",
-            brand_communication.primary_core_message.who_we_serve
-          );
-          builder.addKeyValuePair(
-            "Where They Need Help",
-            brand_communication.primary_core_message.where_they_need_help
-          );
-          builder.addKeyValuePair(
-            "Their Market Alternative",
-            brand_communication.primary_core_message.their_market_alternative
-          );
-          builder.addKeyValuePair(
-            "Key Benefits They Get",
-            brand_communication.primary_core_message.the_key_benefits_they_get
-          );
-          builder.addKeyValuePair(
-            "Our Key Differences",
-            brand_communication.primary_core_message.our_key_differences
-          );
-        }
-      }
-
-      // Brand Strategy Section
-      if (brand_strategy) {
-        builder.addSectionTitle("Brand Strategy", true);
-
-        if (brand_strategy.brand_substance) {
-          builder.addSectionTitle("Brand Substance");
-
-          if (brand_strategy.brand_substance.our_purpose) {
-            builder.addKeyValuePair(
-              brand_strategy.brand_substance.our_purpose.title || "Our Purpose",
-              brand_strategy.brand_substance.our_purpose.purpose_statement,
-              true
-            );
-            builder.addKeyValuePair(
-              "What Customers Mean to Us",
-              brand_strategy.brand_substance.our_purpose
-                .what_our_customers_mean_to_us
-            );
-            builder.addKeyValuePair(
-              "We Believe In Something Bigger",
-              brand_strategy.brand_substance.our_purpose
-                .we_believe_in_something_bigger_than_ourselves
-            );
-          }
-
-          if (brand_strategy.brand_substance.our_vision) {
-            builder.addKeyValuePair(
-              "Our Vision",
-              brand_strategy.brand_substance.our_vision.our_vision_is_bright
-            );
-          }
-
-          if (brand_strategy.brand_substance.our_mission) {
-            builder.addKeyValuePair(
-              "Our Mission",
-              brand_strategy.brand_substance.our_mission.we_are_committed_to
-            );
-          }
-
-          if (brand_strategy.brand_substance.our_values) {
-            builder.addKeyValuePair(
-              "Our Values",
-              brand_strategy.brand_substance.our_values.values
-            );
-            builder.addKeyValuePair(
-              "Values in Action",
-              brand_strategy.brand_substance.our_values
-                .how_we_do_wellness_business
-            );
-          }
-        }
-
-        // Use the special customer persona method
-        if (brand_strategy.our_position) {
-          builder.addCustomerPersona(brand_strategy.our_position);
-        }
-
-        builder.addKeyValuePair(
-          "Competitive Analysis",
-          brand_strategy.top_competitors
-        );
-
-        if (brand_strategy.why_we_are_different) {
-          builder.addSectionTitle("What Makes Us Different");
-          builder.addKeyValuePair(
-            "Positioning Statement",
-            brand_strategy.why_we_are_different.positioning_statement,
-            true
-          );
-          builder.addKeyValuePair(
-            "The Difference We Provide",
-            brand_strategy.why_we_are_different.the_difference_we_provide
-          );
-        }
-      }
-
-      // Brand Identity Section
-      if (brand_identity) {
-        builder.addSectionTitle("Brand Identity", true);
-
-        builder.addKeyValuePair(
-          "About The Brand",
-          brand_identity.about_the_brand,
-          true
-        );
-
-        // Color Palettes
-        if (brand_identity.primary_colors?.length > 0) {
-          builder.addColorPalette(
-            brand_identity.primary_colors,
-            "Primary Colors"
-          );
-        }
-
-        if (brand_identity.secondary_colors?.length > 0) {
-          builder.addColorPalette(
-            brand_identity.secondary_colors,
-            "Secondary Colors"
-          );
-        }
-
-        // Typography
-        if (brand_identity.typography?.length > 0) {
-          builder.addSectionTitle("Typography");
-          brand_identity.typography.forEach((font, index) => {
-            builder.addKeyValuePair(
-              `${font.font_family} ${font.font_weight}`,
-              `Size: ${font.font_size} | Line Height: ${font.line_height}\n${font.description}`
-            );
-          });
-        }
-
-        // Logo images
-        if (brand_identity.logos?.length > 0) {
-          await builder.addLogosWithImages(brand_identity.logos);
-        }
-      }
-
-      // Marketing & Social Media Section
-      if (
-        marketing_and_social_media_strategy &&
-        contentCalendarEntries.length > 0
-      ) {
-        builder.addSectionTitle("Marketing & Social Media Strategy", true);
-        builder.addContentCalendarSample(contentCalendarEntries, 5);
-      }
-
-      // Final note
-      builder.addSectionTitle("Implementation Guide", true);
-      builder.addKeyValuePair(
-        "Next Steps",
-        "This brand blueprint provides the foundation for all your marketing materials, website design, and business communications. Use these guidelines consistently across all touchpoints to build a strong, recognizable brand identity.",
-        true
-      );
-
-      builder.save(
-        `${brand_communication?.brand_name || "brand_blueprint"}_with_logos.pdf`
-      );
-      toast.success("Professional PDF with logos generated successfully!", {
-        id: "pdf-generation-prog",
-      });
-    } catch (error) {
-      console.error("Error generating PDF with images:", error);
-      toast.error("Sorry, an error occurred while generating the PDF.", {
-        id: "pdf-generation-prog",
-      });
-    } finally {
-      setIsGeneratingPdf(false);
-    }
-  };
-
   // Helper to get userId from cookies
-  const getUserId = () => {
-    const userDataCookie = Cookies.get("userData");
-    if (!userDataCookie) return null;
-    try {
-      const parsedData = JSON.parse(userDataCookie);
-      return parsedData?.userId || null;
-    } catch (error) {
-      return null;
-    }
-  };
-
-  const handleStartOver = () => {
-    setShowPopover(true);
-  };
-
-  const handlePopoverClose = () => {
-    setShowPopover(false);
-  };
-
-  const handleStartOverNo = () => {
-    // Do NOT clear localStorage here. Just close popover and go back to form.
-    setShowPopover(false);
-    onStartOver();
-  };
-
-  const handleStartOverYes = async () => {
-    setIsSaving(true);
-    const userId = getUserId();
-    if (userId) {
-      try {
-        localStorage.removeItem("brandingFormData");
-
-        await createBrandMutation.mutateAsync({ userId });
-        setShowPopover(false);
-        onStartOver();
-      } catch (error) {
-        toast.error("Failed to save brand before starting over.");
-      }
-    } else {
-      toast.error("User not found. Cannot save brand.");
-    }
-    setIsSaving(false);
-  };
-
-  const handleEdit = () => {
-    setShowPopover(false);
-    onEdit();
-  };
 
   // --- UI Rendering ---
   return (
-    <div className="min-h-screen mt-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4 sm:p-6 md:p-8 print:bg-white">
+    <div className=" mt-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4 sm:p-6 md:p-8 print:bg-white">
       <div className="max-w-5xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center pt-8 pb-12 print:pt-4 print:pb-6"
-        >
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4 print:text-3xl">
-            Your Brand Blueprint
-          </h1>
-          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 print:text-base">
-            Comprehensive strategy for{" "}
-            <span className="font-semibold text-blue-600 dark:text-blue-400">
-              {brand_communication?.brand_name || "your business"}
-            </span>
-          </p>
-
-          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 no-pdf">
-            {" "}
-            {/* Buttons hidden in PDF */}
-            <Button
-              onClick={() => setShowPaymentModal(true)}
-              disabled={isGeneratingPdf}
-              size="lg"
-              className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
-            >
-              {isGeneratingPdf ? (
-                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              ) : (
-                <Download className="w-5 h-5 mr-2" />
-              )}
-              {isGeneratingPdf ? "Generating PDF..." : "Download Blueprint"}
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={handleStartOver}
-              className="w-full sm:w-auto"
-            >
-              Back to Form
-            </Button>
-          </div>
-        </motion.div>
         <div className="space-y-6 print:space-y-3">
           {/* Brand Communication Section */}
           {brand_communication && (
@@ -695,11 +382,11 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                       <h3 className="text-xl font-semibold text-gray-800 mb-4">
                         Brand Substance
                       </h3>
-                      <div className="space-y-4">
+                      <div className="space-y-4 bg-slate-50/50 dark:bg-slate-800/50 dark:text-white dark:border-gray-700">
                         {brand_strategy.brand_substance.our_purpose && (
-                          <Card>
+                          <Card className="bg-slate-50/50 dark:bg-slate-800/50 dark:text-white dark:border-gray-700">
                             <CardHeader>
-                              <CardTitle className="text-md">
+                              <CardTitle className="text-md ">
                                 {brand_strategy.brand_substance.our_purpose
                                   .title || "Our Purpose"}
                               </CardTitle>
@@ -742,7 +429,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                         Ideal Customer: {brand_strategy.our_position.name}
                       </h3>
                       <div className="grid md:grid-cols-2 gap-4 text-sm">
-                        <Card>
+                        <Card className="bg-slate-50/50 dark:bg-slate-800/50 dark:text-white dark:border-gray-700">
                           <CardHeader>
                             <CardTitle className="text-md">
                               Demographics
@@ -752,7 +439,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                             {brand_strategy.our_position.demographics}
                           </CardContent>
                         </Card>
-                        <Card>
+                        <Card className="bg-slate-50/50 dark:bg-slate-800/50 dark:text-white dark:border-gray-700">
                           <CardHeader>
                             <CardTitle className="text-md">
                               Psychographics
@@ -762,7 +449,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                             {brand_strategy.our_position.psychographics}
                           </CardContent>
                         </Card>
-                        <Card>
+                        <Card className="bg-slate-50/50 dark:bg-slate-800/50 dark:text-white dark:border-gray-700">
                           <CardHeader>
                             <CardTitle className="text-md">
                               Personality
@@ -772,7 +459,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                             {brand_strategy.our_position.personality}
                           </CardContent>
                         </Card>
-                        <Card>
+                        <Card className="bg-slate-50/50 dark:bg-slate-800/50 dark:text-white dark:border-gray-700">
                           <CardHeader>
                             <CardTitle className="text-md">Desires</CardTitle>
                           </CardHeader>
@@ -780,7 +467,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                             {brand_strategy.our_position.desires}
                           </CardContent>
                         </Card>
-                        <Card>
+                        <Card className="bg-slate-50/50 dark:bg-slate-800/50 dark:text-white dark:border-gray-700">
                           <CardHeader>
                             <CardTitle className="text-md">Fears</CardTitle>
                           </CardHeader>
@@ -788,7 +475,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                             {brand_strategy.our_position.fears}
                           </CardContent>
                         </Card>
-                        <Card>
+                        <Card className="bg-slate-50/50 dark:bg-slate-800/50 dark:text-white dark:border-gray-700">
                           <CardHeader>
                             <CardTitle className="text-md">
                               Challenges
@@ -813,7 +500,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                       <h3 className="text-xl font-semibold text-gray-800 mb-4">
                         Our Differentiation
                       </h3>
-                      <Card>
+                      <Card className="bg-slate-50/50 dark:bg-slate-800/50 dark:text-white dark:border-gray-700">
                         <CardHeader>
                           <CardTitle className="text-md">
                             Positioning Statement
@@ -826,7 +513,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                           }
                         </CardContent>
                       </Card>
-                      <Card className="mt-4">
+                      <Card className="mt-4 bg-slate-50/50 dark:bg-slate-800/50 dark:text-white dark:border-gray-700">
                         <CardHeader>
                           <CardTitle className="text-md">
                             The Difference We Provide
@@ -877,12 +564,15 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                   {brand_identity.typography &&
                     brand_identity.typography.length > 0 && (
                       <div>
-                        <h3 className="text-xl font-semibold text-gray-800 mb-4">
+                        <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">
                           Typography
                         </h3>
                         <div className="grid md:grid-cols-2 gap-4">
                           {brand_identity.typography.map((font, index) => (
-                            <Card key={index}>
+                            <Card
+                              key={index}
+                              className="bg-slate-50/50 dark:bg-slate-800/50 dark:text-white dark:border-gray-700"
+                            >
                               <CardHeader>
                                 <CardTitle
                                   className="text-lg"
@@ -914,13 +604,13 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                       </h3>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {brand_identity.logos.map((logo, index) => (
-                          <Card key={index} className="flex flex-col">
-                            <CardContent className="p-4 flex-grow flex flex-col items-center justify-center bg-slate-50">
+                          <Card key={index} className="flex flex-col dark:bg-slate-800/50">
+                            <CardContent className="max-h-64 p-0 flex-grow flex flex-col items-center justify-center bg-slate-50">
                               {logo.image_url ? (
                                 <img
                                   src={logo.image_url}
                                   alt={`Logo ${index + 1}`}
-                                  className="max-w-full max-h-40 object-contain"
+                                  className=" object-cover h-full w-full"
                                 />
                               ) : (
                                 <p className="text-gray-400 text-sm">
@@ -928,8 +618,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                                 </p>
                               )}
                             </CardContent>
-                            <CardHeader className="pt-3 pb-4">
-                              <CardDescription className="text-xs">
+                            <CardHeader className="p-0 dark:bg-slate-800/50 dark:border-gray-700">
+                              <CardDescription className="text-xs p-4 dark:text-white dark:bg-slate-800/50 ">
                                 {logo.description}
                               </CardDescription>
                             </CardHeader>
@@ -1043,55 +733,6 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
         {/* End of space-y-6 for sections */}
       </div>{" "}
       {/* End of max-w-5xl */}
-      {showPopover && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 dark:bg-black/50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-sm">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold dark:text-white">
-                Edit or Start Over?
-              </h3>
-              <Button
-                variant="outline"
-                className="p-2 w-6 h-6"
-                onClick={handlePopoverClose}
-              >
-                {" "}
-                <X className="w-4 h-4" />
-              </Button>
-            </div>
-            <p className="mb-6 dark:text-gray-300">
-              Do you want to Edit this brand or Create A New Brand ?
-            </p>
-            <div className="flex justify-end gap-4">
-              <Button
-                onClick={handleEdit}
-                variant="secondary"
-                disabled={isSaving}
-              >
-                Edit
-              </Button>
-              <Button onClick={handleStartOverYes} disabled={isSaving}>
-                {isSaving ? "Saving..." : "Start Over"}
-              </Button>
-            </div>
-            <button
-              className="absolute top-2 right-3 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
-              onClick={handlePopoverClose}
-              aria-label="Close"
-            >
-              ×
-            </button>
-          </div>
-        </div>
-      )}
-      {/* Payment Modal */}
-      <PaymentModal
-        isOpen={showPaymentModal}
-        onClose={() => setShowPaymentModal(false)}
-        onDownloadBlueprint={handleDownloadPdfProgrammatic}
-        brandName={brand_communication?.brand_name}
-        brandId={id}
-      />
     </div>
   );
 };

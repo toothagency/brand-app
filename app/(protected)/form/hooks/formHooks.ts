@@ -138,4 +138,44 @@ export const useGetBrandResults = (
     ...hookOptions,
   };
   return useMutation(mutationConfig);
+
+
+// PDF Download Hook
+};
+export const useDownloadBlueprintPdf = (
+  hookOptions?: Omit<UseMutationOptions<Blob, Error, { brandId: string }>, 'mutationFn'>
+): UseMutationResult<Blob, Error, { brandId: string }> => {
+  const mutationConfig: UseMutationOptions<Blob, Error, { brandId: string }> = {
+    mutationFn: async ({ brandId }) => {
+      // Replace with your actual API endpoint for blueprint PDF
+      const response = await fetch(`/api/brand/${brandId}/blueprint-pdf`, {
+        method: "GET",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to download blueprint PDF");
+      }
+      return response.blob();
+    },
+    ...hookOptions,
+  };
+  return useMutation(mutationConfig);
+};
+// Full PDF Download Hook
+export const useDownloadFullBrandPdf = (
+  hookOptions?: Omit<UseMutationOptions<Blob, Error, { brandId: string }>, 'mutationFn'>
+): UseMutationResult<Blob, Error, { brandId: string }> => {
+  const mutationConfig: UseMutationOptions<Blob, Error, { brandId: string }> = {
+    mutationFn: async ({ brandId }) => {
+      // Replace with your actual API endpoint for full brand kit PDF
+      const response = await fetch(`/api/brand/${brandId}/full-pdf`, {
+        method: "GET",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to download full brand PDF");
+      }
+      return response.blob();
+    },
+    ...hookOptions,
+  };
+  return useMutation(mutationConfig);
 };

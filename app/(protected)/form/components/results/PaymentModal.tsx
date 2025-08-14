@@ -12,7 +12,7 @@ interface PaymentModalProps {
   onClose: () => void;
   onDownloadBlueprint: () => void;
   brandName?: string;
-  brandId?: string;
+  brandId?: string | null;
 }
 
 const PaymentModal: React.FC<PaymentModalProps> = ({

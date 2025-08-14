@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Loader2, ArrowLeft, AlertCircle, RefreshCw } from "lucide-react";
+import { Loader2, ArrowLeft, AlertCircle, RefreshCw, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -11,6 +11,12 @@ import { useGetBrand } from "../hooks/useGetBrand";
 import Providers from "../providers";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { Suspense } from "react";
+import PaymentModal from "../(protected)/form/components/results/PaymentModal";
+import Cookies from "js-cookie";
+import {
+  useCreateBrand,
+  useDownloadBlueprintPdf,
+} from "../(protected)/form/hooks/formHooks";
 
 // Force dynamic rendering for this page
 export const dynamic = "force-dynamic";
@@ -21,9 +27,16 @@ const BrandResultsContent = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isMounted, setIsMounted] = useState(false);
-
+  const [showPopover, setShowPopover] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
   const { getBrand } = useGetBrand();
   const brandId = searchParams.get("brandId");
+  const createBrandMutation = useCreateBrand();
+  const downloadBlueprintPdf = useDownloadBlueprintPdf();
+  const [isSaving, setIsSaving] = useState(false);
+  const handlePopoverClose = () => {
+    setShowPopover(false);
+  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -66,21 +79,50 @@ const BrandResultsContent = () => {
     fetchBrandData();
   }, [brandId]);
 
-  const handleEdit = () => {
-    // Navigate back to the form with the brand ID
-    router.push(`/form?editBrandId=${brandId}`);
-  };
-
   const handleStartOver = () => {
     // Clear any stored data and go to the form
-    localStorage.removeItem("currentBrandData");
-    router.push("/form");
+    setShowPopover(true);
   };
 
   const handleRetry = () => {
     setError(null);
     setIsLoading(true);
     // The useEffect will trigger again
+  };
+
+  const getUserId = () => {
+    const userDataCookie = Cookies.get("userData");
+    if (!userDataCookie) return null;
+    try {
+      const parsedData = JSON.parse(userDataCookie);
+      return parsedData?.userId || null;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const handleStartOverNo = () => {
+    // Do NOT clear localStorage here. Just close popover and go back to form.
+    setShowPopover(false);
+    router.push("/form");
+  };
+
+  const handleStartOverYes = async () => {
+    setIsSaving(true);
+    const userId = getUserId();
+    if (userId) {
+      try {
+        localStorage.removeItem("brandingFormData");
+
+        await createBrandMutation.mutateAsync({ userId });
+        setShowPopover(false);
+      } catch (error) {
+        toast.error("Failed to save brand before starting over.");
+      }
+    } else {
+      toast.error("User not found. Cannot save brand.");
+    }
+    setIsSaving(false);
   };
 
   // Don't render anything until component is mounted
@@ -210,39 +252,43 @@ const BrandResultsContent = () => {
 
   return (
     <div className="min-h-screen mt-20 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Enhanced Header */}
-      <div className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex flex-col sm:flex-row space-y-3 text-center sm:text-left items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="">
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
-                  {brandData.brand_communication?.brand_name || "Your Brand"}
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Brand Strategy & Identity
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                onClick={handleEdit}
-                className="text-blue-600 border-blue-600 hover:bg-blue-50"
-              >
-                Edit Brand
-              </Button>
-              <Button
-                variant="outline"
-                onClick={handleStartOver}
-                className="text-gray-600 border-gray-300 hover:bg-gray-50"
-              >
-                Start Over
-              </Button>
-            </div>
-          </div>
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center pt-8 pb-12 print:pt-4 print:pb-6"
+      >
+        <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4 print:text-3xl">
+          Your Brand Blueprint
+        </h1>
+        <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 print:text-base">
+          Comprehensive strategy for{" "}
+          <span className="font-semibold text-blue-600 dark:text-blue-400">
+            {brandData.brand_communication?.brand_name || "your business"}
+          </span>
+        </p>
+
+        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 no-pdf">
+          {" "}
+          {/* Buttons hidden in PDF */}
+          <Button
+            onClick={() => setShowPaymentModal(true)}
+            size="lg"
+            className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
+          >
+            Download Blueprint
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={handleStartOver}
+            className="w-full sm:w-auto"
+          >
+            Back to Form
+          </Button>
         </div>
-      </div>
+      </motion.div>
+      {/* Enhanced Header */}
 
       {/* Brand Overview Card */}
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -360,12 +406,72 @@ const BrandResultsContent = () => {
         </motion.div>
 
         {/* Main Results Display */}
-        <ResultsDisplay
-          brandData={brandData}
-          onEdit={handleEdit}
-          onStartOver={handleStartOver}
-        />
+        <ResultsDisplay brandData={brandData} />
       </div>
+
+      {/* Popover for Start Over */}
+      {showPopover && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30 dark:bg-black/50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-sm">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold dark:text-white">
+                Edit or Start Over?
+              </h3>
+              <Button
+                variant="outline"
+                className="p-2 w-6 h-6"
+                onClick={handlePopoverClose}
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+            <p className="mb-6 dark:text-gray-300">
+              Do you want to Edit this brand or Create A New Brand ?
+            </p>
+            <div className="flex justify-end gap-4">
+              <Button
+                onClick={handleStartOverNo}
+                variant="secondary"
+                disabled={isSaving}
+              >
+                Edit
+              </Button>
+              <Button onClick={handleStartOverYes} disabled={isSaving}>
+                {isSaving ? "Saving..." : "Start Over"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        onDownloadBlueprint={async () => {
+          if (!brandId) {
+            toast.error("Brand ID not found.");
+            return;
+          }
+          try {
+            const result = await downloadBlueprintPdf.mutateAsync({ brandId });
+            // Create a blob URL and trigger download
+            const url = window.URL.createObjectURL(result);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `brand-blueprint-${brandId}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+            toast.success("Blueprint downloaded!");
+          } catch (error) {
+            toast.error("Failed to download blueprint.");
+          }
+        }}
+        brandName={brandData.brand_communication?.brand_name}
+        brandId={brandId}
+      />
     </div>
   );
 };
