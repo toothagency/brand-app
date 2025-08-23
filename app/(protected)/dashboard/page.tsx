@@ -197,7 +197,6 @@ const DashboardPage = () => {
       <>
         <ResultsDisplay
           brandData={result}
-          onEdit={() => {}}
           onStartOver={() => {}}
         />
       </>
