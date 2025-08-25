@@ -14,6 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { useFapshiPayment } from "../hooks/useFapshiPayment";
 
 import Providers from "../providers";
 import ErrorBoundary from "../components/ErrorBoundary";
@@ -27,6 +28,7 @@ const InitializePaymentContent = () => {
   const searchParams = useSearchParams();
   const [isInitializing, setIsInitializing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const { initiatePayment } = useFapshiPayment();
 
   useEffect(() => {
     setIsMounted(true);
@@ -40,12 +42,12 @@ const InitializePaymentContent = () => {
   const brandName = brandData?.brand_communication?.brand_name || "your brand";
 
   // Pricing in XAF
-  const amountXAF = 10000; // Current price
-  const originalAmountXAF = 20000; // Original price (slashed)
+  const amountXAF = 15000; // Current price
+  const originalAmountXAF = 30000; // Original price (slashed)
   const discountXAF = originalAmountXAF - amountXAF; // Discount amount
 
   const generateTransactionId = () => {
-    return `pu-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    return `fs-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   };
 
   const handleInitializePayment = async () => {
@@ -53,34 +55,48 @@ const InitializePaymentContent = () => {
 
     try {
       const transactionId = generateTransactionId();
+      const redirectUrl = `${window.location.origin}/payment-success?transactionId=${transactionId}&brandId=${brandData?.id || brandData?.answerId}`;
+      
+      // Get user email from localStorage or use a default
+      const userEmail = localStorage.getItem('userEmail');
+      
+      // Initiate Fapshi payment
+      const result = await initiatePayment.mutateAsync({
+        amount: amountXAF,
+        ...(userEmail && { email: userEmail }),
+        redirectUrl: redirectUrl,
+        userId: transactionId,
+        externalId: transactionId,
+        message: `Payment for ${brandName} Complete Brand Kit`
+      });
 
-      // Store transaction info for success page
-      localStorage.setItem(
-        "paymentTransaction",
-        JSON.stringify({
-          transactionId,
-          amount: amountXAF,
-          brandName,
-          brandData,
-          payunitData: {
-            status: "SUCCESS",
-            message: "Payment completed successfully",
-            transaction_url: `${window.location.origin}/payment-success?transactionId=${transactionId}`,
-          },
-        })
-      );
+      if (result.success && result.data.link) {
+        // Store transaction info for success page
+        localStorage.setItem(
+          "paymentTransaction",
+          JSON.stringify({
+            transactionId,
+            amount: amountXAF,
+            brandName,
+            brandData,
+            fapshiData: {
+              status: "PENDING",
+              message: "Payment initiated",
+              transaction_url: redirectUrl,
+              transId: result.data.transId,
+              link: result.data.link
+            },
+          })
+        );
 
-      // Simulate a brief loading delay for better UX
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Redirect directly to success page with brandId
-      const brandId = brandData?.id || brandData?.answerId;
-      router.push(
-        `/payment-success?transactionId=${transactionId}&brandId=${brandId}`
-      );
+        // Redirect to Fapshi payment page
+        window.location.href = result.data.link;
+      } else {
+        throw new Error(result.error || 'Failed to initiate payment');
+      }
     } catch (error) {
       console.error("Payment initialization error:", error);
-      toast.error("Failed to process payment");
+      toast.error("Failed to initiate payment. Please try again.");
     } finally {
       setIsInitializing(false);
     }
@@ -134,7 +150,7 @@ const InitializePaymentContent = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-1 gap-8">
             {/* Payment Summary */}
             <Card>
               <CardHeader>
@@ -206,64 +222,7 @@ const InitializePaymentContent = () => {
               </CardContent>
             </Card>
 
-            {/* What You'll Get */}
-            <Card>
-              <CardHeader>
-                <CardTitle>What You'll Get</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-blue-900 mb-2">
-                      Complete Brand Kit:
-                    </h4>
-                    <ul className="text-sm text-blue-800 space-y-1">
-                      <li>• High-resolution logo files (AI, SVG, PNG)</li>
-                      <li>• Complete brand guidelines document</li>
-                      <li>• Social media templates (50+ designs)</li>
-                      <li>• Business card designs</li>
-                      <li>• Website mockups</li>
-                      <li>• Email signature templates</li>
-                      <li>• Print-ready files</li>
-                      <li>• Lifetime updates</li>
-                      <li>• Priority support</li>
-                    </ul>
-                  </div>
-
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-green-900 mb-2">
-                      Payment Methods Available:
-                    </h4>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Smartphone className="w-4 h-4 text-green-600" />
-                        <span className="text-sm text-green-800">
-                          Mobile Money (Orange, MTN)
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Globe className="w-4 h-4 text-green-600" />
-                        <span className="text-sm text-green-800">
-                          Credit/Debit Cards
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="bg-yellow-50 p-4 rounded-lg">
-                    <h4 className="font-semibold text-yellow-900 mb-2">
-                      Secure Payment:
-                    </h4>
-                    <ul className="text-sm text-yellow-800 space-y-1">
-                      <li>• SSL encrypted payment processing</li>
-                      <li>• PCI DSS compliant</li>
-                      <li>• Instant payment confirmation</li>
-                      <li>• Money-back guarantee</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+           
           </div>
 
           {/* Additional Info */}

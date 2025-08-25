@@ -25,10 +25,12 @@ import { toast } from "react-hot-toast";
 
 import { useFinalResults } from "../hooks/useFinalResults";
 import { useGetBrand } from "../hooks/useGetBrand";
+import { useFapshiPayment } from "../hooks/useFapshiPayment";
 import Providers from "../providers";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { Suspense } from "react";
 import { getCurrentUser } from "../(auth)/hooks/authHooks";
+import axios from "../configs/axiosConfigs";
 
 // Force dynamic rendering for this page
 export const dynamic = "force-dynamic";
@@ -41,12 +43,14 @@ const PaymentSuccessContent = () => {
   >("PENDING");
   const [transactionData, setTransactionData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
   const [isGeneratingResults, setIsGeneratingResults] = useState(false);
   const [showGeneratingLoader, setShowGeneratingLoader] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [brandData, setBrandData] = useState<any>(null);
   const [selectedLogo, setSelectedLogo] = useState<string>("");
+  const [paymentStatusUpdated, setPaymentStatusUpdated] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -59,9 +63,40 @@ const PaymentSuccessContent = () => {
 
   const finalResultsMutation = useFinalResults();
   const { getBrand } = useGetBrand();
+  const { getPaymentStatus } = useFapshiPayment();
   const userId = getCurrentUser()?.userId;
   const transactionId = searchParams.get("transactionId");
   const brandId = searchParams.get("brandId");
+  
+  // Fapshi redirect parameters
+  const fapshiTransId = searchParams.get("transId");
+  const fapshiStatus = searchParams.get("status");
+
+  // Function to update brand payment status
+  const updateBrandPaymentStatus = async (brandId: string, paymentStatus: boolean) => {
+    try {
+      console.log('Updating brand payment status:', { brandId, paymentStatus });
+      
+      const response = await axios.post('/update_brand_payment_status', {
+        brandId: brandId,
+        paymentStatus: paymentStatus
+      });
+
+      console.log('Brand payment status update response:', response.data);
+      
+      if (response.data.success) {
+        setPaymentStatusUpdated(true);
+        console.log('Brand payment status updated successfully');
+        return true;
+      } else {
+        console.error('Failed to update brand payment status:', response.data.message);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error updating brand payment status:', error);
+      return false;
+    }
+  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -69,39 +104,140 @@ const PaymentSuccessContent = () => {
 
   useEffect(() => {
     const checkPaymentStatus = async () => {
-      if (!transactionId) {
-        toast.error("No transaction ID found");
-        router.push("/");
-        return;
-      }
-
-      try {
-        // Get stored transaction data
-        const storedData = localStorage.getItem("paymentTransaction");
-        if (storedData) {
-          const parsedData = JSON.parse(storedData);
-          setTransactionData(parsedData);
-
-          // Since we're bypassing payment gateway, treat as success
-          setPaymentStatus("SUCCESS");
-          toast.success(
-            "Payment successful! Please complete your information below."
-          );
-          setShowForm(true);
-        } else {
-          toast.error("Transaction data not found");
-          router.push("/");
+      // Check if we have Fapshi redirect parameters
+      if (fapshiTransId && fapshiStatus) {
+        setIsVerifyingPayment(true);
+        try {
+          // Verify payment status with Fapshi API
+          const paymentStatusResult = await getPaymentStatus.mutateAsync(fapshiTransId);
+          
+          if (paymentStatusResult && paymentStatusResult.status === "SUCCESSFUL") {
+            // Payment verified as successful
+            setPaymentStatus("SUCCESS");
+            
+            // Update brand payment status in backend
+            const currentBrandId = brandId || transactionId;
+            if (currentBrandId) {
+              const updateSuccess = await updateBrandPaymentStatus(currentBrandId, true);
+              if (!updateSuccess) {
+                console.warn('Failed to update brand payment status, but continuing with payment flow');
+              }
+            }
+            
+            // Get stored transaction data
+            const storedData = localStorage.getItem("paymentTransaction");
+            if (storedData) {
+              const parsedData = JSON.parse(storedData);
+              
+              // Update stored data with Fapshi payment details
+              const updatedData = {
+                ...parsedData,
+                fapshiPaymentDetails: {
+                  transId: paymentStatusResult.transId,
+                  status: paymentStatusResult.status,
+                  medium: paymentStatusResult.medium,
+                  serviceName: paymentStatusResult.serviceName,
+                  amount: paymentStatusResult.amount,
+                  revenue: paymentStatusResult.revenue,
+                  payerName: paymentStatusResult.payerName,
+                  email: paymentStatusResult.email,
+                  financialTransId: paymentStatusResult.financialTransId,
+                  dateInitiated: paymentStatusResult.dateInitiated,
+                  dateConfirmed: paymentStatusResult.dateConfirmed
+                }
+              };
+              
+              setTransactionData(updatedData);
+              localStorage.setItem("paymentTransaction", JSON.stringify(updatedData));
+              setShowForm(true);
+              toast.success("Payment verified successfully! Please complete your information below.");
+            } else {
+              toast.error("Transaction data not found");
+              router.push("/");
+            }
+          } else if (paymentStatusResult.status === "EXPIRED") {
+            // Payment link expired
+            setPaymentStatus("FAILED");
+            
+            // Update brand payment status as failed
+            const currentBrandId = brandId || transactionId;
+            if (currentBrandId) {
+              await updateBrandPaymentStatus(currentBrandId, false);
+            }
+            
+            toast.error("Payment link has expired. Please initiate a new payment.");
+          } else if (paymentStatusResult.status === "FAILED") {
+            // Payment failed
+            setPaymentStatus("FAILED");
+            
+            // Update brand payment status as failed
+            const currentBrandId = brandId || transactionId;
+            if (currentBrandId) {
+              await updateBrandPaymentStatus(currentBrandId, false);
+            }
+            
+            toast.error("Payment failed. Please try again.");
+          } else if (paymentStatusResult.status === "PENDING") {
+            // Payment is still pending
+            setPaymentStatus("PENDING");
+            toast.error("Payment is still being processed. Please wait and try again.");
+          } else {
+            // Other statuses (CREATED, etc.)
+            setPaymentStatus("FAILED");
+            
+            // Update brand payment status as failed
+            const currentBrandId = brandId || transactionId;
+            if (currentBrandId) {
+              await updateBrandPaymentStatus(currentBrandId, false);
+            }
+            
+            toast.error("Payment verification failed. Please try again.");
+          }
+        } catch (error) {
+          console.error("Error verifying payment with Fapshi:", error);
+          setPaymentStatus("FAILED");
+          toast.error("Error verifying payment. Please contact support.");
+        } finally {
+          setIsLoading(false);
+          setIsVerifyingPayment(false);
         }
-      } catch (error) {
-        console.error("Error processing payment:", error);
-        toast.error("Error processing payment");
-      } finally {
+      } else if (transactionId) {
+        // Fallback for direct access (for testing purposes)
+        try {
+          const storedData = localStorage.getItem("paymentTransaction");
+          if (storedData) {
+            const parsedData = JSON.parse(storedData);
+            setTransactionData(parsedData);
+            setPaymentStatus("SUCCESS");
+            
+            // Update brand payment status for fallback case
+            const currentBrandId = brandId || transactionId;
+            if (currentBrandId) {
+              await updateBrandPaymentStatus(currentBrandId, true);
+            }
+            
+            setShowForm(true);
+            toast.success("Payment successful! Please complete your information below.");
+          } else {
+            toast.error("Transaction data not found");
+            router.push("/");
+          }
+        } catch (error) {
+          console.error("Error processing payment:", error);
+          toast.error("Error processing payment");
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        // No transaction data found
+        toast.error("No transaction information found");
+        router.push("/");
         setIsLoading(false);
       }
     };
 
     checkPaymentStatus();
-  }, [transactionId]);
+  }, [transactionId, fapshiTransId, fapshiStatus, router, getPaymentStatus]);
 
   // Fetch brand data when brandId is available
   useEffect(() => {
@@ -217,7 +353,7 @@ const PaymentSuccessContent = () => {
       case "FAILED":
         return "Your payment was not successful. Please try again or contact support.";
       case "PENDING":
-        return "Your payment is being processed. Please check your phone for confirmation.";
+        return "Your payment is being processed. Please wait and try again.";
       default:
         return "We're checking your payment status...";
     }
@@ -239,17 +375,20 @@ const PaymentSuccessContent = () => {
     );
   }
 
-  if (isLoading) {
+  if (isLoading || isVerifyingPayment) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
             <h2 className="text-xl font-semibold mb-2 dark:text-white">
-              Checking Payment Status
+              {isVerifyingPayment ? "Verifying Payment" : "Checking Payment Status"}
             </h2>
             <p className="text-gray-600 dark:text-gray-300">
-              Please wait while we verify your payment...
+              {isVerifyingPayment 
+                ? "Please wait while we verify your payment with Fapshi..." 
+                : "Please wait while we verify your payment..."
+              }
             </p>
           </CardContent>
         </Card>
