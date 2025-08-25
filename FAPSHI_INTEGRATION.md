@@ -22,6 +22,7 @@ The Fapshi configuration is located in `app/configs/fapshiConfig.ts`:
 - **Currency**: XAF (Central African CFA franc)
 - **Country**: CM (Cameroon)
 - **Mode**: test/live (configurable)
+- **HTTP Client**: Uses native fetch API for requests
 
 ## Payment Flow
 

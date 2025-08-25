@@ -51,6 +51,8 @@ const PaymentSuccessContent = () => {
   const [brandData, setBrandData] = useState<any>(null);
   const [selectedLogo, setSelectedLogo] = useState<string>("");
   const [paymentStatusUpdated, setPaymentStatusUpdated] = useState(false);
+  const [paymentVerificationComplete, setPaymentVerificationComplete] = useState(false);
+  const [brandDataFetched, setBrandDataFetched] = useState(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -71,22 +73,31 @@ const PaymentSuccessContent = () => {
   // Fapshi redirect parameters
   const fapshiTransId = searchParams.get("transId");
   const fapshiStatus = searchParams.get("status");
+  
+  // Get stored redirect parameters from localStorage (read directly, no state)
+  const getStoredRedirectParams = () => {
+    const storedParams = localStorage.getItem('paymentRedirectParams');
+    if (storedParams) {
+      try {
+        return JSON.parse(storedParams);
+      } catch (error) {
+        console.error('Error parsing stored redirect params:', error);
+        return null;
+      }
+    }
+    return null;
+  };
 
   // Function to update brand payment status
   const updateBrandPaymentStatus = async (brandId: string, paymentStatus: boolean) => {
     try {
-      console.log('Updating brand payment status:', { brandId, paymentStatus });
-      
       const response = await axios.post('/update_brand_payment_status', {
         brandId: brandId,
         paymentStatus: paymentStatus
       });
-
-      console.log('Brand payment status update response:', response.data);
       
       if (response.data.success) {
         setPaymentStatusUpdated(true);
-        console.log('Brand payment status updated successfully');
         return true;
       } else {
         console.error('Failed to update brand payment status:', response.data.message);
@@ -103,7 +114,26 @@ const PaymentSuccessContent = () => {
   }, []);
 
   useEffect(() => {
+    // Prevent multiple executions (but allow initial run)
+    if (isVerifyingPayment || paymentVerificationComplete) {
+      return;
+    }
+    
+    // Only run if we have actual payment parameters to verify
+    if (!fapshiTransId && !fapshiStatus && !transactionId) {
+      return;
+    }
+    
+    // Only run payment verification on initial load or when payment parameters change
+    // Not on UI state changes like logo selection
+    if (paymentVerificationComplete && !fapshiTransId && !fapshiStatus) {
+      return;
+    }
+    
     const checkPaymentStatus = async () => {
+      // Get stored redirect parameters
+      const storedRedirectParams = getStoredRedirectParams();
+      
       // Check if we have Fapshi redirect parameters
       if (fapshiTransId && fapshiStatus) {
         setIsVerifyingPayment(true);
@@ -116,7 +146,7 @@ const PaymentSuccessContent = () => {
             setPaymentStatus("SUCCESS");
             
             // Update brand payment status in backend
-            const currentBrandId = brandId || transactionId;
+            const currentBrandId = storedRedirectParams?.brandId || brandId || transactionId;
             if (currentBrandId) {
               const updateSuccess = await updateBrandPaymentStatus(currentBrandId, true);
               if (!updateSuccess) {
@@ -129,9 +159,16 @@ const PaymentSuccessContent = () => {
             if (storedData) {
               const parsedData = JSON.parse(storedData);
               
+              // Update transaction data with stored redirect params
+              const updatedTransactionData = {
+                ...parsedData,
+                transactionId: storedRedirectParams?.transactionId || parsedData.transactionId,
+                brandId: storedRedirectParams?.brandId || parsedData.brandId
+              };
+              
               // Update stored data with Fapshi payment details
               const updatedData = {
-                ...parsedData,
+                ...updatedTransactionData,
                 fapshiPaymentDetails: {
                   transId: paymentStatusResult.transId,
                   status: paymentStatusResult.status,
@@ -150,7 +187,7 @@ const PaymentSuccessContent = () => {
               setTransactionData(updatedData);
               localStorage.setItem("paymentTransaction", JSON.stringify(updatedData));
               setShowForm(true);
-              toast.success("Payment verified successfully! Please complete your information below.");
+             
             } else {
               toast.error("Transaction data not found");
               router.push("/");
@@ -160,7 +197,7 @@ const PaymentSuccessContent = () => {
             setPaymentStatus("FAILED");
             
             // Update brand payment status as failed
-            const currentBrandId = brandId || transactionId;
+            const currentBrandId = storedRedirectParams?.brandId || brandId || transactionId;
             if (currentBrandId) {
               await updateBrandPaymentStatus(currentBrandId, false);
             }
@@ -171,7 +208,7 @@ const PaymentSuccessContent = () => {
             setPaymentStatus("FAILED");
             
             // Update brand payment status as failed
-            const currentBrandId = brandId || transactionId;
+            const currentBrandId = storedRedirectParams?.brandId || brandId || transactionId;
             if (currentBrandId) {
               await updateBrandPaymentStatus(currentBrandId, false);
             }
@@ -186,7 +223,7 @@ const PaymentSuccessContent = () => {
             setPaymentStatus("FAILED");
             
             // Update brand payment status as failed
-            const currentBrandId = brandId || transactionId;
+            const currentBrandId = storedRedirectParams?.brandId || brandId || transactionId;
             if (currentBrandId) {
               await updateBrandPaymentStatus(currentBrandId, false);
             }
@@ -200,7 +237,28 @@ const PaymentSuccessContent = () => {
         } finally {
           setIsLoading(false);
           setIsVerifyingPayment(false);
+          setPaymentVerificationComplete(true);
         }
+      } else if (!fapshiTransId && !fapshiStatus) {
+        // No Fapshi parameters, check if we have transaction data
+        const storedData = localStorage.getItem("paymentTransaction");
+        if (storedData) {
+          try {
+            const parsedData = JSON.parse(storedData);
+            setTransactionData(parsedData);
+            setPaymentStatus("SUCCESS");
+            setShowForm(true);
+            toast.success("Payment successful! Please complete your information below.");
+          } catch (error) {
+            console.error("Error processing stored transaction data:", error);
+            toast.error("Error processing payment data");
+          }
+        } else {
+          toast.error("No transaction information found");
+          router.push("/");
+        }
+        setIsLoading(false);
+        setPaymentVerificationComplete(true);
       } else if (transactionId) {
         // Fallback for direct access (for testing purposes)
         try {
@@ -211,7 +269,7 @@ const PaymentSuccessContent = () => {
             setPaymentStatus("SUCCESS");
             
             // Update brand payment status for fallback case
-            const currentBrandId = brandId || transactionId;
+            const currentBrandId = storedRedirectParams?.brandId || brandId || transactionId;
             if (currentBrandId) {
               await updateBrandPaymentStatus(currentBrandId, true);
             }
@@ -227,24 +285,35 @@ const PaymentSuccessContent = () => {
           toast.error("Error processing payment");
         } finally {
           setIsLoading(false);
+          setPaymentVerificationComplete(true);
         }
       } else {
         // No transaction data found
         toast.error("No transaction information found");
         router.push("/");
         setIsLoading(false);
+        setPaymentVerificationComplete(true);
       }
     };
 
     checkPaymentStatus();
-  }, [transactionId, fapshiTransId, fapshiStatus, router, getPaymentStatus]);
+  }, [transactionId, fapshiTransId, fapshiStatus, router]);
 
   // Fetch brand data when brandId is available
   useEffect(() => {
+    // Prevent multiple executions
+    if (!showForm || brandDataFetched) {
+      return;
+    }
+    
     const fetchBrandData = async () => {
-      if (brandId) {
+      // Get the brandId from multiple sources
+      const storedRedirectParams = getStoredRedirectParams();
+      const currentBrandId = storedRedirectParams?.brandId || brandId;
+      
+      if (currentBrandId) {
         try {
-          const result = await getBrand.mutateAsync(brandId);
+          const result = await getBrand.mutateAsync(currentBrandId);
           if (result.success) {
             setBrandData(result.brand_results);
             // Set default logo if available
@@ -256,17 +325,23 @@ const PaymentSuccessContent = () => {
                 result.brand_results.brand_identity.logos[0].image_url
               );
             }
+            setBrandDataFetched(true);
+          } else {
+            console.error('Failed to fetch brand data:', result);
+            toast.error("Failed to fetch brand data");
+            setBrandDataFetched(true); // Mark as fetched to prevent retries
           }
         } catch (error) {
           console.error("Error fetching brand data:", error);
           toast.error("Failed to fetch brand data");
+          setBrandDataFetched(true); // Mark as fetched to prevent retries
         }
+      } else {
+        setBrandDataFetched(true); // Mark as fetched to prevent retries
       }
     };
 
-    if (showForm && brandId) {
-      fetchBrandData();
-    }
+    fetchBrandData();
   }, [showForm, brandId]);
 
   const generateFinalResults = async () => {
@@ -286,10 +361,14 @@ const PaymentSuccessContent = () => {
     try {
       // Generate a unique user ID
 
+      // Get the correct brandId
+      const storedRedirectParams = getStoredRedirectParams();
+      const currentBrandId = storedRedirectParams?.brandId || brandId || transactionData.brandData?.id || "temp-brand-id";
+      
       // Call the backend endpoint to generate final results
       const result = await finalResultsMutation.mutateAsync({
         userId: userId,
-        brandId: brandId || transactionData.brandData?.id || "temp-brand-id",
+        brandId: currentBrandId,
         userName: formData.userName,
         userEmail: formData.userEmail,
         userPhoneNumbers: formData.userPhoneNumbers,
@@ -304,7 +383,7 @@ const PaymentSuccessContent = () => {
 
         // Redirect to full brand results page
         setTimeout(() => {
-          router.push(`/full-brand-results?brandId=${brandId}`);
+          router.push(`/full-brand-results?brandId=${currentBrandId}`);
         }, 2000);
       } else {
         throw new Error(result.message || "Failed to generate final results");
@@ -443,30 +522,12 @@ const PaymentSuccessContent = () => {
           transition={{ duration: 0.5 }}
         >
           {/* Header */}
-          <div className="text-center mb-8">
-            <Button
-              variant="ghost"
-              onClick={() => router.push("/")}
-              className="absolute top-6 left-6"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
-            </Button>
-
-            <div className="flex items-center justify-center mb-4">
-              <div className="p-3 bg-blue-100 rounded-full mr-3">
-                <Smartphone className="w-6 h-6 text-blue-600" />
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Payment Status
-              </h1>
-            </div>
-          </div>
+         
 
           {/* Payment Status Card */}
           <Card className="mb-8">
-            <CardContent className="p-8 text-center">
-              <div className="mb-6">{getStatusIcon()}</div>
+            <CardContent className="p-8 text-center grid">
+              <div className="mb-6 mx-auto">{getStatusIcon()}</div>
 
               <h2 className="text-2xl font-bold mb-2 dark:text-white">
                 {getStatusTitle()}
@@ -483,7 +544,7 @@ const PaymentSuccessContent = () => {
                   <div className="text-sm space-y-1">
                     <div className="flex justify-between">
                       <span>Transaction ID:</span>
-                      <span className="font-mono">{transactionId}</span>
+                      <span className="font-mono">{fapshiTransId}</span>
                     </div>
                     <div className="flex justify-between">
                       <span>Amount:</span>
@@ -499,18 +560,7 @@ const PaymentSuccessContent = () => {
                 </div>
               )}
 
-              <Badge
-                variant={
-                  paymentStatus === "SUCCESS"
-                    ? "default"
-                    : paymentStatus === "FAILED"
-                    ? "destructive"
-                    : "secondary"
-                }
-                className="mb-4"
-              >
-                {paymentStatus}
-              </Badge>
+            
 
               {paymentStatus === "SUCCESS" && isGeneratingResults && (
                 <div className="mt-4">

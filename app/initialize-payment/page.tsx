@@ -42,7 +42,7 @@ const InitializePaymentContent = () => {
   const brandName = brandData?.brand_communication?.brand_name || "your brand";
 
   // Pricing in XAF
-  const amountXAF = 1000; // Current price
+  const amountXAF = 100; // Current price
   const originalAmountXAF = 30000; // Original price (slashed)
   const discountXAF = originalAmountXAF - amountXAF; // Discount amount
 
@@ -55,7 +55,15 @@ const InitializePaymentContent = () => {
 
     try {
       const transactionId = generateTransactionId();
-      const redirectUrl = `${window.location.origin}/payment-success?transactionId=${transactionId}&brandId=${brandData?.id || brandData?.answerId}`;
+      
+      // Create clean redirect URL without parameters to avoid conflicts with Fapshi's parameters
+      const redirectUrl = `${window.location.origin}/payment-success`;
+      
+      // Store additional parameters in localStorage for retrieval after redirect
+      localStorage.setItem('paymentRedirectParams', JSON.stringify({
+        transactionId,
+        brandId: brandData?.id || brandData?.answerId
+      }));
       
       // Get user email from localStorage or use a default
       const userEmail = localStorage.getItem('userEmail');
