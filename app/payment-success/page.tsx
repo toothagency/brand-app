@@ -442,7 +442,7 @@ const PaymentSuccessContent = () => {
   if (!isMounted) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md dark:bg-gray-800">
           <CardContent className="p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
             <h2 className="text-xl font-semibold mb-2 dark:text-white">
@@ -457,7 +457,7 @@ const PaymentSuccessContent = () => {
   if (isLoading || isVerifyingPayment) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md dark:bg-gray-800">
           <CardContent className="p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
             <h2 className="text-xl font-semibold mb-2 dark:text-white">
@@ -526,7 +526,7 @@ const PaymentSuccessContent = () => {
 
           {/* Payment Status Card */}
           <Card className="mb-8">
-            <CardContent className="p-8 text-center grid">
+            <CardContent className="p-8 text-center grid dark:bg-gray-800">
               <div className="mb-6 mx-auto">{getStatusIcon()}</div>
 
               <h2 className="text-2xl font-bold mb-2 dark:text-white">
@@ -600,7 +600,7 @@ const PaymentSuccessContent = () => {
 
           {/* User Information Form */}
           {showForm && paymentStatus === "SUCCESS" && (
-            <Card className="mb-8">
+            <Card className="mb-8 dark:bg-gray-800">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <User className="w-5 h-5 text-blue-600" />
@@ -620,6 +620,7 @@ const PaymentSuccessContent = () => {
                         Full Name *
                       </Label>
                       <Input
+                      className="dark:bg-gray-800 dark:border-gray-700"
                         id="userName"
                         type="text"
                         placeholder="Enter your full name"
@@ -639,6 +640,7 @@ const PaymentSuccessContent = () => {
                         Email Address *
                       </Label>
                       <Input
+                      className="dark:bg-gray-800 dark:border-gray-700"
                         id="userEmail"
                         type="email"
                         placeholder="Enter your email address"
@@ -665,6 +667,7 @@ const PaymentSuccessContent = () => {
                         Phone Number
                       </Label>
                       <Input
+                      className="dark:bg-gray-800 dark:border-gray-700"
                         id="userPhoneNumbers"
                         type="tel"
                         placeholder="Enter your phone number"
@@ -686,6 +689,7 @@ const PaymentSuccessContent = () => {
                         Website
                       </Label>
                       <Input
+                      className="dark:bg-gray-800 dark:border-gray-700"
                         id="website"
                         type="url"
                         placeholder="Enter your website URL"
@@ -707,6 +711,7 @@ const PaymentSuccessContent = () => {
                       Registration Number
                     </Label>
                     <Input
+                    className="dark:bg-gray-800 dark:border-gray-700"
                       id="registrationNumber"
                       type="text"
                       placeholder="Enter your business registration number"
@@ -735,8 +740,8 @@ const PaymentSuccessContent = () => {
                                 key={index}
                                 className={`relative border-2 rounded-lg p-1 cursor-pointer transition-all ${
                                   selectedLogo === logo.image_url
-                                    ? "border-blue-500 bg-blue-50"
-                                    : "border-gray-200 hover:border-gray-300"
+                                    ? "border-blue-500 bg-blue-50 dark:bg-gray-800"
+                                    : "border-gray-200 hover:border-gray-300 dark:border-gray-700"
                                 }`}
                                 onClick={() => setSelectedLogo(logo.image_url)}
                               >
@@ -767,7 +772,7 @@ const PaymentSuccessContent = () => {
                   <div className="pt-4">
                     <Button
                       onClick={generateFinalResults}
-                      className="w-full bg-blue-600 hover:bg-blue-700"
+                      className="w-full bg-blue-600 dark:text-white hover:bg-blue-700"
                       disabled={
                         isGeneratingResults ||
                         !formData.userName ||
@@ -853,7 +858,7 @@ const PaymentSuccessPage = () => {
       <ErrorBoundary>
         <Suspense
           fallback={
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+            <div className="min-h-screen bg-gradient-to-br dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
               <Card className="w-full max-w-md">
                 <CardContent className="p-8 text-center">
                   <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>

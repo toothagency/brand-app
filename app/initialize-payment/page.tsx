@@ -123,11 +123,12 @@ const InitializePaymentContent = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
-      <div className="max-w-2xl mx-auto pt-20">
+    
+    <div className="min-h-screen dark:text-white dark:bg-gray-800 p-4">
+      <div className="max-w-2xl mx-auto mt-52 pt-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.5 }}
         >
           {/* Header */}
@@ -141,26 +142,21 @@ const InitializePaymentContent = () => {
               Back
             </Button>
 
-            <div className="flex items-center justify-center mb-4">
-              <div className="p-3 bg-blue-100 rounded-full mr-3">
-                <CreditCard className="w-6 h-6 text-blue-600" />
-              </div>
-              <h1 className="text-3xl font-bold text-gray-900">
+            <div className="flex items-center justify-center mb-2">
+             
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Complete Brand Kit
               </h1>
             </div>
 
-            <p className="text-lg text-gray-600 mb-2">
-              Secure payment for {brandName}
-            </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-gray-500 dark:text-gray-200">
               Complete your purchase to get your brand kit
             </p>
           </div>
 
           <div className="grid md:grid-cols-1 gap-8">
             {/* Payment Summary */}
-            <Card>
+            <Card className="dark:bg-gray-800  dark:border-gray-700">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Lock className="w-5 h-5 text-green-600" />
@@ -173,25 +169,25 @@ const InitializePaymentContent = () => {
                     <div className="text-3xl font-bold text-blue-600 mb-2">
                       {amountXAF.toLocaleString()} XAF
                     </div>
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-gray-500 dark:text-gray-200">
                       Complete Brand Kit
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-gray-600">Complete Brand Kit</span>
+                      <span className="text-gray-600 dark:text-gray-200">Complete Brand Kit</span>
                       <span className="font-semibold">
                         {amountXAF.toLocaleString()} XAF
                       </span>
                     </div>
 
-                    <div className="border-t pt-2">
+                    <div className="border-t pt-2 dark:border-gray-700">
                       <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm text-gray-500">
+                        <span className="text-sm text-gray-500 dark:text-gray-200">
                           Original Price
                         </span>
-                        <span className="text-sm text-gray-500 line-through">
+                        <span className="text-sm text-gray-500 line-through dark:text-gray-200">
                           {originalAmountXAF.toLocaleString()} XAF
                         </span>
                       </div>
@@ -210,7 +206,7 @@ const InitializePaymentContent = () => {
 
                   <Button
                     onClick={handleInitializePayment}
-                    className="w-full bg-blue-600 hover:bg-blue-700"
+                    className="w-full bg-blue-600 dark:text-white hover:bg-blue-700"
                     disabled={isInitializing}
                     size="lg"
                   >
@@ -233,34 +229,7 @@ const InitializePaymentContent = () => {
            
           </div>
 
-          {/* Additional Info */}
-          <Card className="mt-8">
-            <CardContent className="p-6">
-              <div className="text-center">
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  Ready to complete your brand?
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Click "Complete Payment" to process your payment and receive
-                  your complete brand kit.
-                </p>
-                <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
-                  <div className="flex items-center gap-1">
-                    <Lock className="w-4 h-4" />
-                    <span>Secure Payment</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Globe className="w-4 h-4" />
-                    <span>Multiple Payment Options</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Smartphone className="w-4 h-4" />
-                    <span>Instant Confirmation</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+         
         </motion.div>
       </div>
     </div>
