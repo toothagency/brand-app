@@ -79,8 +79,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     {
       id: "full",
       title: "Complete Brand Kit",
-      price: "10,000 XAF",
-      originalPrice: "20,000 XAF",
+      price: "15,000 XAF",
+      originalPrice: "30,000 XAF",
       description: "Get everything you need to launch your brand",
       features: [
         "Everything in Blueprint",

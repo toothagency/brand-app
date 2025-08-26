@@ -11,7 +11,7 @@ const callGetBrandAPI = async (brandId: string): Promise<GetBrandResponse> => {
     try {
         console.log('Calling get brand API with brandId:', brandId);
 
-        const response = await axios.get(`/get_brand_results/${brandId}`, {
+        const response = await axios.get(`get_brand_results/${brandId}`, {
             headers: {
                 'Content-Type': 'application/json',
             },

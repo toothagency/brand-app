@@ -41,6 +41,7 @@ const LoadingScreen = dynamic(
 );
 
 const QuickStats = dynamic(() => import("./components/form/QuickStats"));
+const PaymentModal = dynamic(() => import("./components/form/PaymentModal"));
 import toast from "react-hot-toast";
 // --- END ADJUST PATHS ---
 
@@ -82,6 +83,7 @@ const FullBrandingForm: React.FC = () => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [showSuggestionsUI, setShowSuggestionsUI] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
 
   const createBrandMutation = useCreateBrand();
   const submitAnswerMutation = useSubmitBrandingAnswer();
@@ -489,76 +491,15 @@ const FullBrandingForm: React.FC = () => {
         setCurrentStep((p) => p + 1);
         setCurrentQuestion(0);
       } else {
-        // Last question of the last step
-        setShowContextPanel(false);
-        setResultsError(null); // Clear previous results errors
-
-        // Re-add a loading toast here if you removed it for getBrandResultsMutation
-
-        console.log(
-          "LOG A: Last question submitted. Preparing to fetch brand results."
-        );
-        console.log("LOG B: Active Brand Session:", activeBrandSession);
-        console.log("LOG C: Current User:", currentUser);
-
+        // Last question of the last step - show payment modal instead of generating results
+        console.log("Last question submitted. Showing payment modal.");
+        
         if (activeBrandSession?.id && currentUser?.userId) {
-          console.log(
-            `LOG D: Calling getBrandResultsMutation.mutate with brandId: ${activeBrandSession.id}`
-          );
-          getBrandResultsMutation.mutate(
-            // This is where it might not be reached if an error happens before
-            { brandId: activeBrandSession.id },
-            {
-              onSuccess: (detailedBrandObj: DetailedBrandObject) => {
-                console.log("SUCCESS (getBrandResults):", detailedBrandObj);
-
-                // Store the brand data temporarily and redirect to results page
-                localStorage.setItem(
-                  "currentBrandData",
-                  JSON.stringify(detailedBrandObj)
-                );
-                router.push(`/brand-results?brandId=${activeBrandSession.id}`);
-              },
-              onError: (error: any) => {
-                // Temporarily 'any' for deep logging
-
-                console.error(
-                  "ERROR (getBrandResultsMutation onError): Raw error object:",
-                  error
-                );
-                // ... (your detailed error logging from previous suggestion) ...
-                let specificErrorMessage = "Failed to generate results.";
-                if (typeof error === "string") {
-                  specificErrorMessage = error; // If error is just "passed"
-                } else if (error instanceof Error) {
-                  specificErrorMessage = error.message;
-                } else if (axios.isAxiosError(error)) {
-                  // ... (Axios error handling) ...
-                  if (error.response?.data) {
-                    const backendError = error.response
-                      .data as BackendErrorData;
-                    specificErrorMessage =
-                      backendError.message ||
-                      backendError.error ||
-                      "API error during results fetch.";
-                  } else {
-                    specificErrorMessage =
-                      error.message ||
-                      "Network or API error during results fetch.";
-                  }
-                }
-
-                setResultsError(specificErrorMessage);
-              },
-            }
-          );
+          setShowPaymentModal(true);
         } else {
-          const errorMsg =
-            "Session error: Cannot fetch results (brand/user ID missing before getBrandResults call).";
+          const errorMsg = "Session error: Cannot proceed to payment (brand/user ID missing).";
           console.error(errorMsg, { activeBrandSession, currentUser });
-
-          setResultsError(errorMsg); // This would set the UI error
-          // If this block is hit, the "passed" message is not from getBrandResultsMutation's onError
+          setResultsError(errorMsg);
         }
       }
     } catch (errorFromSubmitOrLogic) {
@@ -967,6 +908,14 @@ const FullBrandingForm: React.FC = () => {
           overallProgress={overallProgress}
         />
       </div>
+      
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        brandId={activeBrandSession?.id || ""}
+        userId={currentUser?.userId || ""}
+      />
     </div>
   );
 };
