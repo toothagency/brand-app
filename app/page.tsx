@@ -16,6 +16,7 @@ import {
   Star,
   CircleCheckBig,
   Loader2,
+  ArrowBigRightDash,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Head from "next/head";
@@ -279,13 +280,12 @@ export default function HomePage() {
                 {cardColumns.map((column, columnIndex) => (
                   <div
                     key={columnIndex}
-                    className={` flex  ${
-                      isPageLoaded
+                    className={` flex  ${isPageLoaded
                         ? columnIndex === 0
                           ? "animate-scroll-right-infinite"
                           : "animate-scroll-left-infinite"
                         : ""
-                    }`}
+                      }`}
                   >
                     {/* Only duplicate once instead of twice for better performance */}
                     {[...column, ...column].map((card, cardIndex) => (
@@ -347,35 +347,44 @@ export default function HomePage() {
                   </p>
                 </div>
 
-                {/* Get Started Button with improved loading state */}
+                {/* Get Started Section with improved button and input styling */}
                 <div
                   className="flex justify-center lg:justify-start"
                   data-aos="fade-up"
                   data-aos-delay="500"
                 >
-                  <button
-                    onClick={handleGetStarted}
-                    disabled={isLoading || isRedirecting}
-                    className="px-10 py-4 bg-gradient-to-r from-[#3467AA] to-[#3467AA]/90 text-white rounded-full font-semibold hover:from-[#3467AA]/90 hover:to-[#3467AA] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center gap-3 text-lg disabled:opacity-70 disabled:transform-none disabled:cursor-not-allowed relative"
-                  >
-                    {isRedirecting ? (
-                      <>
-                        <span className="mr-2">Please wait</span>
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      </>
-                    ) : (
-                      <>
-                        Get Started
-                        <ArrowRight className="w-5 h-5" />
-                      </>
-                    )}
-                  </button>
+                  <div className="flex w-full max-w-md bg-white/90 dark:bg-gray-900/80 rounded-full shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <input
+                      type="text"
+                      id="brand-name" 
+                      name="brand-name"
+                      placeholder="Your brand or business name"
+                      className="flex-1 px-6 py-3 text-lg bg-transparent text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:bg-white/95 dark:focus:bg-gray-900/90 transition-all border-0 focus:border-0 dark:focus:border-0 rounded-none [&:focus]:outline-none [&:focus]:ring-0 [&:focus]:border-0"
+                    />
+                    <button
+                      onClick={handleGetStarted}
+                      disabled={isLoading || isRedirecting}
+                      className={`flex items-center gap-2 px-7 py-3 text-lg font-semibold rounded-full transition-all duration-200 m-1
+                        bg-gradient-to-r from-[#3467AA] to-[#3467AA]/90 text-white shadow-lg hover:from-[#28518a] hover:to-[#28518a]/90
+                        focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2
+                        disabled:opacity-60 disabled:cursor-not-allowed 
+                      `}
+                    >
+                      {isLoading || isRedirecting ? (
+                        <Loader2 className="animate-spin w-5 h-5 mr-2" />
+                      ) : (
+                        <>
+                          Create <ArrowBigRightDash className="ml-1" />
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
                 {/* Error Message */}
                 {error && (
                   <div
-                    className="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-4 py-2 rounded-lg border border-red-200 dark:border-red-800"
+                    className="text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-4 py-2 rounded-lg border border-red-200 dark:border-red-800 mt-4"
                     data-aos="fade-up"
                     data-aos-delay="600"
                   >
@@ -395,13 +404,12 @@ export default function HomePage() {
                   {cardColumns.map((column, columnIndex) => (
                     <div
                       key={columnIndex}
-                      className={`flex flex-col gap-4 ${
-                        isPageLoaded
+                      className={`flex flex-col gap-4 ${isPageLoaded
                           ? columnIndex === 0
                             ? "animate-scroll-up-infinite"
                             : "animate-scroll-down-infinite"
                           : ""
-                      }`}
+                        }`}
                     >
                       {/* Only duplicate once instead of twice for better performance */}
                       {[...column, ...column].map((card, cardIndex) => (
@@ -458,17 +466,15 @@ export default function HomePage() {
                 {features.map((feature, index) => (
                   <div
                     key={index}
-                    className={`grid lg:grid-cols-2 gap-12 items-center ${
-                      index % 2 === 1 ? "lg:grid-flow-col-dense" : ""
-                    }`}
+                    className={`grid lg:grid-cols-2 gap-12 items-center ${index % 2 === 1 ? "lg:grid-flow-col-dense" : ""
+                      }`}
                     data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
                     data-aos-delay={index * 200}
                   >
                     {/* Content */}
                     <div
-                      className={`space-y-6 ${
-                        index % 2 === 1 ? "lg:col-start-2" : ""
-                      }`}
+                      className={`space-y-6 ${index % 2 === 1 ? "lg:col-start-2" : ""
+                        }`}
                     >
                       <div
                         className="flex items-center gap-4"
@@ -519,9 +525,8 @@ export default function HomePage() {
 
                     {/* Feature Visual */}
                     <div
-                      className={`${
-                        index % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : ""
-                      }`}
+                      className={`${index % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : ""
+                        }`}
                       data-aos={index % 2 === 0 ? "fade-left" : "fade-right"}
                       data-aos-delay={index * 200 + 300}
                     >

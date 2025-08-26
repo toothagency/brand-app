@@ -1,5 +1,5 @@
 "use client";
-import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -33,6 +33,7 @@ const Register = () => {
     defaultValues: {
       username: "",
       email: "",
+      phoneNumber: "",
       password: "",
       confirmPassword: "",
       terms: false,
@@ -46,6 +47,7 @@ const Register = () => {
       const signupData = {
         userName: data.username, // Change to userName to match backend
         email: data.email,
+        phoneNumber: data.phoneNumber,
         password: data.password,
         // confirmPassword and terms aren't sent to the API
       };
@@ -182,6 +184,30 @@ const Register = () => {
                     {errors.email && (
                       <p className="mt-1 text-sm text-red-600 dark:text-red-400">
                         {errors.email.message}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="phoneNumber"
+                      className="select-none text-sm font-medium leading-6 text-gray-900 dark:text-white flex"
+                    >
+                      <Phone className="mr-2" /> Phone Number
+                    </label>
+                    <input
+                      type="tel"
+                      id="phoneNumber"
+                      placeholder="Enter your phone number"
+                      className={`mt-2 w-full rounded border-0 bg-white dark:bg-gray-800 px-3.5 py-2 text-base text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ${
+                        errors.phoneNumber
+                          ? "ring-red-500"
+                          : "ring-gray-300 dark:ring-gray-600"
+                      } placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6`}
+                      {...register("phoneNumber")}
+                    />
+                    {errors.phoneNumber && (
+                      <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                        {errors.phoneNumber.message}
                       </p>
                     )}
                   </div>
