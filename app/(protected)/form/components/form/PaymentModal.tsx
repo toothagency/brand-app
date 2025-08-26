@@ -156,7 +156,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             ) : (
               <>
                 <CreditCard className="w-5 h-5" />
-                Pay 2000 XAF & Generate Brand
+                Pay 1000 XAF & Generate Brand
               </>
             )}
           </button>
