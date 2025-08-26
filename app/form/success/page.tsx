@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,7 +8,7 @@ import { useFapshiPayment } from "../../hooks/useFapshiPayment";
 import { useGetBrandResults } from "../../(protected)/form/hooks/formHooks";
 import axios from "../../configs/axiosConfigs";
 
-const FormSuccessPage = () => {
+const FormSuccessContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [paymentStatus, setPaymentStatus] = useState<"PENDING" | "SUCCESS" | "FAILED">("PENDING");
@@ -232,6 +232,30 @@ const FormSuccessPage = () => {
         </CardContent>
       </Card>
     </div>
+  );
+};
+
+const FormSuccessPage = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md dark:bg-gray-800">
+          <CardContent className="p-8 text-center">
+            <div className="mb-6 flex justify-center">
+              <Loader2 className="w-16 h-16 text-blue-600 animate-spin" />
+            </div>
+            <h2 className="text-2xl font-bold mb-2 dark:text-white">
+              Loading...
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300">
+              Preparing payment verification...
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    }>
+      <FormSuccessContent />
+    </Suspense>
   );
 };
 
