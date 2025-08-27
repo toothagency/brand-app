@@ -58,24 +58,24 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   };
   
   const plans = [
-    {
-      id: "blueprint",
-      title: "Free Blueprint",
-      price: "Free",
-      description: "Download your brand blueprint with recommendations",
-      features: [
-        "Complete brand strategy document",
-        "Color palette recommendations",
-        "Typography suggestions",
-        "Logo design concepts",
-        "Marketing strategy overview",
-        "Content calendar sample",
-      ],
-      buttonText: "Download Blueprint",
-      buttonVariant: "outline" as const,
-      icon: Download,
-      popular: false,
-    },
+    // {
+    //   id: "blueprint",
+    //   title: "Free Blueprint",
+    //   price: "Free",
+    //   description: "Download your brand blueprint with recommendations",
+    //   features: [
+    //     "Complete brand strategy document",
+    //     "Color palette recommendations",
+    //     "Typography suggestions",
+    //     "Logo design concepts",
+    //     "Marketing strategy overview",
+    //     "Content calendar sample",
+    //   ],
+    //   buttonText: "Download Blueprint",
+    //   buttonVariant: "outline" as const,
+    //   icon: Download,
+    //   popular: false,
+    // },
     {
       id: "full",
       title: "Complete Brand Kit",
@@ -97,7 +97,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       buttonText: "Purchase Full Kit",
       buttonVariant: "default" as const,
       icon: Crown,
-      popular: true,
+      popular: false,
     },
   ];
 
@@ -146,7 +146,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
             {/* Content */}
             <div className="p-6">
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-1 gap-6">
                 {plans.map((plan) => {
                   const IconComponent = plan.icon;
                   return (
