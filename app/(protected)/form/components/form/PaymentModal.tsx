@@ -42,7 +42,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         transactionId: transactionId,
         brandId: brandId,
         userId: userId,
-        amount: 1000,
+        amount: 100,
         type: "form_payment",
         timestamp: new Date().toISOString(),
       };
@@ -61,7 +61,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
       // Call Fapshi API to initiate payment
       const result = await initiatePayment.mutateAsync({
-        amount: 1000,
+        amount: 100,
         email: "", // Optional - user can enter on Fapshi page
         redirectUrl: `${window.location.origin}/form/success`,
         userId: userId,

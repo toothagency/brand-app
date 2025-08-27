@@ -42,8 +42,8 @@ const InitializePaymentContent = () => {
   const brandName = brandData?.brand_communication?.brand_name || "your brand";
 
   // Pricing in XAF
-  const amountXAF = 15000; // Current price
-  const originalAmountXAF = 30000; // Original price (slashed)
+  const amountXAF = 100; // Current price
+  const originalAmountXAF = 300; // Original price (slashed)
   const discountXAF = originalAmountXAF - amountXAF; // Discount amount
 
   const generateTransactionId = () => {
