@@ -288,7 +288,7 @@ const Navbar: React.FC = () => {
                         </div>
                         <div className="mt-2 flex items-center gap-2">
                           <code className="flex-1 px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded font-mono">
-                            {user.referral_code || user.username?.toUpperCase() || 'USER'}
+                            {user.referral_code ? user.referral_code : 'No referral code available' }
                           </code>
                           <button
                             onClick={async () => {
