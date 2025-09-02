@@ -5,22 +5,24 @@ import React, { useState, useEffect, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
 // Import validation schema and type
 import { loginSchema, LoginValidations } from "../utils/validations";
 // Import the custom login hook
 import { useLogin } from "../hooks/authHooks";
 import toast from "react-hot-toast";
+import Providers from "../../providers";
+import GoogleSignInButton from "../../components/GoogleSignInButton";
 
 // Create a separate component that uses useSearchParams
 const LoginForm = () => {
   const router = useRouter();
   const loginMutation = useLogin();
   const [showPassword, setShowPassword] = useState(false);
-  
+
   // Use a simpler approach to get the referrer without useSearchParams
   const [returnUrl, setReturnUrl] = useState<string>("");
-  
+
   useEffect(() => {
     // Get referrer from document if available
     const referrer = document.referrer;
@@ -29,8 +31,10 @@ const LoginForm = () => {
       try {
         const referrerUrl = new URL(referrer);
         // Check if it's from the same origin and not the register page
-        if (referrerUrl.origin === window.location.origin && 
-            !referrerUrl.pathname.includes('/register')) {
+        if (
+          referrerUrl.origin === window.location.origin &&
+          !referrerUrl.pathname.includes("/register")
+        ) {
           setReturnUrl(referrerUrl.pathname + referrerUrl.search);
         }
       } catch (e) {
@@ -38,7 +42,7 @@ const LoginForm = () => {
         console.error("Invalid referrer URL:", e);
       }
     }
-    
+
     // We can also read the URL directly to check for returnUrl parameter
     const urlParams = new URLSearchParams(window.location.search);
     const urlReturnPath = urlParams.get("returnUrl");
@@ -70,10 +74,8 @@ const LoginForm = () => {
       onSuccess: (authData) => {
         console.log("Login successful:", authData);
         toast.success("Login successful! Redirecting...");
-        
-        
-          router.push('/form');
-        
+
+        router.push("/form");
       },
       onError: (error) => {
         console.error("Login failed:", error);
@@ -92,22 +94,33 @@ const LoginForm = () => {
   return (
     <div className="w-full max-w-sm space-y-8">
       <div className="text-center">
-        <Link href="/" className="flex-shrink-0 flex items-center justify-center space-x-2 w-full">
-          <div className={`md:w-14 md:h-14 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-lg transition-all duration-300 `}>
-            <img src="/Logo.png" alt=""/>
+        <Link
+          href="/"
+          className="flex-shrink-0 flex items-center justify-center space-x-2"
+          aria-label="Jara AI Brand Builder - Home"
+        >
+          <div
+            className={`w-36 rounded-lg flex items-center justify-center font-bold text-lg transition-all duration-300`}
+          >
+            <Image
+              src="/Logo.png"
+              alt="Jara AI Brand Builder logo"
+              width={1000}
+              height={1000}
+            />
           </div>
         </Link>
-        <h2 className="mt-6 text-2xl font-semibold text-gray-900 sm:text-3xl">
+        <h2 className="mt-4 text-2xl font-semibold text-gray-900 dark:text-white sm:text-3xl">
           Login to your account
         </h2>
-        <p className="mt-3 text-base text-gray-600">
+        <p className="mt-3 text-base text-gray-600 dark:text-gray-400">
           Welcome back! Please enter your credentials.
         </p>
       </div>
       <div>
         {/* Display root errors (API errors) */}
         {errors.root && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-600 text-sm">
+          <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-red-600 dark:text-red-400 text-sm">
             {errors.root.message}
           </div>
         )}
@@ -123,7 +136,7 @@ const LoginForm = () => {
             <div>
               <label
                 htmlFor="email"
-                className="select-none text-sm font-medium leading-6 text-gray-900 flex"
+                className="select-none text-sm font-medium leading-6 text-gray-900 dark:text-white flex"
               >
                 <Mail className="mr-2" /> Email
               </label>
@@ -131,15 +144,17 @@ const LoginForm = () => {
                 type="email"
                 id="email"
                 placeholder="Enter your email"
-                className={`mt-2 w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ${
-                  errors.email ? "ring-red-500" : "ring-gray-300"
-                } placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6`}
+                className={`mt-2 w-full rounded border-0 bg-white dark:bg-gray-800 px-3.5 py-2 text-base text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ${
+                  errors.email
+                    ? "ring-red-500"
+                    : "ring-gray-300 dark:ring-gray-600"
+                } placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6`}
                 {...register("email")}
                 disabled={loginMutation.isPending}
               />
               {/* Display email validation errors */}
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600">
+                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
                   {errors.email.message}
                 </p>
               )}
@@ -147,7 +162,7 @@ const LoginForm = () => {
             <div>
               <label
                 htmlFor="password"
-                className="select-none text-sm font-medium leading-6 text-gray-900 flex"
+                className="select-none text-sm font-medium leading-6 text-gray-900 dark:text-white flex"
               >
                 <Lock className="mr-2" /> Password
               </label>
@@ -156,14 +171,14 @@ const LoginForm = () => {
                   type={showPassword ? "text" : "password"}
                   id="password"
                   placeholder="Enter your password"
-                  className="w-full rounded border-0 bg-white px-3.5 py-2 text-base text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pr-10"
+                  className="w-full rounded border-0 bg-white dark:bg-gray-800 px-3.5 py-2 text-base text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6 pr-10"
                   {...register("password")}
                   disabled={loginMutation.isPending}
                 />
                 <button
                   type="button"
                   onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400"
                   tabIndex={-1}
                 >
                   {showPassword ? (
@@ -208,7 +223,7 @@ const LoginForm = () => {
               </div>
               <label
                 htmlFor="remember-me"
-                className="select-none text-sm text-gray-900"
+                className="select-none text-sm text-gray-900 dark:text-white"
               >
                 Remember me
               </label>
@@ -216,7 +231,7 @@ const LoginForm = () => {
             <div>
               <a
                 href="#"
-                className="inline-block text-sm font-semibold text-blue-500 hover:text-blue-400"
+                className="inline-block text-sm font-semibold text-blue-500 dark:text-blue-400 hover:text-blue-400 dark:hover:text-blue-300"
               >
                 Forgot password?
               </a>
@@ -225,20 +240,35 @@ const LoginForm = () => {
           <div>
             <button
               type="submit"
-              className="block w-full rounded bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:bg-blue-300 disabled:cursor-not-allowed"
+              className="block w-full rounded bg-blue-500 dark:bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white hover:bg-blue-400 dark:hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 disabled:bg-blue-300 dark:disabled:bg-blue-700 disabled:cursor-not-allowed"
               disabled={loginMutation.isPending}
             >
               {loginMutation.isPending ? "Signing in..." : "Sign in"}
             </button>
           </div>
         </form>
+
+        {/* Divider */}
+        {/* <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300 dark:border-gray-600" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="bg-white dark:bg-gray-900 px-2 text-gray-500 dark:text-gray-400">
+              Or continue with
+            </span>
+          </div>
+        </div> */}
+
+        {/* Google Sign-In Button */}
+        {/* <GoogleSignInButton /> */}
       </div>
       <div>
-        <p className="text-center text-sm text-gray-500">
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400">
           Don&apos;t have an account?
           <Link
             href="/register"
-            className="font-semibold ml-1 text-blue-500 hover:text-blue-400"
+            className="font-semibold ml-1 text-blue-500 dark:text-blue-400 hover:text-blue-400 dark:hover:text-blue-300"
           >
             Sign up
           </Link>
@@ -251,7 +281,7 @@ const LoginForm = () => {
 // Main Login component
 const Login = () => {
   return (
-    <div className="flex min-h-dvh flex-col bg-white">
+    <div className="flex min-h-dvh flex-col bg-white dark:bg-gray-900">
       <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-12 lg:px-8">
         <LoginForm />
       </div>
@@ -259,4 +289,9 @@ const Login = () => {
   );
 };
 
-export default Login;
+const LoginPage = () => (
+  <Providers>
+    <Login />
+  </Providers>
+);
+export default LoginPage;

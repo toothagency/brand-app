@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface QuickStatsProps {
   answeredCount: number;
@@ -34,15 +34,22 @@ const QuickStats: React.FC<QuickStatsProps> = ({
 
   return (
     <div className="mt-2 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-      {statsConfig.map(stat => (
-        <div key={stat.label} className="bg-white rounded p-4 shadow">
-          <div className={`text-2xl font-bold text-blue-600`}>
+      {statsConfig.map((stat) => (
+        <div
+          key={stat.label}
+          className="bg-white dark:bg-gray-800 rounded p-4 shadow"
+        >
+          <div
+            className={`text-2xl font-bold text-blue-600 dark:text-blue-400`}
+          >
             {/* Access the value using the key from statsData */}
             {statsData[stat.key as keyof typeof statsData]}
             {/* Add suffix if defined (e.g., %) */}
             {stat.suffix}
           </div>
-          <div className="text-xs sm:text-sm text-gray-600">{stat.label}</div>
+          <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+            {stat.label}
+          </div>
         </div>
       ))}
     </div>

@@ -1,26 +1,33 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Providers from "./providers";
 import { BrandProvider } from "./contexts/BrandContext";
 import Navbar from "./components/Navbar";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
+import AOSInit from "./components/AOSInit";
+import Footer from "./components/footer";
+import Providers from "./providers";
+
 export const metadata: Metadata = {
-  title: "Tooth BrandKit",
-  description: "AI-powered brand design at lightning speed",
+  title: "Jara AI Brand Builder",
+  description: "Create your brand, logo, and social content instantly with AI",
 };
+
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className={` antialiased`}>
-        <Toaster/>
+      <body
+        className={`antialiased bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200`}
+      >
+        <AOSInit />
+        <Toaster />
+        <Navbar />
         <Providers>
-          {" "} <Navbar />
           <BrandProvider>{children}</BrandProvider>
         </Providers>
+        <Footer />
+        <script type="text/javascript" src="https://www.monetbil.com/widget/v2/monetbil.min.js"></script>
       </body>
     </html>
   );
