@@ -10,6 +10,7 @@ interface User {
   userId: string;
   username: string;
   initials: string; // We'll add this for the avatar
+  referral_code: string;
 }
 
 export const useClientAuth = () => {
