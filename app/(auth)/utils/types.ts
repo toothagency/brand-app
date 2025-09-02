@@ -27,7 +27,9 @@ export interface AuthResponse {
         password: string,
         userId?: string, // Handle camelCase
         userid?: string, // Handle lowercase (backend inconsistency)
-        username: string
+        username: string,
+        referral_code?: string,
+        phoneNumber?: string
     },
     userId?: string
 }

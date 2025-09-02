@@ -1,12 +1,12 @@
 "use client";
-import { Eye, EyeOff, Lock, Mail, Phone, User } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, Phone, User, Gift } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema, RegisterValidations } from "../utils/validations";
 import { useSignup } from "../hooks/authHooks";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import Providers from "../../providers";
 import Image from "next/image";
@@ -14,6 +14,7 @@ import GoogleSignInButton from "../../components/GoogleSignInButton";
 
 const Register = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   // Add state for password visibility
   const [showPassword, setShowPassword] = useState(false);
@@ -27,6 +28,7 @@ const Register = () => {
     handleSubmit,
     formState: { errors, isSubmitting: formIsSubmitting },
     setError,
+    setValue,
   } = useForm<RegisterValidations>({
     resolver: zodResolver(registerSchema),
     mode: "onBlur",
@@ -34,11 +36,20 @@ const Register = () => {
       username: "",
       email: "",
       phoneNumber: "",
+      referralCode: "",
       password: "",
       confirmPassword: "",
       terms: false,
     },
   });
+
+  // Auto-populate referral code from URL params
+  useEffect(() => {
+    const referralCode = searchParams.get("ref") || searchParams.get("referral") || searchParams.get("code");
+    if (referralCode) {
+      setValue("referralCode", referralCode);
+    }
+  }, [searchParams, setValue]);
 
   const onSubmit = async (data: RegisterValidations) => {
     setIsSubmitting(true);
@@ -48,6 +59,7 @@ const Register = () => {
         userName: data.username, // Change to userName to match backend
         email: data.email,
         phoneNumber: data.phoneNumber,
+        referralCode: data.referralCode || undefined, // Include referral code if provided
         password: data.password,
         // confirmPassword and terms aren't sent to the API
       };
@@ -208,6 +220,30 @@ const Register = () => {
                     {errors.phoneNumber && (
                       <p className="mt-1 text-sm text-red-600 dark:text-red-400">
                         {errors.phoneNumber.message}
+                      </p>
+                    )}
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="referralCode"
+                      className="select-none text-sm font-medium leading-6 text-gray-900 dark:text-white flex"
+                    >
+                      <Gift className="mr-2" /> Referral Code (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      id="referralCode"
+                      placeholder="Enter referral code if you have one"
+                      className={`mt-2 w-full rounded border-0 bg-white dark:bg-gray-800 px-3.5 py-2 text-base text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ${
+                        errors.referralCode
+                          ? "ring-red-500"
+                          : "ring-gray-300 dark:ring-gray-600"
+                      } placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 sm:text-sm sm:leading-6`}
+                      {...register("referralCode")}
+                    />
+                    {errors.referralCode && (
+                      <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                        {errors.referralCode.message}
                       </p>
                     )}
                   </div>
@@ -399,7 +435,32 @@ const Register = () => {
 
 const RegisterPage = () => (
   <Providers>
-    <Register />
+    <Suspense fallback={
+      <div className="flex min-h-dvh flex-col bg-white dark:bg-gray-900">
+        <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-12 lg:px-8">
+          <div className="w-full max-w-sm space-y-8">
+            <div className="text-center">
+              <div className="w-36 rounded-lg flex items-center justify-center font-bold text-lg transition-all duration-300">
+                <Image
+                  src="/Logo.png"
+                  alt="Jara AI Brand Builder logo"
+                  width={1000}
+                  height={1000}
+                />
+              </div>
+              <h2 className="mt-4 text-2xl font-semibold text-gray-900 dark:text-white sm:text-3xl">
+                Create a new account
+              </h2>
+              <p className="mt-3 text-base text-gray-600 dark:text-gray-400">
+                Loading...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    }>
+      <Register />
+    </Suspense>
   </Providers>
 );
 export default RegisterPage;

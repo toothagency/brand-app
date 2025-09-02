@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import {
   CheckCircle,
@@ -53,6 +53,10 @@ const PaymentSuccessContent = () => {
   const [paymentStatusUpdated, setPaymentStatusUpdated] = useState(false);
   const [paymentVerificationComplete, setPaymentVerificationComplete] = useState(false);
   const [brandDataFetched, setBrandDataFetched] = useState(false);
+  
+  // Use ref to prevent multiple executions
+  const hasRunPaymentVerification = useRef(false);
+  const hasRunBrandDataFetch = useRef(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -75,7 +79,7 @@ const PaymentSuccessContent = () => {
   const fapshiStatus = searchParams.get("status");
   
   // Get stored redirect parameters from localStorage (read directly, no state)
-  const getStoredRedirectParams = () => {
+  const getStoredRedirectParams = useCallback(() => {
     const storedParams = localStorage.getItem('paymentRedirectParams');
     if (storedParams) {
       try {
@@ -86,14 +90,15 @@ const PaymentSuccessContent = () => {
       }
     }
     return null;
-  };
+  }, []);
 
   // Function to update brand payment status
   const updateBrandPaymentStatus = async (brandId: string, paymentStatus: boolean) => {
     try {
       const response = await axios.post('/update_brand_payment_status', {
         brandId: brandId,
-        paymentStatus: paymentStatus
+        paymentStatus: paymentStatus,
+        transactionId: fapshiTransId
       });
       
       if (response.data.success) {
@@ -114,8 +119,8 @@ const PaymentSuccessContent = () => {
   }, []);
 
   useEffect(() => {
-    // Prevent multiple executions (but allow initial run)
-    if (isVerifyingPayment || paymentVerificationComplete) {
+    // Prevent multiple executions using ref
+    if (hasRunPaymentVerification.current || isVerifyingPayment || paymentVerificationComplete) {
       return;
     }
     
@@ -124,11 +129,8 @@ const PaymentSuccessContent = () => {
       return;
     }
     
-    // Only run payment verification on initial load or when payment parameters change
-    // Not on UI state changes like logo selection
-    if (paymentVerificationComplete && !fapshiTransId && !fapshiStatus) {
-      return;
-    }
+    // Mark as run to prevent future executions
+    hasRunPaymentVerification.current = true;
     
     const checkPaymentStatus = async () => {
       // Get stored redirect parameters
@@ -297,14 +299,17 @@ const PaymentSuccessContent = () => {
     };
 
     checkPaymentStatus();
-  }, [transactionId, fapshiTransId, fapshiStatus, router]);
+  }, [fapshiTransId, fapshiStatus, transactionId, getStoredRedirectParams]); // Added getStoredRedirectParams for stability
 
   // Fetch brand data when brandId is available
   useEffect(() => {
-    // Prevent multiple executions
-    if (!showForm || brandDataFetched) {
+    // Prevent multiple executions using ref
+    if (hasRunBrandDataFetch.current || !showForm || brandDataFetched) {
       return;
     }
+    
+    // Mark as run to prevent future executions
+    hasRunBrandDataFetch.current = true;
     
     const fetchBrandData = async () => {
       // Get the brandId from multiple sources
@@ -342,7 +347,7 @@ const PaymentSuccessContent = () => {
     };
 
     fetchBrandData();
-  }, [showForm, brandId]);
+  }, [showForm, brandId, getStoredRedirectParams]); // Added getStoredRedirectParams for stability
 
   const generateFinalResults = async () => {
     if (!transactionData?.brandData) {

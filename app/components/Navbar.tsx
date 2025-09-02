@@ -12,9 +12,12 @@ import {
   LayoutDashboard,
   Moon,
   Sun,
+  Copy,
+  Gift,
 } from "lucide-react";
 import { useClientAuth } from "../(auth)/hooks/useClientAuth"; // Adjust path if needed
 import Image from "next/image";
+import { toast } from "react-hot-toast";
 
 interface NavLink {
   name: string;
@@ -272,6 +275,42 @@ const Navbar: React.FC = () => {
                           {user.email}
                         </p>
                       </div>
+                      
+                      {/* Referral Code Section */}
+                      <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Gift className="w-4 h-4 text-yellow-500" />
+                            <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                              Your Referral Code
+                            </span>
+                          </div>
+                        </div>
+                        <div className="mt-2 flex items-center gap-2">
+                          <code className="flex-1 px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded font-mono">
+                            {user.referral_code || user.username?.toUpperCase() || 'USER'}
+                          </code>
+                          <button
+                            onClick={async () => {
+                              const referralCode = user.referral_code || user.username?.toUpperCase() || 'USER';
+                              try {
+                                await navigator.clipboard.writeText(referralCode);
+                                toast.success('Referral code copied!');
+                              } catch (error) {
+                                toast.error('Failed to copy referral code');
+                              }
+                            }}
+                            className="p-1.5 text-gray-500 hover:text-yellow-600 dark:hover:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-1"
+                            title="Copy referral code"
+                            aria-label="Copy referral code"
+                          >
+                            <Copy className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                          {user.referral_code ? 'Share this code with friends!' : 'No referral code available'}
+                        </p>
+                      </div>
                       <Link
                         href="/dashboard"
                         onClick={() => setIsAvatarMenuOpen(false)}
@@ -377,6 +416,42 @@ const Navbar: React.FC = () => {
               ></div>
               {user ? (
                 <>
+                  {/* Referral Code Section - Mobile */}
+                  <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Gift className="w-4 h-4 text-yellow-500" />
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                          Your Referral Code
+                        </span>
+                      </div>
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <code className="flex-1 px-3 py-2 text-sm bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded font-mono">
+                        {user.referral_code || user.username?.toUpperCase() || 'USER'}
+                      </code>
+                      <button
+                        onClick={async () => {
+                          const referralCode = user.referral_code || user.username?.toUpperCase() || 'USER';
+                          try {
+                            await navigator.clipboard.writeText(referralCode);
+                            toast.success('Referral code copied!');
+                          } catch (error) {
+                            toast.error('Failed to copy referral code');
+                          }
+                        }}
+                        className="p-2 text-gray-500 hover:text-yellow-600 dark:hover:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-1"
+                        title="Copy referral code"
+                        aria-label="Copy referral code"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                      {user.referral_code ? 'Share this code with friends!' : 'No referral code available'}
+                    </p>
+                  </div>
+                  
                   <Link
                     href="/dashboard"
                     onClick={closeMobileMenu}

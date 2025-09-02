@@ -57,7 +57,9 @@ export const useLogin = () => {
                 const userDataToStore = {
                     email: userData.email,
                     userId: userId, // Use the extracted userId
-                    username: userData.username
+                    username: userData.username,
+                    referral_code: userData.referral_code || null,
+                    phoneNumber: userData.phoneNumber || null
                 };
 
                 console.log("Setting cookies with data:", userDataToStore);
@@ -132,7 +134,9 @@ export const useSignup = () => {
                 const userDataToStore = {
                     email: userData.email,
                     userId: userData.userId,
-                    username: userData.username
+                    username: userData.username,
+                    referral_code: userData.referral_code || null,
+                    phoneNumber: userData.phoneNumber || null
                 };
 
                 // Set user data in a cookie
