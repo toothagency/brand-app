@@ -192,7 +192,7 @@ const PaymentSuccessContent = () => {
              
             } else {
               toast.error("Transaction data not found");
-              router.push("/");
+        router.push("/");
             }
           } else if (paymentStatusResult.status === "EXPIRED") {
             // Payment link expired
@@ -246,10 +246,10 @@ const PaymentSuccessContent = () => {
         const storedData = localStorage.getItem("paymentTransaction");
         if (storedData) {
           try {
-            const parsedData = JSON.parse(storedData);
-            setTransactionData(parsedData);
-            setPaymentStatus("SUCCESS");
-            setShowForm(true);
+          const parsedData = JSON.parse(storedData);
+          setTransactionData(parsedData);
+          setPaymentStatus("SUCCESS");
+          setShowForm(true);
             toast.success("Payment successful! Please complete your information below.");
           } catch (error) {
             console.error("Error processing stored transaction data:", error);
@@ -280,13 +280,13 @@ const PaymentSuccessContent = () => {
             toast.success("Payment successful! Please complete your information below.");
           } else {
             toast.error("Transaction data not found");
-            router.push("/");
-          }
-        } catch (error) {
-          console.error("Error processing payment:", error);
-          toast.error("Error processing payment");
-        } finally {
-          setIsLoading(false);
+          router.push("/");
+        }
+      } catch (error) {
+        console.error("Error processing payment:", error);
+        toast.error("Error processing payment");
+      } finally {
+        setIsLoading(false);
           setPaymentVerificationComplete(true);
         }
       } else {
@@ -346,7 +346,7 @@ const PaymentSuccessContent = () => {
       }
     };
 
-    fetchBrandData();
+      fetchBrandData();
   }, [showForm, brandId, getStoredRedirectParams]); // Added getStoredRedirectParams for stability
 
   const generateFinalResults = async () => {
@@ -369,7 +369,7 @@ const PaymentSuccessContent = () => {
       // Get the correct brandId
       const storedRedirectParams = getStoredRedirectParams();
       const currentBrandId = storedRedirectParams?.brandId || brandId || transactionData.brandData?.id || "temp-brand-id";
-      
+
       // Call the backend endpoint to generate final results
       const result = await finalResultsMutation.mutateAsync({
         userId: userId,
