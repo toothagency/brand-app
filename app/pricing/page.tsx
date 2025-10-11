@@ -18,17 +18,18 @@ import {
 export default function PricingPage() {
   const plans = [
     {
-      name: "Free Trial",
-      price: "0 XAF",
+      name: "Brand Preview",
+      price: "1,000 XAF",
       originalPrice: null,
       description: "Try our AI brand builder",
       features: [
-        "Logo Recommendations",
-        "Basic Color Palette Preview",
+        "3 Logo Recommendations",
+        "Color Palette Preview",
         "Font Suggestions",
-        "Brand Strategy Overview",
-        "Sample Brand Elements",
-        "Form Completion",
+        "Competitors Analysis",
+        "Customer Persona",
+        "Brand strategy Elements",
+        "Tagline and Core message",
       ],
       notIncluded: [
         "Full Logo Downloads",
@@ -36,36 +37,34 @@ export default function PricingPage() {
         "Vector Files (SVG, PDF, AI)",
         "Social Media Templates",
         "Business Card Designs",
-        "Email Templates",
-        "Brand Guidelines PDF",
+        "Letterhead Design",
+        "T-shirt design",
+        "Signboard Design",
         "Marketing Materials",
+        "Brand Guidelines PDF",
       ],
-      cta: "Start Free Trial",
+      cta: "Your Brand Preview",
       popular: false,
       icon: <Sparkles className="w-8 h-8 text-[#3467AA]" />,
     },
     {
       name: "Complete Brand Kit",
-      price: "10,000 XAF",
-      originalPrice: "20,000 XAF",
+      price: "15,000 XAF",
+      originalPrice: "30,000 XAF",
       description: "Unlock your full brand after form completion",
       features: [
-        "All Logo Variations (PNG, SVG, PDF, AI)",
-        "Complete Color Palette",
-        "Custom Typography Package",
+        "All Logo Variations (PNG, SVG, PDF)",
+        "Color Palette",
+        "Typography",
         "Full Brand Guidelines PDF",
-        "Social Media Templates (All Platforms)",
         "Business Card Designs",
-        "Email Signature Templates",
         "Letterhead & Stationery",
-        "Marketing Materials",
+        "T-shirt and Cap Designs",
+        "Signboard and Signage Designs",
+        "Brand pattern",
+        "Social Media content",
+        "Marketing Strategies",
         "Brand Asset Library",
-        "Priority Support",
-        "Custom Brand Strategy Document",
-        "Video & Audio Brand Assets",
-        "Team Collaboration Access",
-        "API Access for Developers",
-        "Lifetime Updates",
       ],
       notIncluded: [],
       cta: "Unlock Full Brand Kit",
@@ -238,7 +237,7 @@ export default function PricingPage() {
                               {plan.originalPrice}
                             </span>
                             <span className="bg-[#3467AA]/10 dark:bg-[#3467AA]/20 text-[#3467AA] px-3 py-1 rounded-full text-sm font-semibold">
-                              Save 10,000 XAF
+                              Save 15,000 XAF
                             </span>
                           </div>
                         ) : (
@@ -267,7 +266,7 @@ export default function PricingPage() {
 
                     <div className="space-y-4">
                       <h4 className="font-semibold text-gray-900 dark:text-white mb-4">
-                        What's included:
+                        What is included:
                       </h4>
                       {plan.features.map((feature, idx) => (
                         <div key={idx} className="flex items-center gap-3">
@@ -321,7 +320,7 @@ export default function PricingPage() {
                       Feature
                     </th>
                     <th className="text-center p-6 font-semibold text-gray-900 dark:text-white">
-                      Free Trial
+                      Brand Preview
                     </th>
                     <th className="text-center p-6 font-semibold text-[#F5A819] dark:text-[#F5A819]">
                       Complete Brand Kit
@@ -392,14 +391,14 @@ export default function PricingPage() {
                       Price
                     </td>
                     <td className="p-6 text-center text-gray-700 dark:text-gray-300 font-semibold">
-                      0 XAF
+                      1,000 XAF
                     </td>
                     <td className="p-6 text-center">
                       <span className="text-[#3467AA] dark:text-[#3467AA] font-semibold">
-                        10,000 XAF
+                        15,000 XAF
                       </span>
                       <div className="text-sm text-gray-500 line-through">
-                        20,000 XAF
+                        30,000 XAF
                       </div>
                     </td>
                   </tr>
@@ -424,12 +423,11 @@ export default function PricingPage() {
                 data-aos="fade-up"
               >
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  What do I get with the free trial?
+                  What do I get with the brand preview?
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  Complete the form to see logo recommendations, color palette
-                  previews, font suggestions, and a brand strategy overview.
-                  You'll get a taste of what your brand could look like.
+                  Complete the form to see logo recommendations, color palette previews, font suggestions, 
+                  and a brand strategy overview. You will get a taste of what your brand could look like.
                 </p>
               </div>
 
@@ -438,13 +436,13 @@ export default function PricingPage() {
                 data-aos="fade-up"
               >
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  When do I pay the 10,000 XAF?
+                  Why do I pay a fee to preview?
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  After completing the form and seeing your brand preview, you
-                  can choose to unlock the complete brand kit with a one-time
-                  payment of 10,000 XAF per brand. This gives you lifetime
-                  access to all files and assets for that specific brand.
+                  The preview fee is there to chase away window shoppers, we believe that most people who 
+                  want things for free are more likely to never pay for anything, so for those serious 
+                  about building something credible they won’t mind previewing their brand. 
+                  ( also we don’t mind making a bit of cash while still delivering value)
                 </p>
               </div>
 
@@ -453,16 +451,26 @@ export default function PricingPage() {
                 data-aos="fade-up"
               >
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Is the 10,000 XAF price really a discount?
+                  When do I pay the 15,000 XAF?
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  Absolutely! Our Complete Brand Kit normally costs 20,000 XAF,
-                  but we're offering it at 50% off for a limited time. This
-                  represents the value of professional branding services that
-                  would cost much more from agencies.
+                  After completing the form and seeing your brand preview, you can choose to unlock the 
+                  complete brand kit with a one-time payment of 15,000 XAF per brand. 
+                  This gives you lifetime access to all files and assets for that specific brand.
                 </p>
               </div>
 
+              <div
+                className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6"
+                data-aos="fade-up"
+              >
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  Is the 15,000 XAF price really a discount?
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Absolutely! Our Complete Brand Kit normally costs 30,000 XAF, but we are offering it at 50% off for a limited time. This represents the value of professional branding services that would cost much more from a traditional agencies.
+                </p>
+              </div>
               <div
                 className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6"
                 data-aos="fade-up"
@@ -471,9 +479,7 @@ export default function PricingPage() {
                   Do I own the rights to my designs?
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  Yes! You own 100% of the rights to all designs created with
-                  Jara AI. You can use them for any commercial purpose without
-                  any restrictions.
+                  Yes! You own 100% of the rights to all designs created with Jara AI. You can use them for any commercial purpose without any restrictions.
                 </p>
               </div>
             </div>
