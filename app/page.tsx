@@ -9,18 +9,15 @@ import Image from "next/image"; // Using Next.js Image for better optimization
 import {
   ArrowRight,
   Sparkles,
-  Palette,
-  Share2,
-  FolderOpen,
-  Check,
   Star,
-  CircleCheckBig,
   Loader2,
   ArrowBigRightDash,
   Wifi,
   Award,
   Send,
   ZapOff,
+  MessageSquare,
+  Download,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Head from "next/head";
@@ -155,6 +152,25 @@ export default function HomePage() {
       image: "/images/mercedes-star-188957_1280.jpg",
       alt: "Energy-Company",
       height: "h-48",
+    },
+  ];
+
+  const steps = [
+    {
+      number: "01",
+      title: "Sign up and create your account",
+      timeEstimate: "2-3 minutes",
+    },
+    {
+      number: "02",
+      title: "Answer a few important questions that tell Jara about your business.",
+      timeEstimate: "30 seconds",
+    },
+
+    {
+      number: "03",
+      title: "Receive a custom brand blueprint with logos, mockups and marketing assets.",
+      timeEstimate: "Instant",
     },
   ];
 
@@ -466,19 +482,23 @@ export default function HomePage() {
         >
           {/* What You Get Section */}
           <section className="bg-white dark:bg-gray-900 py-12 md:py-20">
-            <div className="container mx-auto px-6 flex justify-center gap-x-[5rem] items-center">
+            <div className="container mx-auto px-6 grid gap-y-[1rem] lg:flex justify-center gap-x-[5rem] items-center" data-aos="fade-up">
               {/* Perfect Solution Section */}
-              <div>
-                <h3 className="font-semibold text-[2rem] w-[20rem] text-right">Jara AI Is The Perfect Solution If You:</h3>
+              <div data-aos="fade-right">
+                <h3 className="font-semibold text-[2rem] w-[20rem] text-center lg:text-right">Jara AI Is The Perfect Solution If You:</h3>
               </div>
 
-              <div className="grid grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 {perfect.map (({ Icon, text}, idx) => (
-                  <div key={idx} className="grid gap-y-2 justify-items-center bg-slate-200 p-[2rem] rounded-md">
+                  <div key={idx} 
+                    className="grid gap-y-2 justify-items-center bg-slate-200 dark:bg-gray-800 p-[2rem] rounded-md"
+                    data-aos="fade-left"
+                    data-aos-delay={idx * 100}
+                    >
                     <div className="bg-[#F5A819] text-white p-1 w-[4rem] h-[4rem] grid justify-center items-center rounded-full">
                       <Icon/>
                     </div>
-                    <p className="w-[17rem] text-center text-gray-600">{text}</p>
+                    <p className="w-[23vw] lg:w-[17vw] text-center text-gray-600 dark:text-gray-300">{text}</p>
                   </div>
                 ))}
               </div>
@@ -486,12 +506,73 @@ export default function HomePage() {
             </div>
           </section>
 
+          <section className="py-20 bg-gray-50 dark:bg-gray-800">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-16" data-aos="fade-up">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                How To use Jara AI
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-300">
+                Generate a full brand blueprint in three easy steps!
+              </p>
+            </div>
+
+            <div className="max-w-4xl mx-auto">
+              <div className="relative">
+                {/* Timeline Line */}
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-[#3467AA]"></div>
+
+                {/* Timeline Items */}
+                <div className="space-y-12">
+                  {steps.map((step, index) => (
+                    <div
+                      key={index}
+                      className={`flex items-center ${
+                        index % 2 === 0 ? "flex-row" : "flex-row-reverse"
+                      }`}
+                      data-aos="fade-up"
+                      data-aos-delay={index * 100}
+                    >
+                      {/* Content */}
+                      <div
+                        className={`w-1/2 ${
+                          index % 2 === 0 ? "pr-8 text-right" : "pl-8 text-left"
+                        }`}
+                      >
+                        <div className="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                            {step.title}
+                          </h3>
+                          {/* <p className="text-gray-600 dark:text-gray-300 mb-3">
+                            {step.description}
+                          </p> */}
+                          <span className="inline-block bg-[#3467AA]/10 dark:bg-[#3467AA]/20 text-[#3467AA] px-3 py-1 rounded-full text-sm font-medium">
+                            {step.timeEstimate}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Timeline Dot */}
+                      <div className="relative z-10">
+                        <div className="w-8 h-8 bg-[#F5A819] rounded-full border-4 border-white dark:border-gray-800 shadow-lg"></div>
+                      </div>
+
+                      {/* Empty space for alignment */}
+                      <div className="w-1/2"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
           {/* How It Works Section */}
           <section className="bg-gray-50 dark:bg-gray-800 py-16 md:py-20">
             <div className="container mx-auto px-6">
               <div className="text-center mb-12 md:mb-16" data-aos="fade-up">
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                  How It Works
+                  What’s in it for you?
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                   Create your complete brand identity in just 4 simple steps. No
@@ -603,8 +684,8 @@ export default function HomePage() {
                     What is Jara AI?
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Jara AI is a tool that is specifically designed to help you
-                    build your brand from scratch in just 10 minutes.
+                    Jara AI is a tool that is specifically designed to help you build your 
+                    brand from scratch in just 5 minutes.
                   </p>
                 </div>
 
@@ -632,7 +713,7 @@ export default function HomePage() {
                     How long does it take to build a brand with Jara AI?
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Building a brand with Jara takes 10 minutes. No more.
+                    Building a brand with Jara takes 5 minutes. No more.
                   </p>
                 </div>
 

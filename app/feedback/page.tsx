@@ -9,6 +9,7 @@ import {
   CheckCircle,
   AlertCircle,
   ArrowRight,
+  VenetianMask,
 } from "lucide-react";
 
 export default function FeedbackPage() {
@@ -80,13 +81,13 @@ export default function FeedbackPage() {
                 </div>
               </div> */}
               <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-1 lg:mb-6">
-                We Value Your <span className="text-[#3467AA]">Feedback</span>
+                We listen,<span className="text-[#3467AA]"> We don’t Judge</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
-                Help us improve Jara AI Brand Builder. Your insights shape the
-                future of AI-powered branding.
+                We might look like we have everything figured out but trust us we don’t. We really want to 
+                hear from you and build for you
               </p>
-              <div className="flex justify-center items-center gap-4 mb-2 lg:mb-8">
+              {/* <div className="flex justify-center items-center gap-4 mb-2 lg:mb-8">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-5 h-5 text-[#3467AA]" />
                   <span className="text-gray-600 dark:text-gray-300">
@@ -105,7 +106,7 @@ export default function FeedbackPage() {
                     We Listen
                   </span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>
@@ -313,7 +314,7 @@ CREATE POLICY "Allow public reads" ON feedback
                             Quick & Easy
                           </h4>
                           <p className="text-gray-600 dark:text-gray-300 text-sm">
-                            Takes less than 2 minutes to share your thoughts
+                            Just like everything else we build
                           </p>
                         </div>
                       </div>
@@ -327,22 +328,21 @@ CREATE POLICY "Allow public reads" ON feedback
                             We Actually Listen
                           </h4>
                           <p className="text-gray-600 dark:text-gray-300 text-sm">
-                            Your feedback directly influences our product
-                            roadmap
+                            We read all of these, this is your voice being part of our roadmap
                           </p>
                         </div>
                       </div>
 
                       <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4">
                         <div className="w-12 h-12  rounded-full flex items-center justify-center flex-shrink-0">
-                          <ArrowRight className="w-6 h-6 text-[#3467AA]" />
+                          <VenetianMask className="w-6 h-6 text-[#3467AA]" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900 dark:text-white mb-1">
-                            Continuous Improvement
+                            Anonymous Option
                           </h4>
                           <p className="text-gray-600 dark:text-gray-300 text-sm">
-                            Help us make Jara AI even better for everyone
+                            Incase you have something spicy you want to say, You are safe cause we won’t know its you
                           </p>
                         </div>
                       </div>
@@ -367,8 +367,7 @@ CREATE POLICY "Allow public reads" ON feedback
                 Ready to Build Your Brand?
               </h2>
               <p className="text-xl text-white/90 mb-8">
-                After sharing your feedback, why not try creating your own brand
-                with Jara AI?
+                Now that you have poured out your heart to us, why not build another brand with Jara AI
               </p>
               <a
                 href="/form"
