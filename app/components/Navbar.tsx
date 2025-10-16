@@ -29,7 +29,7 @@ const Navbar: React.FC = () => {
   const pathname = usePathname();
 
   // ✨ Move this array here
-  const routesWithoutNavbar = ["/login", "/register", "/dashboard", "/dashboard/overview", "/dashboard/brands", "/dashboard/analytics", "/dashboard/documents", "/dashboard/marketing", "/dashboard/settings"];
+  const routesWithoutNavbar = ["/login", "/register", "/dashboard", "/dashboard/overview", "/dashboard/brands", "/dashboard/analytics", "/dashboard/documents", "/dashboard/marketing", "/dashboard/settings", "/dashboard/referrals"];
 
   // ✨ Move the check to the top, before any other hooks
   if (routesWithoutNavbar.includes(pathname)) {

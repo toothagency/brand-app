@@ -16,6 +16,8 @@ import {
   TrendingUp,
   Bell,
   HelpCircle,
+  Users,
+  X,
 } from "lucide-react";
 import { useClientAuth } from "../../../(auth)/hooks/useClientAuth";
 import { Button } from "../../../../components/ui/button";
@@ -33,7 +35,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const navigationItems = [
     {
       name: "Overview",
-      href: "/dashboard",
+      href: "/dashboard/overview",
       icon: LayoutDashboard,
       exact: true,
     },
@@ -41,23 +43,27 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       name: "My Brands",
       href: "/dashboard/brands",
       icon: Palette,
-      badge: user?.brands?.length || 0,
     },
     {
-      name: "Analytics",
-      href: "/dashboard/analytics",
-      icon: BarChart3,
+      name: "Referrals",
+      href: "/dashboard/referrals",
+      icon: Users,
     },
-    {
-      name: "Documents",
-      href: "/dashboard/documents",
-      icon: FileText,
-    },
-    {
-      name: "Marketing",
-      href: "/dashboard/marketing",
-      icon: TrendingUp,
-    },
+    // {
+    //   name: "Analytics",
+    //   href: "/dashboard/analytics",
+    //   icon: BarChart3,
+    // },
+    // {
+    //   name: "Documents",
+    //   href: "/dashboard/documents",
+    //   icon: FileText,
+    // },
+    // {
+    //   name: "Marketing",
+    //   href: "/dashboard/marketing",
+    //   icon: TrendingUp,
+    // },
     {
       name: "Settings",
       href: "/dashboard/settings",
@@ -90,7 +96,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between h-20 mb-10 p-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-between h-20 mb-10 py-6 px-2 border-b border-gray-200 dark:border-gray-700">
           <Link
               href="/dashboard"
               className="flex-shrink-0 flex items-center space-x-2"
@@ -112,8 +118,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
               size="sm"
               onClick={onClose}
               className="lg:hidden"
-            >
-              ×
+            ><X className="w-5 h-5" />
             </Button>
           </div>
 
@@ -140,11 +145,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                     <Icon className="w-5 h-5" />
                     <span>{item.name}</span>
                   </div>
-                  {item.badge && item.badge > 0 && (
-                    <Badge variant="secondary" className="text-xs">
-                      {item.badge}
-                    </Badge>
-                  )}
+                 
                 </Link>
               );
             })}

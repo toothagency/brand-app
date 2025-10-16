@@ -281,7 +281,7 @@ const BrandsPage = () => {
         {/* Brands Grid/List */}
         {filteredBrands.length === 0 ? (
           <div className="text-center py-12">
-            <div className="mx-auto h-24 w-24 text-gray-300 dark:text-gray-600 mb-4">
+            <div className="mx-auto h-16 w-16 text-gray-300 dark:text-gray-600 mb-4">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"

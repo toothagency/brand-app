@@ -94,9 +94,7 @@ const AnalyticsPage = () => {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                  <Palette className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                </div>
+                <Palette className="w-6 h-6 text-[#3467AA]" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                     Total Brands
@@ -112,9 +110,7 @@ const AnalyticsPage = () => {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
-                  <Star className="w-6 h-6 text-green-600 dark:text-green-400" />
-                </div>
+                <Star className="w-6 h-6 text-[#3467AA]" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                     Premium Brands
@@ -130,9 +126,7 @@ const AnalyticsPage = () => {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
-                  <TrendingUp className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                </div>
+                <TrendingUp className="w-6 h-6 text-[#3467AA]" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                     Premium Rate
@@ -148,9 +142,7 @@ const AnalyticsPage = () => {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
-                  <Calendar className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                </div>
+                <Calendar className="w-6 h-6 text-[#3467AA]" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                     This Month
@@ -168,10 +160,10 @@ const AnalyticsPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-green-600" />
-                Monthly Growth
-              </CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-[#3467AA]" />
+              Monthly Growth
+            </CardTitle>
               <CardDescription>
                 Brand creation growth compared to last month
               </CardDescription>
@@ -211,10 +203,10 @@ const AnalyticsPage = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-blue-600" />
-                Recent Activity
-              </CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Clock className="w-5 h-5 text-[#3467AA]" />
+              Recent Activity
+            </CardTitle>
               <CardDescription>
                 Your latest brand creations
               </CardDescription>
@@ -267,10 +259,10 @@ const AnalyticsPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="w-5 h-5 text-purple-600" />
-                Brand Distribution
-              </CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <BarChart3 className="w-5 h-5 text-[#3467AA]" />
+              Brand Distribution
+            </CardTitle>
               <CardDescription>
                 Breakdown of your brand types
               </CardDescription>
@@ -314,10 +306,10 @@ const AnalyticsPage = () => {
 
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Award className="w-5 h-5 text-yellow-600" />
-                Achievements
-              </CardTitle>
+            <CardTitle className="flex items-center gap-2">
+              <Award className="w-5 h-5 text-[#3467AA]" />
+              Achievements
+            </CardTitle>
               <CardDescription>
                 Your brand creation milestones
               </CardDescription>

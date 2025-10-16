@@ -32,6 +32,8 @@ import {
   FileText,
   BarChart3,
   Settings,
+  Gift,
+  UserPlus,
 } from "lucide-react";
 import Link from "next/link";
 import { useGetBrand } from "@/app/hooks/useGetBrand";
@@ -225,9 +227,7 @@ const OverviewPage = () => {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                  <Palette className="w-6 h-6 text-blue-600 dark:text-blue-400" />
-                </div>
+                <Palette className="w-6 h-6 text-[#3467AA]" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                     Total Brands
@@ -243,9 +243,7 @@ const OverviewPage = () => {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
-                  <Star className="w-6 h-6 text-green-600 dark:text-green-400" />
-                </div>
+                <Star className="w-6 h-6 text-[#3467AA]" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                     Premium Brands
@@ -261,9 +259,7 @@ const OverviewPage = () => {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
-                  <FileText className="w-6 h-6 text-purple-600 dark:text-purple-400" />
-                </div>
+                <FileText className="w-6 h-6 text-[#3467AA]" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                     Free Brands
@@ -279,9 +275,7 @@ const OverviewPage = () => {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
-                  <TrendingUp className="w-6 h-6 text-orange-600 dark:text-orange-400" />
-                </div>
+                <TrendingUp className="w-6 h-6 text-[#3467AA]" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                     This Month
@@ -299,6 +293,54 @@ const OverviewPage = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Referral Stats */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <span className="flex items-center gap-2">
+                <Gift className="w-5 h-5 text-[#3467AA]" />
+                Referral Program
+              </span>
+              <Link href="/dashboard/referrals">
+                <Button variant="ghost" size="sm">
+                  View All
+                  <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
+              </Link>
+            </CardTitle>
+            <CardDescription>
+              Earn rewards by referring friends to Jara AI
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <UserPlus className="w-8 h-8 text-[#3467AA] mx-auto mb-3" />
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">12</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Total Referrals</p>
+              </div>
+              <div className="text-center">
+                <Users className="w-8 h-8 text-[#3467AA] mx-auto mb-3" />
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">8</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Successful</p>
+              </div>
+              <div className="text-center">
+                <Star className="w-8 h-8 text-[#3467AA] mx-auto mb-3" />
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">2,400</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Earnings (XAF)</p>
+              </div>
+            </div>
+            <div className="mt-6 text-center">
+              <Link href="/dashboard/referrals">
+                <Button className="bg-[#3467AA] hover:bg-[#3467AA]/90 text-white">
+                  <Gift className="w-4 h-4 mr-2" />
+                  Manage Referrals
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Recent Brands */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -407,6 +449,12 @@ const OverviewPage = () => {
                   <Button className="w-full justify-start" variant="outline">
                     <BarChart3 className="w-4 h-4 mr-2" />
                     View Analytics
+                  </Button>
+                </Link>
+                <Link href="/dashboard/referrals">
+                  <Button className="w-full justify-start" variant="outline">
+                    <Gift className="w-4 h-4 mr-2" />
+                    Referral Program
                   </Button>
                 </Link>
                 <Link href="/dashboard/settings">

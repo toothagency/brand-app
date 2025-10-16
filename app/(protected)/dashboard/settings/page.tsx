@@ -88,7 +88,7 @@ const SettingsPage = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <User className="w-5 h-5 text-blue-600" />
+              <User className="w-5 h-5 text-[#3467AA]" />
               Profile Information
             </CardTitle>
             <CardDescription>
@@ -157,7 +157,7 @@ const SettingsPage = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Palette className="w-5 h-5 text-purple-600" />
+              <Palette className="w-5 h-5 text-[#3467AA]" />
               Appearance
             </CardTitle>
             <CardDescription>
@@ -197,7 +197,7 @@ const SettingsPage = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Bell className="w-5 h-5 text-orange-600" />
+              <Bell className="w-5 h-5 text-[#3467AA]" />
               Notifications
             </CardTitle>
             <CardDescription>
@@ -268,7 +268,7 @@ const SettingsPage = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-red-600" />
+              <Shield className="w-5 h-5 text-[#3467AA]" />
               Account Actions
             </CardTitle>
             <CardDescription>
@@ -295,7 +295,7 @@ const SettingsPage = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Gift className="w-5 h-5 text-green-600" />
+              <Gift className="w-5 h-5 text-[#3467AA]" />
               Referral Program
             </CardTitle>
             <CardDescription>
