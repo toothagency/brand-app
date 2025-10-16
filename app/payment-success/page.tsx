@@ -69,7 +69,7 @@ const PaymentSuccessContent = () => {
 
   const finalResultsMutation = useFinalResults();
   const { getBrand } = useGetBrand();
-  const { getPaymentStatus } = useFapshiPayment();
+  const { verifyPayment } = useFapshiPayment();
   const userId = getCurrentUser()?.userId;
   const transactionId = searchParams.get("transactionId");
   const brandId = searchParams.get("brandId");
@@ -140,21 +140,14 @@ const PaymentSuccessContent = () => {
       if (fapshiTransId && fapshiStatus) {
         setIsVerifyingPayment(true);
         try {
-          // Verify payment status with Fapshi API
-          const paymentStatusResult = await getPaymentStatus.mutateAsync(fapshiTransId);
+          // Verify payment status through backend
+          const paymentStatusResult = await verifyPayment.mutateAsync({ transId: fapshiTransId });
           
-          if (paymentStatusResult && paymentStatusResult.status === "SUCCESSFUL") {
+          if (paymentStatusResult && paymentStatusResult.verified) {
             // Payment verified as successful
             setPaymentStatus("SUCCESS");
             
-            // Update brand payment status in backend
-            const currentBrandId = storedRedirectParams?.brandId || brandId || transactionId;
-            if (currentBrandId) {
-              const updateSuccess = await updateBrandPaymentStatus(currentBrandId, true);
-              if (!updateSuccess) {
-                console.warn('Failed to update brand payment status, but continuing with payment flow');
-              }
-            }
+            // Payment status is already updated by backend during verification
             
             // Get stored transaction data
             const storedData = localStorage.getItem("paymentTransaction");
@@ -168,22 +161,10 @@ const PaymentSuccessContent = () => {
                 brandId: storedRedirectParams?.brandId || parsedData.brandId
               };
               
-              // Update stored data with Fapshi payment details
+              // Update stored data with payment details
               const updatedData = {
                 ...updatedTransactionData,
-                fapshiPaymentDetails: {
-                  transId: paymentStatusResult.transId,
-                  status: paymentStatusResult.status,
-                  medium: paymentStatusResult.medium,
-                  serviceName: paymentStatusResult.serviceName,
-                  amount: paymentStatusResult.amount,
-                  revenue: paymentStatusResult.revenue,
-                  payerName: paymentStatusResult.payerName,
-                  email: paymentStatusResult.email,
-                  financialTransId: paymentStatusResult.financialTransId,
-                  dateInitiated: paymentStatusResult.dateInitiated,
-                  dateConfirmed: paymentStatusResult.dateConfirmed
-                }
+                paymentDetails: paymentStatusResult.payment_data
               };
               
               setTransactionData(updatedData);
@@ -194,43 +175,10 @@ const PaymentSuccessContent = () => {
               toast.error("Transaction data not found");
         router.push("/");
             }
-          } else if (paymentStatusResult.status === "EXPIRED") {
-            // Payment link expired
-            setPaymentStatus("FAILED");
-            
-            // Update brand payment status as failed
-            const currentBrandId = storedRedirectParams?.brandId || brandId || transactionId;
-            if (currentBrandId) {
-              await updateBrandPaymentStatus(currentBrandId, false);
-            }
-            
-            toast.error("Payment link has expired. Please initiate a new payment.");
-          } else if (paymentStatusResult.status === "FAILED") {
-            // Payment failed
-            setPaymentStatus("FAILED");
-            
-            // Update brand payment status as failed
-            const currentBrandId = storedRedirectParams?.brandId || brandId || transactionId;
-            if (currentBrandId) {
-              await updateBrandPaymentStatus(currentBrandId, false);
-            }
-            
-            toast.error("Payment failed. Please try again.");
-          } else if (paymentStatusResult.status === "PENDING") {
-            // Payment is still pending
-            setPaymentStatus("PENDING");
-            toast.error("Payment is still being processed. Please wait and try again.");
           } else {
-            // Other statuses (CREATED, etc.)
+            // Payment failed, expired, or pending
             setPaymentStatus("FAILED");
-            
-            // Update brand payment status as failed
-            const currentBrandId = storedRedirectParams?.brandId || brandId || transactionId;
-            if (currentBrandId) {
-              await updateBrandPaymentStatus(currentBrandId, false);
-            }
-            
-            toast.error("Payment verification failed. Please try again.");
+            toast.error(paymentStatusResult.error || "Payment verification failed. Please try again.");
           }
         } catch (error) {
           console.error("Error verifying payment with Fapshi:", error);

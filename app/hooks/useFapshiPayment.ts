@@ -1,42 +1,59 @@
 import { useMutation } from '@tanstack/react-query';
-import fapshiAPI from '../configs/fapshiConfig';
+import axios from '../configs/axiosConfigs';
 
 interface InitiatePaymentRequest {
     amount: number;
+    brandId: string;
     email?: string;
     redirectUrl?: string;
     userId?: string;
-    externalId?: string;
     message?: string;
 }
 
+interface VerifyPaymentRequest {
+    transId: string;
+}
+
 export const useFapshiPayment = () => {
-    // Initiate payment and get payment link
+    // Initiate payment through backend
     const initiatePayment = useMutation({
         mutationFn: (data: InitiatePaymentRequest) =>
-            fapshiAPI.initiatePayment(data),
+            axios.post('/api/payment/initiate', data).then(res => res.data),
         onSuccess: (data) => {
-            console.log('Fapshi payment initiated successfully:', data);
+            console.log('Payment initiated successfully:', data);
         },
         onError: (error) => {
-            console.error('Failed to initiate Fapshi payment:', error);
+            console.error('Failed to initiate payment:', error);
         },
     });
 
-    // Get payment status
-    const getPaymentStatus = useMutation({
-        mutationFn: (transId: string) =>
-            fapshiAPI.getPaymentStatus(transId),
+    // Verify payment through backend
+    const verifyPayment = useMutation({
+        mutationFn: (data: VerifyPaymentRequest) =>
+            axios.post('/api/payment/verify', data).then(res => res.data),
         onSuccess: (data) => {
-            console.log('Fapshi payment status retrieved:', data);
+            console.log('Payment verification result:', data);
         },
         onError: (error) => {
-            console.error('Failed to get Fapshi payment status:', error);
+            console.error('Failed to verify payment:', error);
+        },
+    });
+
+    // Get payment status through backend
+    const getPaymentStatus = useMutation({
+        mutationFn: (transId: string) =>
+            axios.get(`/api/payment/status?transId=${transId}`).then(res => res.data),
+        onSuccess: (data) => {
+            console.log('Payment status retrieved:', data);
+        },
+        onError: (error) => {
+            console.error('Failed to get payment status:', error);
         },
     });
 
     return {
         initiatePayment,
+        verifyPayment,
         getPaymentStatus,
     };
 };
