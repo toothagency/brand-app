@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   useUserBrands,
   useDeleteBrand,
@@ -36,8 +37,10 @@ import ResultsDisplay from "../../form/components/results/ResultsDisplay";
 import { useGetFullResults } from "@/app/hooks/useGetFullResults";
 import DashboardLayout from "../components/DashboardLayout";
 import { Input } from "../../../../components/ui/input";
+import { toast } from "react-hot-toast";
 
 const BrandsPage = () => {
+  const router = useRouter();
   const currentUser = getCurrentUser();
   const { data: userBrandsData, isLoading, error, refetch } = useUserBrands();
   const deleteBrandMutation = useDeleteBrand();
@@ -64,8 +67,10 @@ const BrandsPage = () => {
       });
       setShowDeleteModal(false);
       setBrandToDelete(null);
+      toast.success(`Brand "${brand.name || 'Untitled Brand'}" deleted successfully!`);
     } catch (error) {
       console.error("Failed to delete brand:", error);
+      toast.error("Failed to delete brand. Please try again.");
     }
   };
 
@@ -93,10 +98,12 @@ const BrandsPage = () => {
   };
 
   const view = (brand: DetailedBrandObject) => {
-    if (!brand.premium) {
-      freeBrand(brand.id);
+    if (brand.payment_status) {
+      // Premium brand - navigate to full brand results page
+      router.push(`/full-brand-results?brandId=${brand.id}`);
     } else {
-      fetchFullResults(brand.id);
+      // Free brand - navigate to brand results page
+      router.push(`/brand-results?brandId=${brand.id}`);
     }
   };
 

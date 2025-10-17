@@ -88,6 +88,9 @@ const FullBrandingForm: React.FC = () => {
   const createBrandMutation = useCreateBrand();
   const submitAnswerMutation = useSubmitBrandingAnswer();
   const getBrandResultsMutation = useGetBrandResults(currentUser?.userId || "");
+  
+  // Add a ref to track if brand creation is already in progress
+  const [isCreatingBrand, setIsCreatingBrand] = useState(false);
 
   // Effect for initializing user and brand session (runs once on mount)
   useEffect(() => {
@@ -129,7 +132,16 @@ const FullBrandingForm: React.FC = () => {
         console.log(
           "Effect 1: No valid brand in cookie, attempting to create new brand."
         );
+        
+        // Prevent duplicate brand creation
+        if (isCreatingBrand) {
+          console.log("Effect 1: Brand creation already in progress, skipping...");
+          return;
+        }
+        
+        setIsCreatingBrand(true);
         try {
+          console.log("Effect 1: Calling createBrandMutation.mutateAsync...");
           const response = await createBrandMutation.mutateAsync({
             userId: user.userId,
           });
@@ -157,6 +169,8 @@ const FullBrandingForm: React.FC = () => {
           console.error("Effect 1: Exception during brand creation:", error);
           setActiveBrandSession(null);
           // Potentially show an error
+        } finally {
+          setIsCreatingBrand(false);
         }
       } else {
         console.log(
@@ -598,16 +612,21 @@ const FullBrandingForm: React.FC = () => {
     setIsLoadingBrandSession(true); // Show loading screen
     setIsResumingState(true); // Ensure resume logic re-evaluates correctly
 
-    // The main initialization useEffect will run again because its dependencies might change
-    // or if it's set to run once, we might need to call a re-init function.
-    // For simplicity, we assume the top-level useEffect for initializeFormSession
-    // will be re-triggered if necessary (e.g., if it depends on currentUser which becomes null then re-populated).
-    // Or, explicitly call it:
+    // This effect is for handling mutation state changes, not for re-initialization
+    // The reInitialize function is available but not automatically called
     const reInitialize = async () => {
       const user = getCurrentUser();
       setCurrentUser(user);
       if (user?.userId) {
+        // Prevent duplicate brand creation
+        if (isCreatingBrand) {
+          console.log("reInitialize: Brand creation already in progress, skipping...");
+          return;
+        }
+        
+        setIsCreatingBrand(true);
         try {
+          console.log("reInitialize: Calling createBrandMutation.mutateAsync...");
           const response = await createBrandMutation.mutateAsync({
             userId: user.userId,
           });
@@ -624,15 +643,16 @@ const FullBrandingForm: React.FC = () => {
           }
         } catch (error) {
           setActiveBrandSession(null);
+        } finally {
+          setIsCreatingBrand(false);
         }
       }
       setIsLoadingBrandSession(false);
-      //setIsResumingState(false); // Resume logic will handle this based on new activeBrandSession
     };
-    reInitialize(); // Call re-initialization
 
+    // Only handle mutation state changes, don't automatically re-initialize
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [createBrandMutation, submitAnswerMutation, getBrandResultsMutation]);
+  }, [submitAnswerMutation, getBrandResultsMutation]);
 
   useEffect(() => {
     if (submitAnswerMutation.isError && submitAnswerMutation.error) {

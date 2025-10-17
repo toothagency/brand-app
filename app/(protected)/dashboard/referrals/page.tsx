@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useClientAuth } from "../../../(auth)/hooks/useClientAuth";
 import DashboardLayout from "../components/DashboardLayout";
+import { useReferralRewards, useReferralStats, useReferralHistory } from "../../../hooks/hooks";
 import {
   Card,
   CardContent,
@@ -28,6 +29,7 @@ import {
   Target,
   DollarSign,
   UserPlus,
+  Loader2,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 
@@ -35,56 +37,21 @@ const ReferralsPage = () => {
   const { user } = useClientAuth();
   const [copiedCode, setCopiedCode] = useState(false);
 
-  // Mock data - replace with actual API calls
-  const referralStats = {
-    totalReferrals: 12,
-    successfulReferrals: 8,
-    pendingReferrals: 4,
-    totalEarnings: 2400, // XAF
-    thisMonth: 3,
-    lastMonth: 5,
-  };
+  // Get real referral data from API
+  const { data: referralRewards, isLoading: rewardsLoading, error: rewardsError } = useReferralRewards(user?.userId || "");
+  const { data: referralStats, isLoading: statsLoading, error: statsError } = useReferralStats(user?.userId || "");
+  const { data: referralHistoryData, isLoading: historyLoading, error: historyError } = useReferralHistory(user?.userId || "");
 
-  const referralHistory = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "john@example.com",
-      status: "completed",
-      date: "2024-01-15",
-      reward: 300,
-      brandCreated: true,
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "jane@example.com",
-      status: "pending",
-      date: "2024-01-20",
-      reward: 0,
-      brandCreated: false,
-    },
-    {
-      id: 3,
-      name: "Mike Johnson",
-      email: "mike@example.com",
-      status: "completed",
-      date: "2024-01-18",
-      reward: 300,
-      brandCreated: true,
-    },
-    {
-      id: 4,
-      name: "Sarah Wilson",
-      email: "sarah@example.com",
-      status: "completed",
-      date: "2024-01-12",
-      reward: 300,
-      brandCreated: true,
-    },
-  ];
+  // Extract data from API responses
+  const totalReferrals = referralRewards?.data?.total_referrals || 0;
+  const totalEarnings = referralRewards?.data?.total_earnings || 0;
+  const referralCode = referralRewards?.data?.referral_code || user?.referral_code || user?.username?.toUpperCase() || 'USER';
+  
+  // Calculate successful and pending referrals from history data
+  const referralHistory = referralHistoryData?.data || [];
+  const successfulReferrals = referralHistory.filter(r => r.status === 'completed').length;
+  const pendingReferrals = referralHistory.filter(r => r.status === 'pending' || r.status === 'registered').length;
 
-  const referralCode = user?.referral_code || user?.username?.toUpperCase() || 'USER';
   const referralLink = `${typeof window !== 'undefined' ? window.location.origin : ''}/register?ref=${referralCode}`;
 
   const copyReferralCode = async () => {
@@ -125,6 +92,8 @@ const ReferralsPage = () => {
         return <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">Completed</Badge>;
       case 'pending':
         return <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400">Pending</Badge>;
+      case 'registered':
+        return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">Registered</Badge>;
       default:
         return <Badge variant="outline">Unknown</Badge>;
     }
@@ -136,6 +105,21 @@ const ReferralsPage = () => {
       subtitle="Invite friends and earn rewards for every successful referral"
     >
       <div className="space-y-8">
+        {/* Error Display */}
+        {(rewardsError || statsError || historyError) && (
+          <Card className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
+                <CheckCircle className="w-5 h-5" />
+                <p className="font-medium">Failed to load referral data</p>
+              </div>
+              <p className="text-sm text-red-600 dark:text-red-400 mt-1">
+                Please refresh the page or try again later
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Referral Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card>
@@ -147,7 +131,11 @@ const ReferralsPage = () => {
                     Total Referrals
                   </p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {referralStats.totalReferrals}
+                    {rewardsLoading ? (
+                      <Loader2 className="w-6 h-6 animate-spin mx-auto" />
+                    ) : (
+                      totalReferrals
+                    )}
                   </p>
                 </div>
               </div>
@@ -163,7 +151,11 @@ const ReferralsPage = () => {
                     Successful
                   </p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {referralStats.successfulReferrals}
+                    {rewardsLoading ? (
+                      <Loader2 className="w-6 h-6 animate-spin mx-auto" />
+                    ) : (
+                      successfulReferrals
+                    )}
                   </p>
                 </div>
               </div>
@@ -179,7 +171,11 @@ const ReferralsPage = () => {
                     Pending
                   </p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {referralStats.pendingReferrals}
+                    {rewardsLoading ? (
+                      <Loader2 className="w-6 h-6 animate-spin mx-auto" />
+                    ) : (
+                      pendingReferrals
+                    )}
                   </p>
                 </div>
               </div>
@@ -195,7 +191,11 @@ const ReferralsPage = () => {
                     Total Earnings
                   </p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {referralStats.totalEarnings.toLocaleString()} XAF
+                    {rewardsLoading ? (
+                      <Loader2 className="w-6 h-6 animate-spin mx-auto" />
+                    ) : (
+                      `${totalEarnings.toLocaleString()} XAF`
+                    )}
                   </p>
                 </div>
               </div>
@@ -229,7 +229,7 @@ const ReferralsPage = () => {
                 </Button>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-300">
-                Earn 300 XAF for each friend who creates their first brand using your code!
+                Earn 1,500 XAF for each friend who pays for a premium brand using your code!
               </p>
             </CardContent>
           </Card>
@@ -298,7 +298,7 @@ const ReferralsPage = () => {
                 <Award className="w-8 h-8 text-[#3467AA] mx-auto mb-4" />
                 <h3 className="font-semibold mb-2">3. Earn Rewards</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                  You earn 300 XAF for each successful referral when they create their first brand
+                  You earn 1,500 XAF for each successful referral when they pay for a premium brand
                 </p>
               </div>
             </div>
@@ -318,7 +318,12 @@ const ReferralsPage = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {referralHistory.length === 0 ? (
+              {historyLoading ? (
+                <div className="text-center py-8">
+                  <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-[#3467AA]" />
+                  <p className="text-gray-600 dark:text-gray-300">Loading referral history...</p>
+                </div>
+              ) : referralHistory.length === 0 ? (
                 <div className="text-center py-8">
                   <Users className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
@@ -348,14 +353,14 @@ const ReferralsPage = () => {
                           {referral.email}
                         </p>
                         <p className="text-xs text-gray-400 dark:text-gray-500">
-                          {new Date(referral.date).toLocaleDateString()}
+                          {referral.date ? new Date(referral.date).toLocaleDateString() : 'Unknown date'}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right">
                         <p className="font-semibold text-gray-900 dark:text-white">
-                          {referral.reward > 0 ? `${referral.reward} XAF` : 'Pending'}
+                          {referral.reward > 0 ? `${referral.reward.toLocaleString()} XAF` : 'Pending'}
                         </p>
                         <div className="flex items-center gap-2">
                           {getStatusBadge(referral.status)}

@@ -1,10 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   useUserBrands,
   useDeleteBrand,
   useDownloadBrand,
+  useReferralRewards,
 } from "../../../hooks/hooks";
 import { getCurrentUser } from "../../../(auth)/hooks/authHooks";
 import { Brand } from "../../../contexts/BrandContext";
@@ -45,6 +47,7 @@ import { motion } from "framer-motion";
 import DashboardLayout from "../components/DashboardLayout";
 
 const OverviewPage = () => {
+  const router = useRouter();
   const currentUser = getCurrentUser();
   const { data: userBrandsData, isLoading, error, refetch } = useUserBrands();
   const deleteBrandMutation = useDeleteBrand();
@@ -60,6 +63,9 @@ const OverviewPage = () => {
   const [error2, setError2] = useState<string | null>();
   const [result, setShowResult] = useState<DetailedBrandObject | null>(null);
   const [fullResult, setShowFullResult] = useState<FullBrand | null>(null);
+  
+  // Get referral rewards data
+  const { data: referralRewards, isLoading: referralLoading } = useReferralRewards(currentUser?.userId || "");
 
   const handleDeleteBrand = async (brand: DetailedBrandObject) => {
     if (!currentUser?.userId) return;
@@ -71,8 +77,10 @@ const OverviewPage = () => {
       });
       setShowDeleteModal(false);
       setBrandToDelete(null);
+      toast.success(`Brand "${brand.name || 'Untitled Brand'}" deleted successfully!`);
     } catch (error) {
       console.error("Failed to delete brand:", error);
+      toast.error("Failed to delete brand. Please try again.");
     }
   };
 
@@ -100,10 +108,12 @@ const OverviewPage = () => {
   };
 
   const view = (brand: DetailedBrandObject) => {
-    if (!brand.premium) {
-      freeBrand(brand.id);
+    if (brand.payment_status) {
+      // Premium brand - navigate to full brand results page
+      router.push(`/full-brand-results?brandId=${brand.id}`);
     } else {
-      fetchFullResults(brand.id);
+      // Free brand - navigate to brand results page
+      router.push(`/brand-results?brandId=${brand.id}`);
     }
   };
 
@@ -317,17 +327,23 @@ const OverviewPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
                 <UserPlus className="w-8 h-8 text-[#3467AA] mx-auto mb-3" />
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">12</h3>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {referralLoading ? "..." : (referralRewards?.data?.total_referrals || 0)}
+                </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">Total Referrals</p>
               </div>
               <div className="text-center">
                 <Users className="w-8 h-8 text-[#3467AA] mx-auto mb-3" />
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">8</h3>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {referralLoading ? "..." : (referralRewards?.data?.total_referrals || 0)}
+                </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">Successful</p>
               </div>
               <div className="text-center">
                 <Star className="w-8 h-8 text-[#3467AA] mx-auto mb-3" />
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">2,400</h3>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {referralLoading ? "..." : (referralRewards?.data?.total_earnings?.toLocaleString() || "0")}
+                </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">Earnings (XAF)</p>
               </div>
             </div>

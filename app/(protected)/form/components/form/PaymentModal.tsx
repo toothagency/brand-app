@@ -65,7 +65,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
         email: "", // Optional - user can enter on Fapshi page
         redirectUrl: `${window.location.origin}/form/success`,
         userId: userId,
-        externalId: transactionId,
+        brandId: brandId,
+        // externalId: transactionId,
         message: "Brand Generation Payment"
       });
 
