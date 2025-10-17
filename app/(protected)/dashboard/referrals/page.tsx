@@ -43,14 +43,14 @@ const ReferralsPage = () => {
   const { data: referralHistoryData, isLoading: historyLoading, error: historyError } = useReferralHistory(user?.userId || "");
 
   // Extract data from API responses
-  const totalReferrals = referralRewards?.data?.total_referrals || 0;
-  const totalEarnings = referralRewards?.data?.total_earnings || 0;
-  const referralCode = referralRewards?.data?.referral_code || user?.referral_code || user?.username?.toUpperCase() || 'USER';
+  const totalReferrals = (referralRewards as any)?.data?.total_referrals || 0;
+  const totalEarnings = (referralRewards as any)?.data?.total_earnings || 0;
+  const referralCode = (referralRewards as any)?.data?.referral_code || user?.referral_code || user?.username?.toUpperCase() || 'USER';
   
   // Calculate successful and pending referrals from history data
-  const referralHistory = referralHistoryData?.data || [];
-  const successfulReferrals = referralHistory.filter(r => r.status === 'completed').length;
-  const pendingReferrals = referralHistory.filter(r => r.status === 'pending' || r.status === 'registered').length;
+  const referralHistory = (referralHistoryData as any)?.data || [];
+  const successfulReferrals = referralHistory.filter((r: any) => r.status === 'completed').length;
+  const pendingReferrals = referralHistory.filter((r: any) => r.status === 'pending' || r.status === 'registered').length;
 
   const referralLink = `${typeof window !== 'undefined' ? window.location.origin : ''}/register?ref=${referralCode}`;
 
@@ -334,7 +334,7 @@ const ReferralsPage = () => {
                   </p>
                 </div>
               ) : (
-                referralHistory.map((referral) => (
+                referralHistory.map((referral: any) => (
                   <div
                     key={referral.id}
                     className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
