@@ -18,6 +18,7 @@ import {
   ZapOff,
   MessageSquare,
   Download,
+  Check,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Head from "next/head";
