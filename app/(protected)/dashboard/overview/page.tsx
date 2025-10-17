@@ -328,21 +328,21 @@ const OverviewPage = () => {
               <div className="text-center">
                 <UserPlus className="w-8 h-8 text-[#3467AA] mx-auto mb-3" />
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {referralLoading ? "..." : (referralRewards?.data?.total_referrals || 0)}
+                  {referralLoading ? "..." : ((referralRewards as any)?.data?.total_referrals ?? 0)}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">Total Referrals</p>
               </div>
               <div className="text-center">
                 <Users className="w-8 h-8 text-[#3467AA] mx-auto mb-3" />
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {referralLoading ? "..." : (referralRewards?.data?.total_referrals || 0)}
+                  {referralLoading ? "..." : ((referralRewards as any)?.data?.total_referrals ?? 0)}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">Successful</p>
               </div>
               <div className="text-center">
                 <Star className="w-8 h-8 text-[#3467AA] mx-auto mb-3" />
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {referralLoading ? "..." : (referralRewards?.data?.total_earnings?.toLocaleString() || "0")}
+                  {referralLoading ? "..." : ((referralRewards as any)?.data?.total_earnings?.toLocaleString() ?? "0")}
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300">Earnings (XAF)</p>
               </div>
