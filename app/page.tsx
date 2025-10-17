@@ -9,14 +9,15 @@ import Image from "next/image"; // Using Next.js Image for better optimization
 import {
   ArrowRight,
   Sparkles,
-  Palette,
-  Share2,
-  FolderOpen,
-  Check,
   Star,
-  CircleCheckBig,
   Loader2,
   ArrowBigRightDash,
+  Wifi,
+  Award,
+  Send,
+  ZapOff,
+  MessageSquare,
+  Download,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Head from "next/head";
@@ -70,6 +71,19 @@ export default function HomePage() {
     alt: string;
     height: string;
   };
+
+  // Define PerfectSolution type
+  type PerfectSolution = {
+    Icon: React.ElementType;
+    text: string;
+  }
+
+  const perfect: PerfectSolution[] = [
+    { Icon: Wifi, text: "Want to look legit online and offline." },
+    { Icon: Award, text: "Need help with branding and marketing for your business." },
+    { Icon: Send, text: "Are launching something new and don’t know where to start." },
+    { Icon: ZapOff, text: "Are tired of Googling “how to build a brand” and getting lost." },
+  ];
 
   // Reduced number of cards for better performance - just keep the first 8
   const brandCards: BrandCard[] = [
@@ -141,6 +155,25 @@ export default function HomePage() {
     },
   ];
 
+  const steps = [
+    {
+      number: "01",
+      title: "Sign up and create your account",
+      timeEstimate: "2-3 minutes",
+    },
+    {
+      number: "02",
+      title: "Answer a few important questions that tell Jara about your business.",
+      timeEstimate: "30 seconds",
+    },
+
+    {
+      number: "03",
+      title: "Receive a custom brand blueprint with logos, mockups and marketing assets.",
+      timeEstimate: "Instant",
+    },
+  ];
+
   // Distribute cards into 3 columns for desktop, 2 for mobile
   const distributeCards = (): BrandCard[][] => {
     const columns: BrandCard[][] = [[], [], []];
@@ -150,84 +183,84 @@ export default function HomePage() {
     return columns;
   };
 
-  const features = [
-    {
-      number: "01",
-      title: "Start with Strategy",
-      description:
-        "Craft your brand's foundation using AI-powered insights. Define your brand's strategy so everything you build feels intentional and customer-focused.",
-      items: [
-        "Story",
-        "Mission & Values",
-        "Customer & Competitors Analysis",
-        "Differentiation Strategy",
-      ],
-      icon: <Sparkles className="w-8 h-8 text-[#3467AA]" />,
-      image:
-        "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=400&fit=crop&crop=center",
-      imageAlt: "Strategic planning and brainstorming session",
-      type: "single",
-    },
-    {
-      number: "02",
-      title: "Build an awesome logo",
-      description:
-        "Get a stunning logo and brand identity that reflects your vision. Use Jara's AI Logo Maker to create a logo in minutes.",
-      items: [
-        "Logo Design",
-        "Font & Color Palette",
-        "Brand Kits",
-        "Brand Guidelines",
-      ],
-      icon: <Palette className="w-8 h-8 text-[#F5A819]" />,
-      images: [
-        {
-          src: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=300&h=200&fit=crop&crop=center",
-          alt: "Logo design mockups",
-        },
-        {
-          src: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=300&h=200&fit=crop&crop=center",
-          alt: "Color palette and typography",
-        },
-        {
-          src: "https://images.unsplash.com/photo-1634942537034-2531766767d1?w=300&h=200&fit=crop&crop=center",
-          alt: "Brand kit materials",
-        },
-        {
-          src: "https://images.unsplash.com/photo-1586717799252-bd134ad00e26?w=300&h=200&fit=crop&crop=center",
-          alt: "Brand guidelines document",
-        },
-      ],
-      type: "grid",
-    },
-    {
-      number: "03",
-      title: "Design Social Media Content",
-      description:
-        "Automate your brand's daily content needs. Design, customize, and publish scroll-stopping posts across platforms in just a few clicks.",
-      items: ["Posts", "Carousels", "Reels", "Infographics"],
-      icon: <Share2 className="w-8 h-8 text-[#3467AA]" />,
-      image: "/images/SM 5.jpg",
-      imageAlt: "Social media content creation and management",
-      type: "single",
-    },
-    {
-      number: "04",
-      title: "Manage Your Brand Assets",
-      description:
-        "All logo files and design templates are stored in your brand asset library and easily shared to ensure brand consistency.",
-      items: [
-        "Logo Files & Templates",
-        "Videos, Audio & Brand Images",
-        "Brand Guide",
-        "Brand and Marketing Strategy",
-      ],
-      icon: <FolderOpen className="w-8 h-8 text-[#F5A819]" />,
-      image: "/images/online-marketing-branding-concept-laptop-screen.jpg",
-      imageAlt: "Digital asset management and file organization",
-      type: "single",
-    },
-  ];
+  // const features = [
+  //   {
+  //     number: "01",
+  //     title: "Start with Strategy",
+  //     description:
+  //       "Craft your brand's foundation using AI-powered insights. Define your brand's strategy so everything you build feels intentional and customer-focused.",
+  //     items: [
+  //       "Story",
+  //       "Mission & Values",
+  //       "Customer & Competitors Analysis",
+  //       "Differentiation Strategy",
+  //     ],
+  //     icon: <Sparkles className="w-8 h-8 text-[#3467AA]" />,
+  //     image:
+  //       "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=400&fit=crop&crop=center",
+  //     imageAlt: "Strategic planning and brainstorming session",
+  //     type: "single",
+  //   },
+  //   {
+  //     number: "02",
+  //     title: "Build an awesome logo",
+  //     description:
+  //       "Get a stunning logo and brand identity that reflects your vision. Use Jara's AI Logo Maker to create a logo in minutes.",
+  //     items: [
+  //       "Logo Design",
+  //       "Font & Color Palette",
+  //       "Brand Kits",
+  //       "Brand Guidelines",
+  //     ],
+  //     icon: <Palette className="w-8 h-8 text-[#F5A819]" />,
+  //     images: [
+  //       {
+  //         src: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=300&h=200&fit=crop&crop=center",
+  //         alt: "Logo design mockups",
+  //       },
+  //       {
+  //         src: "https://images.unsplash.com/photo-1586717791821-3f44a563fa4c?w=300&h=200&fit=crop&crop=center",
+  //         alt: "Color palette and typography",
+  //       },
+  //       {
+  //         src: "https://images.unsplash.com/photo-1634942537034-2531766767d1?w=300&h=200&fit=crop&crop=center",
+  //         alt: "Brand kit materials",
+  //       },
+  //       {
+  //         src: "https://images.unsplash.com/photo-1586717799252-bd134ad00e26?w=300&h=200&fit=crop&crop=center",
+  //         alt: "Brand guidelines document",
+  //       },
+  //     ],
+  //     type: "grid",
+  //   },
+  //   {
+  //     number: "03",
+  //     title: "Design Social Media Content",
+  //     description:
+  //       "Automate your brand's daily content needs. Design, customize, and publish scroll-stopping posts across platforms in just a few clicks.",
+  //     items: ["Posts", "Carousels", "Reels", "Infographics"],
+  //     icon: <Share2 className="w-8 h-8 text-[#3467AA]" />,
+  //     image: "/images/SM 5.jpg",
+  //     imageAlt: "Social media content creation and management",
+  //     type: "single",
+  //   },
+  //   {
+  //     number: "04",
+  //     title: "Manage Your Brand Assets",
+  //     description:
+  //       "All logo files and design templates are stored in your brand asset library and easily shared to ensure brand consistency.",
+  //     items: [
+  //       "Logo Files & Templates",
+  //       "Videos, Audio & Brand Images",
+  //       "Brand Guide",
+  //       "Brand and Marketing Strategy",
+  //     ],
+  //     icon: <FolderOpen className="w-8 h-8 text-[#F5A819]" />,
+  //     image: "/images/online-marketing-branding-concept-laptop-screen.jpg",
+  //     imageAlt: "Digital asset management and file organization",
+  //     type: "single",
+  //   },
+  // ];
 
   const cardColumns = distributeCards();
 
@@ -327,23 +360,24 @@ export default function HomePage() {
                     data-aos="fade-up"
                     data-aos-delay="300"
                   >
+                    Build Your{" "}
                     <span className="bg-[#3467AA]  bg-clip-text font-semibold text-transparent">
-                      AI-powered
+                      Brand In 5 Minutes
                     </span>{" "}
-                    brand design at{" "}
+                    with{" "}
                     <span className="bg-[#F5A819] font-semibold bg-clip-text text-transparent">
-                      lightning speed
+                      Jara AI
                     </span>
                   </h1>
 
                   <p
-                    className="text-xl md:w-[90%] text-center lg:text-left text-gray-600 dark:text-gray-300 leading-relaxed"
+                    className="text-lg md:w-[90%] text-center lg:text-left text-gray-600 dark:text-gray-300 leading-relaxed"
                     data-aos="fade-up"
                     data-aos-delay="400"
                   >
-                    Instantly create your brand, logo, and marketing assets with
-                    AI. No design skills needed—just launch and grow your
-                    business.
+                    Jara is a tool designed to assist business owners in Africa with developing outstanding 
+                    brand identities and marketing their brands in a fast and reliable way, 
+                    using the power of artificial intelligence!
                   </p>
                 </div>
 
@@ -448,172 +482,97 @@ export default function HomePage() {
         >
           {/* What You Get Section */}
           <section className="bg-white dark:bg-gray-900 py-12 md:py-20">
-            <div className="container mx-auto px-6">
-              <div className="text-center mb-12 md:mb-16" data-aos="fade-up">
-                <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                  What you get
-                </h2>
-                <h3 className="text-2xl font-semibold bg-gradient-to-r bg-[#3467AA] bg-clip-text text-transparent mb-2">
-                  Automated Branding & Marketing in One Place
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Build and launch your brand in a few clicks
-                </p>
+            <div className="container mx-auto px-6 grid gap-y-[1rem] lg:flex justify-center gap-x-[5rem] items-center" data-aos="fade-up">
+              {/* Perfect Solution Section */}
+              <div data-aos="fade-right">
+                <h3 className="font-semibold text-[2rem] w-[20rem] text-center lg:text-right">Jara AI Is The Perfect Solution If You:</h3>
               </div>
 
-              {/* Features Grid */}
-              <div className="space-y-20 md:space-y-32 lg:space-y-40">
-                {features.map((feature, index) => (
-                  <div
-                    key={index}
-                    className={`grid lg:grid-cols-2 gap-12 items-center ${index % 2 === 1 ? "lg:grid-flow-col-dense" : ""
-                      }`}
-                    data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
-                    data-aos-delay={index * 200}
-                  >
-                    {/* Content */}
-                    <div
-                      className={`space-y-6 ${index % 2 === 1 ? "lg:col-start-2" : ""
-                        }`}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                {perfect.map (({ Icon, text}, idx) => (
+                  <div key={idx} 
+                    className="grid gap-y-2 justify-items-center bg-slate-200 dark:bg-gray-800 p-[2rem] rounded-md"
+                    data-aos="fade-left"
+                    data-aos-delay={idx * 100}
                     >
-                      <div
-                        className="flex items-center gap-4"
-                        data-aos="fade-up"
-                        data-aos-delay={index * 200 + 100}
-                      >
-                        <span className="text-3xl font-bold text-gray-300 dark:text-gray-600">
-                          {feature.number}
-                        </span>
-                        {feature.icon}
-                      </div>
-
-                      <h3
-                        className="text-3xl font-bold text-gray-900 dark:text-white"
-                        data-aos="fade-up"
-                        data-aos-delay={index * 200 + 200}
-                      >
-                        {feature.title}
-                      </h3>
-                      <p
-                        className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed"
-                        data-aos="fade-up"
-                        data-aos-delay={index * 200 + 300}
-                      >
-                        {feature.description}
-                      </p>
-
-                      <div
-                        className="grid grid-cols-2 gap-3"
-                        data-aos="fade-up"
-                        data-aos-delay={index * 200 + 400}
-                      >
-                        {feature.items.map((item, idx) => (
-                          <div
-                            key={idx}
-                            className="flex items-center gap-2"
-                            data-aos="fade-up"
-                            data-aos-delay={index * 200 + 400 + idx * 50}
-                          >
-                            <CircleCheckBig className="w-5 h-5 text-[#3467AA]" />
-                            <span className="text-gray-700 dark:text-gray-300">
-                              {item}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
+                    <div className="bg-[#F5A819] text-white p-1 w-[4rem] h-[4rem] grid justify-center items-center rounded-full">
+                      <Icon/>
                     </div>
-
-                    {/* Feature Visual */}
-                    <div
-                      className={`${index % 2 === 1 ? "lg:col-start-1 lg:row-start-1" : ""
-                        }`}
-                      data-aos={index % 2 === 0 ? "fade-left" : "fade-right"}
-                      data-aos-delay={index * 200 + 300}
-                    >
-                      {feature.type === "grid" ? (
-                        // Grid layout for Feature 02 (Logo Design)
-                        <div className="relative">
-                          <div className="grid grid-cols-2 gap-4">
-                            {feature.images?.map((img, imgIndex) => (
-                              <div
-                                key={imgIndex}
-                                className="relative rounded-xl overflow-hidden shadow-lg group hover:shadow-xl transition-all duration-300"
-                                data-aos="zoom-in"
-                                data-aos-delay={
-                                  index * 200 + 400 + imgIndex * 100
-                                }
-                              >
-                                {/* Use Next.js Image for grid images */}
-                                <div className="relative w-full h-40">
-                                  <Image
-                                    src={img.src}
-                                    alt={img.alt}
-                                    fill
-                                    sizes="(max-width: 768px) 50vw, 25vw"
-                                    className="object-cover transform group-hover:scale-105 transition-transform duration-300"
-                                    loading="lazy"
-                                  />
-                                </div>
-                                {/* Gradient overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
-                              </div>
-                            ))}
-                          </div>
-
-                          {/* Feature number overlay for grid */}
-                          <div
-                            className="absolute -top-3 -left-3 w-12 h-12 bg-white dark:bg-gray-800 shadow-lg rounded-full flex items-center justify-center z-10"
-                            data-aos="zoom-in"
-                            data-aos-delay={index * 200 + 600}
-                          >
-                            <span className="text-lg font-bold text-[#F5A819] dark:text-[#F5A819]">
-                              {feature.number}
-                            </span>
-                          </div>
-                        </div>
-                      ) : (
-                        // Single image layout for other features
-                        <div className="relative rounded-2xl overflow-hidden shadow-2xl group">
-                          {/* Use Next.js Image for single feature image */}
-                          <div className="relative w-full h-80 lg:h-96">
-                            <Image
-                              src={feature.image ?? "/images/placeholder.png"}
-                              alt={feature.imageAlt ?? "Feature-image"}
-                              fill
-                              sizes="(max-width: 768px) 100vw, 50vw"
-                              className="object-cover transform group-hover:scale-105 transition-transform duration-500"
-                              loading="lazy"
-                            />
-                          </div>
-
-                          {/* Gradient overlay for better visual appeal */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
-
-                          {/* Feature number overlay */}
-                          <div
-                            className="absolute top-6 left-6 w-12 h-12 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full flex items-center justify-center"
-                            data-aos="zoom-in"
-                            data-aos-delay={index * 200 + 600}
-                          >
-                            <span className="text-lg font-bold text-gray-800 dark:text-gray-200">
-                              {feature.number}
-                            </span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                    <p className="w-[23vw] lg:w-[17vw] text-center text-gray-600 dark:text-gray-300">{text}</p>
                   </div>
                 ))}
               </div>
+
             </div>
           </section>
+
+          <section className="py-20 bg-gray-50 dark:bg-gray-800">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-16" data-aos="fade-up">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                How To use Jara AI
+              </h2>
+              <p className="text-lg text-gray-600 dark:text-gray-300">
+                Generate a full brand blueprint in three easy steps!
+              </p>
+            </div>
+
+            <div className="max-w-4xl mx-auto">
+              <div className="relative">
+                {/* Timeline Line */}
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-[#3467AA]"></div>
+
+                {/* Timeline Items */}
+                <div className="space-y-12">
+                  {steps.map((step, index) => (
+                    <div
+                      key={index}
+                      className={`flex items-center ${
+                        index % 2 === 0 ? "flex-row" : "flex-row-reverse"
+                      }`}
+                      data-aos="fade-up"
+                      data-aos-delay={index * 100}
+                    >
+                      {/* Content */}
+                      <div
+                        className={`w-1/2 ${
+                          index % 2 === 0 ? "pr-8 text-right" : "pl-8 text-left"
+                        }`}
+                      >
+                        <div className="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
+                          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                            {step.title}
+                          </h3>
+                          {/* <p className="text-gray-600 dark:text-gray-300 mb-3">
+                            {step.description}
+                          </p> */}
+                          <span className="inline-block bg-[#3467AA]/10 dark:bg-[#3467AA]/20 text-[#3467AA] px-3 py-1 rounded-full text-sm font-medium">
+                            {step.timeEstimate}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Timeline Dot */}
+                      <div className="relative z-10">
+                        <div className="w-8 h-8 bg-[#F5A819] rounded-full border-4 border-white dark:border-gray-800 shadow-lg"></div>
+                      </div>
+
+                      {/* Empty space for alignment */}
+                      <div className="w-1/2"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
           {/* How It Works Section */}
           <section className="bg-gray-50 dark:bg-gray-800 py-16 md:py-20">
             <div className="container mx-auto px-6">
               <div className="text-center mb-12 md:mb-16" data-aos="fade-up">
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                  How It Works
+                  What’s in it for you?
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                   Create your complete brand identity in just 4 simple steps. No
@@ -725,8 +684,8 @@ export default function HomePage() {
                     What is Jara AI?
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Jara AI is a tool that is specifically designed to help you
-                    build your brand from scratch in just 10 minutes.
+                    Jara AI is a tool that is specifically designed to help you build your 
+                    brand from scratch in just 5 minutes.
                   </p>
                 </div>
 
@@ -754,7 +713,7 @@ export default function HomePage() {
                     How long does it take to build a brand with Jara AI?
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300">
-                    Building a brand with Jara takes 10 minutes. No more.
+                    Building a brand with Jara takes 5 minutes. No more.
                   </p>
                 </div>
 

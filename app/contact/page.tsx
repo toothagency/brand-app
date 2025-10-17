@@ -68,7 +68,7 @@ export default function ContactPage() {
       icon: <Mail className="w-6 h-6" />,
       title: "Email Us",
       description: "Get in touch via email",
-      contact: "agencytooth@gmail.com",
+      contact: "Jaraai@gmail.com",
       link: "mailto:agencytooth@gmail.com",
       color: "bg-[#3467AA]/10 dark:bg-[#3467AA]/20 text-[#3467AA]",
     },
@@ -128,8 +128,7 @@ export default function ContactPage() {
                 Get in <span className="text-[#3467AA]">Touch</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
-                Have questions about Jara AI? We're here to help you build the
-                perfect brand.
+                You have questions and we have answers.
               </p>
               <div className="flex justify-center items-center gap-4 mb-2 lg:mb-8">
                 <div className="flex items-center gap-2">
