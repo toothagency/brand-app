@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,7 +19,35 @@ const FormSuccessContent = () => {
   // Fapshi redirect parameters
   const fapshiTransId = searchParams.get("transId");
   const fapshiStatus = searchParams.get("status");
-  const { getPaymentStatus } = useFapshiPayment();
+  const { verifyPayment } = useFapshiPayment();
+  
+  // Use ref to prevent duplicate calls
+  const verificationInProgress = useRef(false);
+  const hasVerifiedPayment = useRef(false);
+  
+  // Debug: Log component mount
+  useEffect(() => {
+    console.log("🔄 FormSuccessContent component mounted");
+    return () => {
+      console.log("🔄 FormSuccessContent component unmounted");
+      // Clean up verification flag when component unmounts
+      if (fapshiTransId) {
+        const verificationKey = `payment_verified_${fapshiTransId}`;
+        localStorage.removeItem(verificationKey);
+      }
+    };
+  }, [fapshiTransId]);
+  
+  // Check if verification was already completed (persistent across re-mounts)
+  useEffect(() => {
+    const verificationKey = `payment_verified_${fapshiTransId}`;
+    const alreadyVerified = localStorage.getItem(verificationKey);
+    if (alreadyVerified === 'true') {
+      console.log("🔄 Payment already verified for this transaction, skipping verification");
+      hasVerifiedPayment.current = true;
+      setPaymentStatus("SUCCESS");
+    }
+  }, [fapshiTransId]);
   
   // Get stored redirect parameters from localStorage
   const getStoredRedirectParams = () => {
@@ -41,58 +69,88 @@ const FormSuccessContent = () => {
 
     // Verify payment status
   useEffect(() => {
-    const verifyPayment = async () => {
-      if (!fapshiTransId || !fapshiStatus) {
-        toast.error("Payment verification failed - missing parameters");
-        router.push("/");
+    console.log("🔄 useEffect triggered - fapshiTransId:", fapshiTransId, "fapshiStatus:", fapshiStatus);
+    console.log("🔄 hasVerifiedPayment.current:", hasVerifiedPayment.current, "verificationInProgress.current:", verificationInProgress.current);
+    
+    const verifyPaymentStatus = async () => {
+      // Prevent duplicate verification calls
+      if (hasVerifiedPayment.current || verificationInProgress.current || !fapshiTransId || !fapshiStatus) {
+        console.log("🔄 Skipping verification - hasVerifiedPayment:", hasVerifiedPayment.current, "verificationInProgress:", verificationInProgress.current, "missing params:", !fapshiTransId || !fapshiStatus);
+        if (!fapshiTransId || !fapshiStatus) {
+          toast.error("Payment verification failed - missing parameters");
+          router.push("/");
+        }
         return;
       }
 
+      console.log("🔄 Starting payment verification for transId:", fapshiTransId);
+      verificationInProgress.current = true;
+      hasVerifiedPayment.current = true;
       setIsVerifyingPayment(true);
 
       try {
-        // Verify payment with Fapshi
-        const paymentResult = await getPaymentStatus.mutateAsync(fapshiTransId);
-        console.log("Payment Result:", paymentResult);
+        // Use the verify payment endpoint instead of status endpoint
+        const paymentResult = await verifyPayment.mutateAsync({ transId: fapshiTransId });
+        console.log("Payment Verification Result:", paymentResult);
         
-        if (paymentResult) {
-          if (paymentResult.status === "SUCCESSFUL") {
+        if (paymentResult && paymentResult.success) {
+          if (paymentResult.verified) {
             setPaymentStatus("SUCCESS");
-            setIsVerifyingPayment(false);
-            console.log("Payment Status:", paymentResult.status);
+            console.log("✅ Payment verified successfully");
             console.log("Stored Params:", storedParams);
             
-            // Generate brand results
+            // Mark as verified in localStorage to prevent duplicate calls
+            const verificationKey = `payment_verified_${fapshiTransId}`;
+            localStorage.setItem(verificationKey, 'true');
+            
+            // Start brand generation immediately (before setting isVerifyingPayment to false)
             await generateBrandResults();
-          } else if (paymentResult.status === "FAILED" || paymentResult.status === "EXPIRED") {
-            setPaymentStatus("FAILED");
-            toast.error("Payment failed or expired");
           } else {
-            setPaymentStatus("PENDING");
-            toast.error("Payment is still pending");
+            // Payment verification failed or is pending
+            const errorMessage = paymentResult.error || "Payment verification failed";
+            console.log("❌ Payment verification failed:", errorMessage);
+            
+            if (errorMessage.includes("pending")) {
+              setPaymentStatus("PENDING");
+              toast.error("Payment is still pending");
+            } else if (errorMessage.includes("expired")) {
+              setPaymentStatus("FAILED");
+              toast.error("Payment link has expired");
+            } else {
+              setPaymentStatus("FAILED");
+              toast.error("Payment verification failed");
+            }
+            // Set isVerifyingPayment to false for failed/pending payments
+            setIsVerifyingPayment(false);
           }
         } else {
           setPaymentStatus("FAILED");
           toast.error("Payment verification failed");
+          setIsVerifyingPayment(false);
         }
       } catch (error) {
-        console.error("Error verifying payment:", error);
+        console.error("❌ Error verifying payment:", error);
         setPaymentStatus("FAILED");
         toast.error("Payment verification failed");
-      } finally {
         setIsVerifyingPayment(false);
+      } finally {
+        verificationInProgress.current = false;
       }
     };
 
-    if (fapshiTransId && fapshiStatus) {
-      verifyPayment();
+    if (fapshiTransId && fapshiStatus && !hasVerifiedPayment.current && !verificationInProgress.current) {
+      verifyPaymentStatus();
     }
-  }, [fapshiTransId, fapshiStatus, router]);
+  }, [fapshiTransId, fapshiStatus]); // Removed router and hasVerifiedPayment from dependencies
 
   // Generate brand results
   const generateBrandResults = async () => {
-    console.log("Starting brand generation...");
+    console.log("🔄 Starting brand generation...");
+    console.log("🔄 Transitioning from payment verification to brand generation");
+    // Transition from payment verification to brand generation
+    setIsVerifyingPayment(false);
     setIsGeneratingBrand(true);
+    console.log("✅ State transitioned: isVerifyingPayment=false, isGeneratingBrand=true");
 
     try {
       // Get stored redirect params and transaction data
@@ -186,9 +244,13 @@ const FormSuccessContent = () => {
   const getStatusMessage = () => {
     switch (paymentStatus) {
       case "SUCCESS":
-        return isGeneratingBrand 
-          ? "Generating your brand kit..." 
-          : "Your payment has been confirmed. Generating your brand kit...";
+        if (isGeneratingBrand) {
+          return "Your payment has been confirmed! We're now generating your personalized brand kit...";
+        } else if (isVerifyingPayment) {
+          return "Payment confirmed! Preparing to generate your brand kit...";
+        } else {
+          return "Your payment has been confirmed. Generating your brand kit...";
+        }
       case "FAILED":
         return "Your payment was not successful. Please try again or contact support.";
       case "PENDING":
@@ -216,7 +278,11 @@ const FormSuccessContent = () => {
             <div className="flex items-center justify-center gap-2 text-blue-600 dark:text-blue-400">
               <Loader2 className="w-5 h-5 animate-spin" />
               <span>
-                {isVerifyingPayment ? "Verifying payment..." : "Generating brand..."}
+                {isVerifyingPayment 
+                  ? "Verifying payment..." 
+                  : isGeneratingBrand 
+                    ? "Generating your brand kit..." 
+                    : "Processing..."}
               </span>
             </div>
           )}

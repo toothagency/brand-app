@@ -1,40 +1,48 @@
 # Fapshi Payment Gateway Integration
 
-This document outlines the integration of Fapshi payment gateway using the simple payment link approach.
+This document outlines the integration of Fapshi payment gateway with backend processing for enhanced security.
 
 ## Configuration
 
 ### Environment Variables
 
-Add the following environment variables to your `.env.local` file:
-
+**Frontend (.env.local):**
 ```env
-NEXT_PUBLIC_FAPSHI_API_URL=https://sandbox.fapshi.com
-NEXT_PUBLIC_FAPSHI_API_USER=your_fapshi_api_user_here
-NEXT_PUBLIC_FAPSHI_API_KEY=your_fapshi_api_key_here
+# Backend URL for payment API calls
+NEXT_PUBLIC_BACKEND_URL=http://localhost:8080
 ```
 
-### Configuration File
+**Backend (.env):**
+```env
+# Fapshi API Configuration
+FAPSHI_API_URL=https://live.fapshi.com
+FAPSHI_API_USER=your_fapshi_api_user_here
+FAPSHI_API_KEY=your_fapshi_api_key_here
+```
 
-The Fapshi configuration is located in `app/configs/fapshiConfig.ts`:
+### Backend Configuration
 
-- **Base URL**: `https://sandbox.fapshi.com` (test) / `https://fapshi.com` (production)
+The Fapshi integration is now handled by the backend:
+
+- **Base URL**: `https://live.fapshi.com` (production) / `https://sandbox.fapshi.com` (test)
 - **Currency**: XAF (Central African CFA franc)
 - **Country**: CM (Cameroon)
-- **Mode**: test/live (configurable)
-- **HTTP Client**: Uses native fetch API for requests
+- **Security**: API keys stored securely on backend
+- **HTTP Client**: Uses Python requests library
 
 ## Payment Flow
 
-### Simple Payment Link Approach
+### Backend-Processed Payment Flow
 
 1. **User clicks "Complete Payment"** on the initialize-payment page
-2. **App calls Fapshi's `/initiate-pay` endpoint** with payment details
-3. **Fapshi returns a payment link** in the response
-4. **User is redirected to the payment link** to complete payment
-5. **User is redirected back** to the success page with transaction ID and status
-6. **App verifies payment status** by calling Fapshi's `/payment-status/{transId}` endpoint
-7. **App displays success/failure** based on verification result
+2. **Frontend calls backend** `/api/payment/initiate` with payment details
+3. **Backend calls Fapshi's `/initiate-pay` endpoint** with payment details
+4. **Backend returns payment link** to frontend
+5. **User is redirected to the payment link** to complete payment
+6. **User is redirected back** to the success page with transaction ID and status
+7. **Frontend calls backend** `/api/payment/verify` to verify payment
+8. **Backend verifies payment** with Fapshi API and updates database
+9. **Frontend displays success/failure** based on verification result
 
 ### Payment Verification
 
@@ -291,16 +299,15 @@ The app properly extracts and displays these error messages to users.
 3. Update redirect URLs to production domain
 4. Test with real payment methods
 
-## Migration from PayUnit
+## Implementation Files
 
-The following files were updated to migrate from PayUnit to Fapshi:
+The following files implement the Fapshi payment integration:
 
-- `app/configs/fapshiConfig.ts` (new)
-- `app/hooks/useFapshiPayment.ts` (new)
-- `app/api/fapshi/callback/route.ts` (new)
-- `app/payment/page.tsx` (updated - now redirects to initialize-payment)
-- `app/initialize-payment/page.tsx` (updated - now uses Fapshi payment link)
-- `package.json` (updated)
+- `app/configs/fapshiConfig.ts` - Fapshi API configuration
+- `app/hooks/useFapshiPayment.ts` - React hooks for payment operations
+- `app/api/fapshi/callback/route.ts` - Payment callback handler
+- `app/payment/page.tsx` - Redirects to initialize-payment
+- `app/initialize-payment/page.tsx` - Payment initiation page
 
 ## Payment Flow Summary
 

@@ -55,6 +55,7 @@ const InitializePaymentContent = () => {
 
     try {
       const transactionId = generateTransactionId();
+      const brandId = brandData?.id || brandData?.answerId;
       
       // Create clean redirect URL without parameters to avoid conflicts with Fapshi's parameters
       const redirectUrl = `${window.location.origin}/payment-success`;
@@ -62,19 +63,19 @@ const InitializePaymentContent = () => {
       // Store additional parameters in localStorage for retrieval after redirect
       localStorage.setItem('paymentRedirectParams', JSON.stringify({
         transactionId,
-        brandId: brandData?.id || brandData?.answerId
+        brandId: brandId
       }));
       
       // Get user email from localStorage or use a default
       const userEmail = localStorage.getItem('userEmail');
       
-      // Initiate Fapshi payment
+      // Initiate payment through backend
       const result = await initiatePayment.mutateAsync({
         amount: amountXAF,
+        brandId: brandId,
         ...(userEmail && { email: userEmail }),
         redirectUrl: redirectUrl,
         userId: transactionId,
-        externalId: transactionId,
         message: `Payment for ${brandName} Complete Brand Kit`
       });
 

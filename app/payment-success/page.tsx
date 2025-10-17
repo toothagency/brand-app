@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { motion } from "framer-motion";
 import {
   CheckCircle,
@@ -53,6 +53,10 @@ const PaymentSuccessContent = () => {
   const [paymentStatusUpdated, setPaymentStatusUpdated] = useState(false);
   const [paymentVerificationComplete, setPaymentVerificationComplete] = useState(false);
   const [brandDataFetched, setBrandDataFetched] = useState(false);
+  
+  // Use ref to prevent multiple executions
+  const hasRunPaymentVerification = useRef(false);
+  const hasRunBrandDataFetch = useRef(false);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -65,7 +69,7 @@ const PaymentSuccessContent = () => {
 
   const finalResultsMutation = useFinalResults();
   const { getBrand } = useGetBrand();
-  const { getPaymentStatus } = useFapshiPayment();
+  const { verifyPayment } = useFapshiPayment();
   const userId = getCurrentUser()?.userId;
   const transactionId = searchParams.get("transactionId");
   const brandId = searchParams.get("brandId");
@@ -75,7 +79,7 @@ const PaymentSuccessContent = () => {
   const fapshiStatus = searchParams.get("status");
   
   // Get stored redirect parameters from localStorage (read directly, no state)
-  const getStoredRedirectParams = () => {
+  const getStoredRedirectParams = useCallback(() => {
     const storedParams = localStorage.getItem('paymentRedirectParams');
     if (storedParams) {
       try {
@@ -86,14 +90,15 @@ const PaymentSuccessContent = () => {
       }
     }
     return null;
-  };
+  }, []);
 
   // Function to update brand payment status
   const updateBrandPaymentStatus = async (brandId: string, paymentStatus: boolean) => {
     try {
       const response = await axios.post('/update_brand_payment_status', {
         brandId: brandId,
-        paymentStatus: paymentStatus
+        paymentStatus: paymentStatus,
+        transactionId: fapshiTransId
       });
       
       if (response.data.success) {
@@ -114,8 +119,8 @@ const PaymentSuccessContent = () => {
   }, []);
 
   useEffect(() => {
-    // Prevent multiple executions (but allow initial run)
-    if (isVerifyingPayment || paymentVerificationComplete) {
+    // Prevent multiple executions using ref
+    if (hasRunPaymentVerification.current || isVerifyingPayment || paymentVerificationComplete) {
       return;
     }
     
@@ -124,11 +129,8 @@ const PaymentSuccessContent = () => {
       return;
     }
     
-    // Only run payment verification on initial load or when payment parameters change
-    // Not on UI state changes like logo selection
-    if (paymentVerificationComplete && !fapshiTransId && !fapshiStatus) {
-      return;
-    }
+    // Mark as run to prevent future executions
+    hasRunPaymentVerification.current = true;
     
     const checkPaymentStatus = async () => {
       // Get stored redirect parameters
@@ -138,21 +140,14 @@ const PaymentSuccessContent = () => {
       if (fapshiTransId && fapshiStatus) {
         setIsVerifyingPayment(true);
         try {
-          // Verify payment status with Fapshi API
-          const paymentStatusResult = await getPaymentStatus.mutateAsync(fapshiTransId);
+          // Verify payment status through backend
+          const paymentStatusResult = await verifyPayment.mutateAsync({ transId: fapshiTransId });
           
-          if (paymentStatusResult && paymentStatusResult.status === "SUCCESSFUL") {
+          if (paymentStatusResult && paymentStatusResult.verified) {
             // Payment verified as successful
             setPaymentStatus("SUCCESS");
             
-            // Update brand payment status in backend
-            const currentBrandId = storedRedirectParams?.brandId || brandId || transactionId;
-            if (currentBrandId) {
-              const updateSuccess = await updateBrandPaymentStatus(currentBrandId, true);
-              if (!updateSuccess) {
-                console.warn('Failed to update brand payment status, but continuing with payment flow');
-              }
-            }
+            // Payment status is already updated by backend during verification
             
             // Get stored transaction data
             const storedData = localStorage.getItem("paymentTransaction");
@@ -166,22 +161,10 @@ const PaymentSuccessContent = () => {
                 brandId: storedRedirectParams?.brandId || parsedData.brandId
               };
               
-              // Update stored data with Fapshi payment details
+              // Update stored data with payment details
               const updatedData = {
                 ...updatedTransactionData,
-                fapshiPaymentDetails: {
-                  transId: paymentStatusResult.transId,
-                  status: paymentStatusResult.status,
-                  medium: paymentStatusResult.medium,
-                  serviceName: paymentStatusResult.serviceName,
-                  amount: paymentStatusResult.amount,
-                  revenue: paymentStatusResult.revenue,
-                  payerName: paymentStatusResult.payerName,
-                  email: paymentStatusResult.email,
-                  financialTransId: paymentStatusResult.financialTransId,
-                  dateInitiated: paymentStatusResult.dateInitiated,
-                  dateConfirmed: paymentStatusResult.dateConfirmed
-                }
+                paymentDetails: paymentStatusResult.payment_data
               };
               
               setTransactionData(updatedData);
@@ -190,45 +173,12 @@ const PaymentSuccessContent = () => {
              
             } else {
               toast.error("Transaction data not found");
-              router.push("/");
+        router.push("/");
             }
-          } else if (paymentStatusResult.status === "EXPIRED") {
-            // Payment link expired
-            setPaymentStatus("FAILED");
-            
-            // Update brand payment status as failed
-            const currentBrandId = storedRedirectParams?.brandId || brandId || transactionId;
-            if (currentBrandId) {
-              await updateBrandPaymentStatus(currentBrandId, false);
-            }
-            
-            toast.error("Payment link has expired. Please initiate a new payment.");
-          } else if (paymentStatusResult.status === "FAILED") {
-            // Payment failed
-            setPaymentStatus("FAILED");
-            
-            // Update brand payment status as failed
-            const currentBrandId = storedRedirectParams?.brandId || brandId || transactionId;
-            if (currentBrandId) {
-              await updateBrandPaymentStatus(currentBrandId, false);
-            }
-            
-            toast.error("Payment failed. Please try again.");
-          } else if (paymentStatusResult.status === "PENDING") {
-            // Payment is still pending
-            setPaymentStatus("PENDING");
-            toast.error("Payment is still being processed. Please wait and try again.");
           } else {
-            // Other statuses (CREATED, etc.)
+            // Payment failed, expired, or pending
             setPaymentStatus("FAILED");
-            
-            // Update brand payment status as failed
-            const currentBrandId = storedRedirectParams?.brandId || brandId || transactionId;
-            if (currentBrandId) {
-              await updateBrandPaymentStatus(currentBrandId, false);
-            }
-            
-            toast.error("Payment verification failed. Please try again.");
+            toast.error(paymentStatusResult.error || "Payment verification failed. Please try again.");
           }
         } catch (error) {
           console.error("Error verifying payment with Fapshi:", error);
@@ -244,10 +194,10 @@ const PaymentSuccessContent = () => {
         const storedData = localStorage.getItem("paymentTransaction");
         if (storedData) {
           try {
-            const parsedData = JSON.parse(storedData);
-            setTransactionData(parsedData);
-            setPaymentStatus("SUCCESS");
-            setShowForm(true);
+          const parsedData = JSON.parse(storedData);
+          setTransactionData(parsedData);
+          setPaymentStatus("SUCCESS");
+          setShowForm(true);
             toast.success("Payment successful! Please complete your information below.");
           } catch (error) {
             console.error("Error processing stored transaction data:", error);
@@ -278,13 +228,13 @@ const PaymentSuccessContent = () => {
             toast.success("Payment successful! Please complete your information below.");
           } else {
             toast.error("Transaction data not found");
-            router.push("/");
-          }
-        } catch (error) {
-          console.error("Error processing payment:", error);
-          toast.error("Error processing payment");
-        } finally {
-          setIsLoading(false);
+          router.push("/");
+        }
+      } catch (error) {
+        console.error("Error processing payment:", error);
+        toast.error("Error processing payment");
+      } finally {
+        setIsLoading(false);
           setPaymentVerificationComplete(true);
         }
       } else {
@@ -297,14 +247,17 @@ const PaymentSuccessContent = () => {
     };
 
     checkPaymentStatus();
-  }, [transactionId, fapshiTransId, fapshiStatus, router]);
+  }, [fapshiTransId, fapshiStatus, transactionId, getStoredRedirectParams]); // Added getStoredRedirectParams for stability
 
   // Fetch brand data when brandId is available
   useEffect(() => {
-    // Prevent multiple executions
-    if (!showForm || brandDataFetched) {
+    // Prevent multiple executions using ref
+    if (hasRunBrandDataFetch.current || !showForm || brandDataFetched) {
       return;
     }
+    
+    // Mark as run to prevent future executions
+    hasRunBrandDataFetch.current = true;
     
     const fetchBrandData = async () => {
       // Get the brandId from multiple sources
@@ -341,8 +294,8 @@ const PaymentSuccessContent = () => {
       }
     };
 
-    fetchBrandData();
-  }, [showForm, brandId]);
+      fetchBrandData();
+  }, [showForm, brandId, getStoredRedirectParams]); // Added getStoredRedirectParams for stability
 
   const generateFinalResults = async () => {
     if (!transactionData?.brandData) {
@@ -364,7 +317,7 @@ const PaymentSuccessContent = () => {
       // Get the correct brandId
       const storedRedirectParams = getStoredRedirectParams();
       const currentBrandId = storedRedirectParams?.brandId || brandId || transactionData.brandData?.id || "temp-brand-id";
-      
+
       // Call the backend endpoint to generate final results
       const result = await finalResultsMutation.mutateAsync({
         userId: userId,

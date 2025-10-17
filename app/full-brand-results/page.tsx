@@ -30,6 +30,7 @@ import {
   Copy,
   Share2,
   XCircle,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -41,6 +42,7 @@ import Providers from "../providers";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { Suspense } from "react";
 import { FullBrand } from "../(protected)/form/utils/types";
+import axios from "../configs/axiosConfigs";
 
 // Force dynamic rendering for this page
 export const dynamic = "force-dynamic";
@@ -52,6 +54,7 @@ const FullBrandResultsContent = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [fullBrandData, setFullBrandData] = useState<FullBrand | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const { getFullResults } = useGetFullResults();
   const brandId = searchParams.get("brandId");
@@ -105,6 +108,44 @@ const FullBrandResultsContent = () => {
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
     toast.success(`${label} copied to clipboard!`);
+  };
+
+  const handleDownloadPDF = async () => {
+    if (!brandId) {
+      toast.error("No brand ID found");
+      return;
+    }
+
+    setIsDownloading(true);
+    try {
+      console.log("🔄 Downloading brand PDF for brandId:", brandId);
+      
+      // Call the backend endpoint
+      const response = await axios.get(`/download_brand_pdf/${brandId}`, {
+        responseType: 'blob',
+        headers: {
+          'Accept': 'application/pdf'
+        }
+      });
+
+      // Create download link
+      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `brand_${brandId}_blueprint.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Brand kit downloaded successfully!");
+    } catch (error) {
+      console.error("❌ Error downloading brand PDF:", error);
+      toast.error("Failed to download brand kit. Please try again.");
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   const tabs = [
@@ -193,22 +234,9 @@ const FullBrandResultsContent = () => {
               Back to Home
             </Button>
 
-            <div className="text-center">
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                {brand?.brand_communication?.brand_name || "Your Brand"} -
-                Complete Kit
-              </h1>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
-                Your comprehensive brand package
-              </p>
-            </div>
+            
 
-            <div className="flex items-center gap-2">
-              <Badge variant="default" className="bg-green-600">
-                <CheckCircle className="w-3 h-3 mr-1" />
-                Complete
-              </Badge>
-            </div>
+           
           </div>
         </div>
       </div>
@@ -232,11 +260,22 @@ const FullBrandResultsContent = () => {
           {" "}
           {/* Buttons hidden in PDF */}
           <Button
-            onClick={() => {console.log("download blueprint")}}
+            onClick={handleDownloadPDF}
+            disabled={isDownloading}
             size="lg"
-            className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto"
+            className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Download Kit
+            {isDownloading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Downloading...
+              </>
+            ) : (
+              <>
+                <Download className="w-4 h-4 mr-2" />
+                Download Kit
+              </>
+            )}
           </Button>
          
         </div>

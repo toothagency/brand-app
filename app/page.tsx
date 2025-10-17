@@ -749,6 +749,148 @@ export default function HomePage() {
             </div>
           </section>
 
+          {/* Sample Brand Blueprints Section */}
+          <section className="bg-gray-50 dark:bg-gray-800 py-16 md:py-24">
+            <div className="container mx-auto px-6">
+              <div className="text-center mb-12 md:mb-16" data-aos="fade-up">
+                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                  Here's How Our Brand Blueprints Look Like
+                </h2>
+                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                  Professional, comprehensive brand kits designed by AI that capture your vision perfectly
+                </p>
+              </div>
+
+              {/* Sample Blueprint Preview */}
+              <div className="flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-12" data-aos="fade-up" data-aos-delay="200">
+                {/* PDF Preview Cards - Mobile responsive */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full lg:w-auto">
+                  {/* Left PDF - Hidden on mobile, visible on larger screens */}
+                  <div className="hidden sm:block transform -rotate-6 hover:rotate-0 transition-transform duration-300 cursor-pointer shadow-2xl">
+                    <div className="w-48 sm:w-56 lg:w-64 h-72 sm:h-76 lg:h-80 bg-white rounded-lg shadow-xl overflow-hidden border-4 border-gray-200">
+                      <div className="h-full bg-gradient-to-b from-gray-100 to-gray-200 p-4 sm:p-6">
+                        <div className="space-y-3 sm:space-y-4">
+                          <div className="h-3 sm:h-4 bg-gray-300 rounded w-3/4"></div>
+                          <div className="h-2 sm:h-3 bg-gray-300 rounded w-1/2"></div>
+                          <div className="h-24 sm:h-28 lg:h-32 bg-gradient-to-r from-pink-400 to-purple-500 rounded-lg flex items-center justify-center">
+                            <span className="text-white font-bold text-sm sm:text-base lg:text-lg">Brand Guidelines</span>
+                          </div>
+                          <div className="space-y-2">
+                            <div className="h-2 sm:h-3 bg-gray-300 rounded w-full"></div>
+                            <div className="h-2 sm:h-3 bg-gray-300 rounded w-2/3"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Center PDF - Main focus - Always visible */}
+                  <div className="transform rotate-1 sm:rotate-2 hover:rotate-0 transition-transform duration-300 cursor-pointer shadow-2xl z-10">
+                    <div className="w-64 sm:w-72 lg:w-80 h-80 sm:h-88 lg:h-96 bg-white rounded-lg shadow-xl overflow-hidden border-4 border-gray-200">
+                      {/* PDF Header */}
+                      <div className="bg-gradient-to-r from-[#3467AA] to-[#28518a] text-white p-4 sm:p-6 text-center">
+                        <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2">BRAND BLUEPRINT 2024</h3>
+                        <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-white/20 rounded-full mx-auto mb-3 sm:mb-4 flex items-center justify-center">
+                          <span className="text-lg sm:text-xl lg:text-2xl font-bold">B</span>
+                        </div>
+                        <h4 className="text-base sm:text-lg lg:text-xl font-semibold">TechFlow Solutions</h4>
+                        <p className="text-xs sm:text-sm opacity-90">Innovating the future together</p>
+                      </div>
+                      
+                      {/* PDF Content Preview */}
+                      <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 bg-[#3467AA] rounded"></div>
+                          <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 bg-[#F5A819] rounded"></div>
+                          <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 bg-gray-600 rounded"></div>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="h-2 sm:h-3 bg-gray-200 rounded w-full"></div>
+                          <div className="h-2 sm:h-3 bg-gray-200 rounded w-3/4"></div>
+                        </div>
+                        <div className="h-16 sm:h-18 lg:h-20 bg-gradient-to-r from-[#3467AA]/20 to-[#F5A819]/20 rounded-lg flex items-center justify-center">
+                          <span className="text-gray-600 font-medium text-sm sm:text-base">Logo Variations</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right PDF - Hidden on mobile, visible on larger screens */}
+                  <div className="hidden sm:block transform rotate-6 hover:rotate-0 transition-transform duration-300 cursor-pointer shadow-2xl">
+                    <div className="w-48 sm:w-56 lg:w-64 h-72 sm:h-76 lg:h-80 bg-white rounded-lg shadow-xl overflow-hidden border-4 border-gray-200">
+                      <div className="h-full bg-gradient-to-b from-gray-100 to-gray-200 p-4 sm:p-6">
+                        <div className="space-y-3 sm:space-y-4">
+                          <div className="h-16 sm:h-18 lg:h-20 bg-gradient-to-r from-blue-400 to-green-500 rounded-lg flex items-center justify-center">
+                            <span className="text-white font-bold text-sm sm:text-base">Marketing Kit</span>
+                          </div>
+                          <div className="space-y-2">
+                            <div className="h-2 sm:h-3 bg-gray-300 rounded w-full"></div>
+                            <div className="h-2 sm:h-3 bg-gray-300 rounded w-2/3"></div>
+                            <div className="h-2 sm:h-3 bg-gray-300 rounded w-4/5"></div>
+                          </div>
+                          <div className="h-12 sm:h-14 lg:h-16 bg-gray-300 rounded-lg"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content and CTA */}
+                <div className="text-center lg:text-left lg:max-w-md w-full px-4 sm:px-0" data-aos="fade-left" data-aos-delay="400">
+                  <div className="space-y-6 mb-8">
+                    <div className="flex items-center gap-3">
+                      <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                        <Check className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">Professional brand identity</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                        <Check className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">Complete logo variations</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                        <Check className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">360° brand guidelines</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start w-full">
+                    <button
+                      onClick={handleGetStarted}
+                      disabled={isLoading || isRedirecting}
+                      className="px-6 sm:px-8 py-3 bg-[#3467AA] text-white rounded-full font-semibold hover:bg-[#28518a] transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-base sm:text-lg disabled:opacity-70 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2 w-full sm:w-auto"
+                    >
+                      {isRedirecting ? (
+                        <>
+                          <span className="mr-2">Please wait</span>
+                          <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-sm sm:text-base">View Complete Plan</span>
+                          <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                        </>
+                      )}
+                    </button>
+                    
+                    <button
+                      onClick={handleGetStarted}
+                      disabled={isLoading || isRedirecting}
+                      className="px-6 sm:px-8 py-3 bg-white dark:bg-gray-800 text-[#3467AA] border-2 border-[#3467AA] rounded-full font-semibold hover:bg-[#3467AA] hover:text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl text-base sm:text-lg disabled:opacity-70 disabled:transform-none disabled:cursor-not-allowed flex items-center justify-center gap-2 w-full sm:w-auto"
+                    >
+                      <span className="text-sm sm:text-base">Get Started Now</span>
+                      <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Final CTA Section */}
           <section
             className="bg-gradient-to-r bg-[#F5A819]  py-12 md:py-20 mt-0"

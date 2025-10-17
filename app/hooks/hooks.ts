@@ -177,3 +177,97 @@ export const useDownloadBrand = () => {
     }
   });
 };
+
+// Referral Types
+interface ReferralRewardsData {
+  userId: string;
+  referral_code: string;
+  total_referrals: number;
+  total_earnings: number;
+  can_refer: boolean;
+  referred_by: string | null;
+  earnings_breakdown: {
+    from_referrals: number;
+    from_purchases: number;
+    total: number;
+  };
+}
+
+interface ReferralRewardsResponse {
+  success: boolean;
+  data: ReferralRewardsData;
+  message?: string;
+}
+
+/**
+ * Custom hook to get referral rewards for a user
+ * @returns Query hook for referral rewards data
+ */
+export const useReferralRewards = (userId: string) => {
+  return useQuery<ReferralRewardsResponse, Error>({
+    queryKey: ['referralRewards', userId],
+    queryFn: async () => {
+      console.log('Fetching referral rewards for user:', userId);
+      const response = await apiClient.get<ReferralRewardsResponse>(`/referral/rewards/${userId}`);
+      return response.data;
+    },
+    enabled: !!userId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 10 * 60 * 1000, // 10 minutes
+  });
+};
+
+/**
+ * Custom hook to get referral statistics for a user
+ * @returns Query hook for referral stats data
+ */
+export const useReferralStats = (userId: string) => {
+  return useQuery({
+    queryKey: ['referralStats', userId],
+    queryFn: async () => {
+      console.log('Fetching referral stats for user:', userId);
+      const response = await apiClient.get(`/referral/stats/${userId}`);
+      return response.data;
+    },
+    enabled: !!userId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 10 * 60 * 1000, // 10 minutes
+  });
+};
+
+// Referral History Types
+interface ReferralHistoryItem {
+  id: string;
+  name: string;
+  email: string;
+  status: 'completed' | 'pending' | 'registered';
+  date: string | null;
+  reward: number;
+  brandCreated: boolean;
+  brandCount: number;
+  lastBrandCreated: string | null;
+}
+
+interface ReferralHistoryResponse {
+  success: boolean;
+  data: ReferralHistoryItem[];
+  message?: string;
+}
+
+/**
+ * Custom hook to get referral history for a user
+ * @returns Query hook for referral history data
+ */
+export const useReferralHistory = (userId: string) => {
+  return useQuery<ReferralHistoryResponse, Error>({
+    queryKey: ['referralHistory', userId],
+    queryFn: async () => {
+      console.log('Fetching referral history for user:', userId);
+      const response = await apiClient.get<ReferralHistoryResponse>(`/referral/history/${userId}`);
+      return response.data;
+    },
+    enabled: !!userId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    cacheTime: 10 * 60 * 1000, // 10 minutes
+  });
+};
