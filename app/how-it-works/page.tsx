@@ -7,14 +7,10 @@ import Link from "next/link";
 import {
   MessageSquare,
   Sparkles,
-  Palette,
   Download,
   ArrowRight,
-  Clock,
   CheckCircle,
-  Zap,
-  Users,
-  Star,
+  LogIn,
 } from "lucide-react";
 
 export default function HowItWorksPage() {
@@ -23,7 +19,18 @@ export default function HowItWorksPage() {
       number: "01",
       title: "Answer Simple Questions",
       description:
-        "Tell us about your business, industry, and preferences. Our AI asks targeted questions to understand your brand vision.",
+        "Sign up using your email and a strong password. It only takes 20 seconds, and there’s no complicated onboarding. You can jump right in.",
+      icon: <LogIn className="w-8 h-8 text-[#3467AA]" />,
+      details: [
+      ],
+      image: "/images/how-it-works/step1.jpg",
+      timeEstimate: "30 seconnds",
+    },
+    {
+      number: "02",
+      title: "Answer Guided Questions",
+      description:
+        "Jara will ask you a few tailored questions about your business goals, audience, and vibe. These questions are based on proven branding and marketing strategy techniques to ensure you’re building your brand with intention",
       icon: <MessageSquare className="w-8 h-8 text-[#3467AA]" />,
       details: [
         "Business type and industry",
@@ -35,10 +42,10 @@ export default function HowItWorksPage() {
       timeEstimate: "2-3 minutes",
     },
     {
-      number: "02",
-      title: "AI Generates Your Options",
+      number: "03",
+      title: "Generate Your Brand and marketing Blueprint",
       description:
-        "Our advanced AI analyzes your responses and creates multiple professional logo and brand identity options.",
+        "In a matter of minutes, Jara AI creates a complete brand blueprint and marketing assets containing: ",
       icon: <Sparkles className="w-8 h-8 text-[#3467AA]" />,
       details: [
         "Multiple logo variations",
@@ -51,7 +58,7 @@ export default function HowItWorksPage() {
     },
 
     {
-      number: "03",
+      number: "04",
       title: "Download & Launch",
       description:
         "Download your complete brand kit with all the files you need to start using your new brand immediately.",
@@ -67,28 +74,28 @@ export default function HowItWorksPage() {
     },
   ];
 
-  const features = [
-    {
-      icon: <Clock className="w-6 h-6" />,
-      title: "Lightning Fast",
-      description: "Complete your brand in under 15 minutes",
-    },
-    {
-      icon: <Zap className="w-6 h-6" />,
-      title: "AI-Powered",
-      description: "Advanced algorithms create professional designs",
-    },
-    {
-      icon: <Users className="w-6 h-6" />,
-      title: "No Design Skills",
-      description: "Anyone can create stunning brands",
-    },
-    {
-      icon: <Star className="w-6 h-6" />,
-      title: "Professional Quality",
-      description: "Results that rival expensive agencies",
-    },
-  ];
+  // const features = [
+  //   {
+  //     icon: <Clock className="w-6 h-6" />,
+  //     title: "Lightning Fast",
+  //     description: "Complete your brand in under 15 minutes",
+  //   },
+  //   {
+  //     icon: <Zap className="w-6 h-6" />,
+  //     title: "AI-Powered",
+  //     description: "Advanced algorithms create professional designs",
+  //   },
+  //   {
+  //     icon: <Users className="w-6 h-6" />,
+  //     title: "No Design Skills",
+  //     description: "Anyone can create stunning brands",
+  //   },
+  //   {
+  //     icon: <Star className="w-6 h-6" />,
+  //     title: "Professional Quality",
+  //     description: "Results that rival expensive agencies",
+  //   },
+  // ];
 
   return (
     <>
@@ -106,12 +113,12 @@ export default function HowItWorksPage() {
           <div className="absolute inset-0 bg-[#3467AA]/5 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800"></div>
           <div className="container mx-auto px-6 relative z-10">
             <div className="max-w-4xl mx-auto text-center" data-aos="fade-up">
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-                How It <span className="text-[#3467AA]">Works</span>
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+                Build A Brand with Jara in <span className="text-[#3467AA]">4 Easy Steps</span>
               </h1>
               <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
-                Create your complete brand identity in just 4 simple steps. No
-                design experience required.
+                You don’t need to be a design or marketing professional. Jara will do the heavy lifting and handle your 
+                brand visuals so you can focus on growing your business.
               </p>
               <div className="flex justify-center">
                 <Link
@@ -127,7 +134,7 @@ export default function HowItWorksPage() {
         </section>
 
         {/* Quick Features */}
-        <section className="py-16 bg-gray-50 dark:bg-gray-800">
+        {/* <section className="py-16 bg-gray-50 dark:bg-gray-800">
           <div className="container mx-auto px-6">
             <div className="grid md:grid-cols-4 gap-8">
               {features.map((feature, index) => (
@@ -152,7 +159,7 @@ export default function HowItWorksPage() {
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* Steps Section */}
         <section className="py-20 bg-white dark:bg-gray-900">
@@ -243,67 +250,6 @@ export default function HowItWorksPage() {
           </div>
         </section>
 
-        {/* Timeline Section */}
-        <section className="py-20 bg-gray-50 dark:bg-gray-800">
-          <div className="container mx-auto px-6">
-            <div className="text-center mb-16" data-aos="fade-up">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                Timeline
-              </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-300">
-                See how quickly you can go from idea to brand.
-              </p>
-            </div>
-
-            <div className="max-w-4xl mx-auto">
-              <div className="relative">
-                {/* Timeline Line */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-[#3467AA]"></div>
-
-                {/* Timeline Items */}
-                <div className="space-y-12">
-                  {steps.map((step, index) => (
-                    <div
-                      key={index}
-                      className={`flex items-center ${
-                        index % 2 === 0 ? "flex-row" : "flex-row-reverse"
-                      }`}
-                      data-aos="fade-up"
-                      data-aos-delay={index * 100}
-                    >
-                      {/* Content */}
-                      <div
-                        className={`w-1/2 ${
-                          index % 2 === 0 ? "pr-8 text-right" : "pl-8 text-left"
-                        }`}
-                      >
-                        <div className="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
-                          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                            {step.title}
-                          </h3>
-                          <p className="text-gray-600 dark:text-gray-300 mb-3">
-                            {step.description}
-                          </p>
-                          <span className="inline-block bg-[#3467AA]/10 dark:bg-[#3467AA]/20 text-[#3467AA] px-3 py-1 rounded-full text-sm font-medium">
-                            {step.timeEstimate}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Timeline Dot */}
-                      <div className="relative z-10">
-                        <div className="w-8 h-8 bg-[#F5A819] rounded-full border-4 border-white dark:border-gray-800 shadow-lg"></div>
-                      </div>
-
-                      {/* Empty space for alignment */}
-                      <div className="w-1/2"></div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* Results Section */}
         <section className="py-20 bg-white dark:bg-gray-900">
@@ -325,11 +271,10 @@ export default function HowItWorksPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                        Professional Logo Files
+                        Branding Assets
                       </h3>
                       <p className="text-gray-600 dark:text-gray-300">
-                        High-resolution PNG, SVG, and PDF formats for all your
-                        needs.
+                        A brand logo with Cirresponding Business card, Tshirt ,Signboard etc designs
                       </p>
                     </div>
                   </div>
@@ -340,11 +285,10 @@ export default function HowItWorksPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                        Brand Guidelines
+                        Messaging Framework
                       </h3>
                       <p className="text-gray-600 dark:text-gray-300">
-                        Complete style guide with colors, fonts, and usage
-                        rules.
+                        Brand communication guidelines to optimize your messaging
                       </p>
                     </div>
                   </div>
@@ -355,10 +299,10 @@ export default function HowItWorksPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                        Social Media Templates
+                        Marketing Blueprint
                       </h3>
                       <p className="text-gray-600 dark:text-gray-300">
-                        Ready-to-use templates for all major platforms.
+                        A brand strategy outline to assist with marketing efforts
                       </p>
                     </div>
                   </div>
@@ -369,10 +313,38 @@ export default function HowItWorksPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                        Business Card Designs
+                        Audience Insights
                       </h3>
                       <p className="text-gray-600 dark:text-gray-300">
-                        Professional business card layouts ready for printing.
+                        Customer personas to help you understand your target audience
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#3467AA]/10 dark:bg-[#3467AA]/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <CheckCircle className="w-5 h-5 text-[#3467AA]" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                        Market Positioning
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300">
+                        Your competitive advantage over others in your industry or niche
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="w-8 h-8 bg-[#3467AA]/10 dark:bg-[#3467AA]/20 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <CheckCircle className="w-5 h-5 text-[#3467AA]" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                        Content Planning
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300">
+                        A two-week social media content calendar
                       </p>
                     </div>
                   </div>
