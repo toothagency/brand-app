@@ -159,12 +159,12 @@ export default function HomePage() {
     {
       number: "01",
       title: "Sign up and create your account",
-      timeEstimate: "2-3 minutes",
+      timeEstimate: "1 minute",
     },
     {
       number: "02",
       title: "Answer a few important questions that tell Jara about your business.",
-      timeEstimate: "30 seconds",
+      timeEstimate: "2-5 minutes",
     },
 
     {
@@ -546,9 +546,9 @@ export default function HomePage() {
                           {/* <p className="text-gray-600 dark:text-gray-300 mb-3">
                             {step.description}
                           </p> */}
-                          {/* <span className="inline-block bg-[#3467AA]/10 dark:bg-[#3467AA]/20 text-[#3467AA] px-3 py-1 rounded-full text-sm font-medium">
+                          <span className="inline-block bg-[#3467AA]/10 dark:bg-[#3467AA]/20 text-[#3467AA] px-3 py-1 rounded-full text-sm font-medium">
                             {step.timeEstimate}
-                          </span> */}
+                          </span>
                         </div>
                       </div>
 
