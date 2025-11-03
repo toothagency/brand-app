@@ -498,7 +498,7 @@ export default function HomePage() {
                     <div className="bg-[#F5A819] text-white p-1 w-[4rem] h-[4rem] grid justify-center items-center rounded-full">
                       <Icon/>
                     </div>
-                    <p className="w-[23vw] lg:w-[17vw] text-center text-gray-600 dark:text-gray-300">{text}</p>
+                    <p className="w-[50vw] lg:w-[17vw] text-center text-gray-600 dark:text-gray-300">{text}</p>
                   </div>
                 ))}
               </div>
@@ -540,15 +540,15 @@ export default function HomePage() {
                         }`}
                       >
                         <div className="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
-                          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                          <h3 className="text-[3vw] lg:text-xl font-semibold text-gray-900 dark:text-white mb-2">
                             {step.title}
                           </h3>
                           {/* <p className="text-gray-600 dark:text-gray-300 mb-3">
                             {step.description}
                           </p> */}
-                          <span className="inline-block bg-[#3467AA]/10 dark:bg-[#3467AA]/20 text-[#3467AA] px-3 py-1 rounded-full text-sm font-medium">
+                          {/* <span className="inline-block bg-[#3467AA]/10 dark:bg-[#3467AA]/20 text-[#3467AA] px-3 py-1 rounded-full text-sm font-medium">
                             {step.timeEstimate}
-                          </span>
+                          </span> */}
                         </div>
                       </div>
 
