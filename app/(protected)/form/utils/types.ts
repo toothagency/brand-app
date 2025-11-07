@@ -48,7 +48,7 @@ export interface DetailedBrandObject { // This is the main object from get_brand
   brandId?: string;
 
   name: string;
-
+answerId?: string;
   logo: string;
   brand_communication: BrandObjectCommunication;
   brand_identity: BrandObjectIdentity;

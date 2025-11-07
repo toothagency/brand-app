@@ -227,7 +227,7 @@ const FullBrandResultsContent = () => {
           <div className="flex items-center justify-between h-16">
             <Button
               variant="ghost"
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/dashboard")}
               className="flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -621,7 +621,7 @@ const FullBrandResultsContent = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {brand_assets.full_brand_identity.t_shirt_mockups.map(
+                        {brand_assets.full_brand_identity.cap_mockups.map(
                           (cap: any, index: number) => (
                             <div key={index} className="space-y-4">
                               <div className="border rounded-lg p-4 bg-white">

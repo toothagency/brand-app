@@ -96,7 +96,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="flex items-center justify-between h-20 mb-10 py-6 px-2 border-b border-gray-200 dark:border-gray-700">
+          <div className="flex items-center justify-center h-20 mb-10 py-6 px-2 border-b border-gray-200 dark:border-gray-700">
           <Link
               href="/dashboard"
               className="flex-shrink-0 flex items-center space-x-2"
@@ -156,13 +156,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           {/* Footer */}
           <div className="p-4 border-t border-gray-200 dark:border-gray-700">
             <div className="space-y-2">
-              <Link
-                href="/dashboard/notifications"
-                className="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                <Bell className="w-5 h-5" />
-                <span>Notifications</span>
-              </Link>
+            
               <Link
                 href="/contact"
                 className="flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"

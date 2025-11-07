@@ -146,13 +146,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
             {/* Content */}
             <div className="p-6">
-              <div className="grid md:grid-cols-1 gap-6">
+              <div className="grid md:grid-cols-1 bg-gray-50 dark:bg-gray-800 gap-6">
                 {plans.map((plan) => {
                   const IconComponent = plan.icon;
                   return (
                     <Card
                       key={plan.id}
-                      className={`relative transition-all duration-200 hover:shadow-lg ${
+                      className={`relative transition-all duration-200 hover:shadow-lg bg-gray-50 dark:bg-gray-800 ${
                         selectedOption === plan.id
                           ? "ring-2 ring-blue-500 dark:ring-blue-400"
                           : ""

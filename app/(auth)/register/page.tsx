@@ -73,7 +73,8 @@ const Register = () => {
       // Redirect to dashboard or login page
       router.push("/login");
     } catch (error) {
-      toast.error("Registration failed. Please try again.");
+
+      toast.error(`${error instanceof Error ? error.message : "Registration failed. Please try again."}`);
       console.error("Registration failed:", error);
 
       // Set form error

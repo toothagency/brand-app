@@ -318,7 +318,7 @@ const BrandsPage = () => {
             ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" 
             : "space-y-4"
           }>
-            {filteredBrands.map((brand) => (
+            {filteredBrands.map((brand: DetailedBrandObject) => (
               <Card
                 key={brand.id}
                 className={`hover:shadow-lg transition-shadow duration-200 dark:bg-gray-800 ${
@@ -349,7 +349,7 @@ const BrandsPage = () => {
                         <CardDescription className="text-sm text-gray-500 dark:text-gray-400">
                           <div className="flex items-center gap-2">
                             <Calendar className="w-3 h-3" />
-                            {new Date(brand.id).toLocaleDateString()}
+                            {new Date(brand.created_at || "").toLocaleDateString()}
                           </div>
                         </CardDescription>
                       </div>
