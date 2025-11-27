@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
+.brand-app-code-workspace
 
 # testing
 /coverage
