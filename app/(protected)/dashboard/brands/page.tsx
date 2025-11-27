@@ -98,7 +98,7 @@ const BrandsPage = () => {
   };
 
   const view = (brand: DetailedBrandObject) => {
-    if (brand.payment_status) {
+    if (brand.premium) {
       // Premium brand - navigate to full brand results page
       router.push(`/full-brand-results?brandId=${brand.id}`);
     } else {
@@ -355,7 +355,7 @@ const BrandsPage = () => {
                       </div>
                     </div>
                     <Badge variant="outline" className={viewMode === "list" ? "ml-2" : "ml-2"}>
-                      {brand.payment_status ? (
+                      {brand.premium ? (
                         <div className="flex items-center gap-1">
                           <Star className="w-3 h-3" />
                           Premium
@@ -378,20 +378,22 @@ const BrandsPage = () => {
                         <Eye className="h-4 w-4 mr-1" />
                         View
                       </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex-1"
-                        onClick={() => handleDownloadBrand(brand)}
-                        disabled={downloadBrandMutation.isPending}
-                      >
-                        {downloadBrandMutation.isPending ? (
-                          <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                        ) : (
-                          <Download className="h-4 w-4 mr-1" />
-                        )}
-                        Download
-                      </Button>
+                      {brand.premium && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => handleDownloadBrand(brand)}
+                          disabled={downloadBrandMutation.isPending}
+                        >
+                          {downloadBrandMutation.isPending ? (
+                            <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                          ) : (
+                            <Download className="h-4 w-4 mr-1" />
+                          )}
+                          Download
+                        </Button>
+                      )}
                       <Button
                         variant="outline"
                         size="sm"
