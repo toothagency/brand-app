@@ -9,6 +9,7 @@ interface User {
   email: string;
   userId: string;
   username: string;
+  phoneNumber: string;
   initials: string; // We'll add this for the avatar
   referral_code: string;
 }

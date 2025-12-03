@@ -13,6 +13,7 @@ interface GoogleAuthResponse {
         email: string;
         profile_picture?: string;
         auth_provider: string;
+        is_first_login?: boolean;
     };
 }
 
@@ -80,6 +81,7 @@ export const useGoogleAuth = () => {
                     email: data.user.email,
                     profile_picture: data.user.profile_picture,
                     auth_provider: data.user.auth_provider,
+                    is_first_login: data.user.is_first_login,
                 };
 
                 // Store in localStorage for now (you might want to use cookies)
@@ -87,8 +89,12 @@ export const useGoogleAuth = () => {
 
                 toast.success(data.message || 'Authentication successful');
 
-                // Redirect to dashboard or form
-                window.location.href = '/form';
+                // Redirect based on first login status
+                if (data.user.is_first_login) {
+                    window.location.href = '/form';
+                } else {
+                    window.location.href = '/dashboard';
+                }
             } else {
                 toast.error(data.message || 'Authentication failed');
             }

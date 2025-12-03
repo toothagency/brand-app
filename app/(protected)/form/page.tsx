@@ -93,93 +93,93 @@ const FullBrandingForm: React.FC = () => {
   const [isCreatingBrand, setIsCreatingBrand] = useState(false);
 
   // Effect for initializing user and brand session (runs once on mount)
-  useEffect(() => {
-    const initializeFormSession = async () => {
-      console.log("Effect 1: Initializing form session...");
-      setIsLoadingBrandSession(true); // Ensure loading state is true at the start
-      setActiveBrandSession(null); // Reset active brand session
-      createBrandMutation.reset(); // Reset mutation state if re-initializing
+  const initializeFormSession = async () => {
+    console.log("Effect 1: Initializing form session...");
+    setIsLoadingBrandSession(true); // Ensure loading state is true at the start
+    setActiveBrandSession(null); // Reset active brand session
+    createBrandMutation.reset(); // Reset mutation state if re-initializing
 
-      const user = getCurrentUser();
-      setCurrentUser(user);
+    const user = getCurrentUser();
+    setCurrentUser(user);
 
-      if (user?.userId) {
-        const existingBrandCookie = Cookies.get("currentBrandData");
-        if (existingBrandCookie) {
-          try {
-            const parsedBrand: InitialBrandObject =
-              JSON.parse(existingBrandCookie);
-            if (parsedBrand?.id) {
-              console.log(
-                "Effect 1: Found existing brand in cookie:",
-                parsedBrand.id
-              );
-              setActiveBrandSession(parsedBrand);
-              setIsLoadingBrandSession(false); // Brand session loaded from cookie
-              //setIsResumingState(true); // Indicate resume logic can now run (if not already true)
-              return; // Exit early, no need to create a new brand
-            } else {
-              console.log("Effect 1: Invalid brand data in cookie, removing.");
-              Cookies.remove("currentBrandData");
-            }
-          } catch (e) {
-            console.error("Effect 1: Error parsing brand data from cookie:", e);
+    if (user?.userId) {
+      const existingBrandCookie = Cookies.get("currentBrandData");
+      if (existingBrandCookie) {
+        try {
+          const parsedBrand: InitialBrandObject =
+            JSON.parse(existingBrandCookie);
+          if (parsedBrand?.id) {
+            console.log(
+              "Effect 1: Found existing brand in cookie:",
+              parsedBrand.id
+            );
+            setActiveBrandSession(parsedBrand);
+            setIsLoadingBrandSession(false); // Brand session loaded from cookie
+            //setIsResumingState(true); // Indicate resume logic can now run (if not already true)
+            return; // Exit early, no need to create a new brand
+          } else {
+            console.log("Effect 1: Invalid brand data in cookie, removing.");
             Cookies.remove("currentBrandData");
           }
+        } catch (e) {
+          console.error("Effect 1: Error parsing brand data from cookie:", e);
+          Cookies.remove("currentBrandData");
         }
-
-        // If no valid brand in cookie, try to create a new one
-        console.log(
-          "Effect 1: No valid brand in cookie, attempting to create new brand."
-        );
-        
-        // Prevent duplicate brand creation
-        if (isCreatingBrand) {
-          console.log("Effect 1: Brand creation already in progress, skipping...");
-          return;
-        }
-        
-        setIsCreatingBrand(true);
-        try {
-          console.log("Effect 1: Calling createBrandMutation.mutateAsync...");
-          const response = await createBrandMutation.mutateAsync({
-            userId: user.userId,
-          });
-          if (response.success && response.brand?.id) {
-            console.log(
-              "Effect 1: New brand created successfully:",
-              response.brand.id
-            );
-            setActiveBrandSession(response.brand);
-            Cookies.set("currentBrandData", JSON.stringify(response.brand), {
-              expires: 1,
-              path: "/",
-              secure: process.env.NODE_ENV === "production",
-              sameSite: "Lax",
-            });
-          } else {
-            console.error(
-              "Effect 1: Brand creation API call did not succeed or returned invalid data:",
-              response.message
-            );
-            setActiveBrandSession(null);
-            // Potentially show an error to the user here if brand creation is critical path
-          }
-        } catch (error) {
-          console.error("Effect 1: Exception during brand creation:", error);
-          setActiveBrandSession(null);
-          // Potentially show an error
-        } finally {
-          setIsCreatingBrand(false);
-        }
-      } else {
-        console.log(
-          "Effect 1: No user found, cannot initialize brand session."
-        );
       }
-      setIsLoadingBrandSession(false); // Done with brand session loading/creation attempt
-      //setIsResumingState(true); // Indicate resume logic can now run
-    };
+
+      // If no valid brand in cookie, try to create a new one
+      console.log(
+        "Effect 1: No valid brand in cookie, attempting to create new brand."
+      );
+      
+      // Prevent duplicate brand creation
+      if (isCreatingBrand) {
+        console.log("Effect 1: Brand creation already in progress, skipping...");
+        return;
+      }
+      
+      setIsCreatingBrand(true);
+      try {
+        console.log("Effect 1: Calling createBrandMutation.mutateAsync...");
+        const response = await createBrandMutation.mutateAsync({
+          userId: user.userId,
+        });
+        if (response.success && response.brand?.id) {
+          console.log(
+            "Effect 1: New brand created successfully:",
+            response.brand.id
+          );
+          setActiveBrandSession(response.brand);
+          Cookies.set("currentBrandData", JSON.stringify(response.brand), {
+            expires: 1,
+            path: "/",
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "Lax",
+          });
+        } else {
+          console.error(
+            "Effect 1: Brand creation API call did not succeed or returned invalid data:",
+            response.message
+          );
+          setActiveBrandSession(null);
+          // Potentially show an error to the user here if brand creation is critical path
+        }
+      } catch (error) {
+        console.error("Effect 1: Exception during brand creation:", error);
+        setActiveBrandSession(null);
+        // Potentially show an error
+      } finally {
+        setIsCreatingBrand(false);
+      }
+    } else {
+      console.log(
+        "Effect 1: No user found, cannot initialize brand session."
+      );
+    }
+    setIsLoadingBrandSession(false); // Done with brand session loading/creation attempt
+    //setIsResumingState(true); // Indicate resume logic can now run
+  };
+  useEffect(() => {
 
     initializeFormSession();
     // eslint-disable-next-line react-hooks/exhaustive-deps
