@@ -217,7 +217,7 @@ const FullBrandResultsContent = () => {
     );
   }
 
-  const { brand, brand_assets } = fullBrandData;
+  const { brand, brand_assets } = fullBrandData || {};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
@@ -227,7 +227,7 @@ const FullBrandResultsContent = () => {
           <div className="flex items-center justify-between h-16">
             <Button
               variant="ghost"
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/dashboard")}
               className="flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
@@ -303,7 +303,7 @@ const FullBrandResultsContent = () => {
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
                     Primary Colors
                   </h3>
-                  <div className="flex space-x-3">
+                  <div className="flex flex-wrap gap-3">
                     {brand.brand_identity?.primary_colors?.map(
                       (color: any, index: number) => (
                         <div
@@ -314,29 +314,76 @@ const FullBrandResultsContent = () => {
                             className="w-8 h-8 rounded-full border-2 border-gray-200 dark:border-gray-600"
                             style={{ backgroundColor: color.hex_value }}
                           />
-                          <span className="text-sm text-gray-600 dark:text-gray-300">
-                            {color.color_name}
-                          </span>
+                          <div className="flex flex-col">
+                            <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                              {color.color_name}
+                            </span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                              {color.hex_value}
+                            </span>
+                          </div>
                         </div>
                       )
                     )}
                   </div>
+                  {brand.brand_identity?.secondary_colors && brand.brand_identity.secondary_colors.length > 0 && (
+                    <div className="mt-4">
+                      <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        Secondary Colors
+                      </h4>
+                      <div className="flex flex-wrap gap-3">
+                        {brand.brand_identity.secondary_colors.map(
+                          (color: any, index: number) => (
+                            <div
+                              key={index}
+                              className="flex items-center space-x-2"
+                            >
+                              <div
+                                className="w-8 h-8 rounded-full border-2 border-gray-200 dark:border-gray-600"
+                                style={{ backgroundColor: color.hex_value }}
+                              />
+                              <div className="flex flex-col">
+                                <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                                  {color.color_name}
+                                </span>
+                                <span className="text-xs text-gray-500 dark:text-gray-400">
+                                  {color.hex_value}
+                                </span>
+                              </div>
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
                     Typography
                   </h3>
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     {brand.brand_identity?.typography?.map(
                       (font: any, index: number) => (
                         <div
                           key={index}
-                          className="text-sm text-gray-600 dark:text-gray-300"
+                          className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
                         >
-                          <span className="font-medium">
-                            {font.font_family}
-                          </span>{" "}
-                          - {font.font_weight}
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="font-medium text-gray-900 dark:text-gray-100">
+                              {font.font_family}
+                            </span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                              {font.font_weight}
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-600 dark:text-gray-400">
+                            Size: {font.font_size} • Line Height: {font.line_height}
+                          </div>
+                          {font.description && (
+                            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                              {font.description}
+                            </p>
+                          )}
                         </div>
                       )
                     )}
@@ -407,28 +454,40 @@ const FullBrandResultsContent = () => {
                         <p className="text-lg italic text-gray-600 mb-4">
                           "{brand?.brand_communication?.brand_tagline}"
                         </p>
-                        <p className="text-gray-700">
+                        <p className="text-gray-700 dark:text-gray-300">
                           {brand?.brand_identity?.about_the_brand}
                         </p>
                       </div>
                       <div className="space-y-4">
-                        <div className="flex items-center gap-2">
-                          <Users className="w-4 h-4 text-blue-600" />
-                          <span className="font-medium">Target Audience:</span>
-                          <span>
-                            {brand?.brand_strategy?.our_position?.name}
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Target className="w-4 h-4 text-green-600" />
-                          <span className="font-medium">Positioning:</span>
-                          <span>Family-focused convenience</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-orange-600" />
-                          <span className="font-medium">Time Saved:</span>
-                          <span>5+ hours per week</span>
-                        </div>
+                        {brand?.brand_strategy?.our_position?.name && (
+                          <div className="flex items-center gap-2">
+                            <Users className="w-4 h-4 text-blue-600" />
+                            <span className="font-medium">Target Audience:</span>
+                            <span>
+                              {brand.brand_strategy.our_position.name}
+                            </span>
+                          </div>
+                        )}
+                        {brand?.brand_communication?.primary_core_message && (
+                          <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                            <h4 className="font-semibold mb-2">Key Message</h4>
+                            {brand.brand_communication.primary_core_message.our_key_differences && (
+                              <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                                <strong>What sets us apart:</strong> {brand.brand_communication.primary_core_message.our_key_differences}
+                              </p>
+                            )}
+                            {brand.brand_communication.primary_core_message.the_key_benefits_they_get && (
+                              <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                                <strong>Key benefits:</strong> {brand.brand_communication.primary_core_message.the_key_benefits_they_get}
+                              </p>
+                            )}
+                            {brand.brand_communication.primary_core_message.who_we_serve && (
+                              <p className="text-sm text-gray-700 dark:text-gray-300">
+                                <strong>Who we serve:</strong> {brand.brand_communication.primary_core_message.who_we_serve}
+                              </p>
+                            )}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </CardContent>
@@ -439,7 +498,7 @@ const FullBrandResultsContent = () => {
                   <Card>
                     <CardContent className="p-6 text-center">
                       <div className="text-2xl font-bold text-blue-600 mb-2">
-                        {brand.logo.length || 0}
+                        {brand?.brand_identity?.logos?.length || 0}
                       </div>
                       <div className="text-sm text-gray-600">Logo Variants</div>
                     </CardContent>
@@ -458,7 +517,7 @@ const FullBrandResultsContent = () => {
                   <Card>
                     <CardContent className="p-6 text-center">
                       <div className="text-2xl font-bold text-purple-600 mb-2">
-                        {brand_assets.social_media_content?.ready_made_posts
+                        {brand_assets?.social_media_content?.ready_made_posts
                           ?.length || 0}
                       </div>
                       <div className="text-sm text-gray-600">Social Posts</div>
@@ -482,6 +541,24 @@ const FullBrandResultsContent = () => {
             {/* Brand Assets Tab */}
             {activeTab === "brand-assets" && (
               <div className="space-y-8">
+                {!brand_assets && (
+                  <Card>
+                    <CardContent className="p-8 text-center">
+                      <div className="text-yellow-500 dark:text-yellow-400 mb-4">
+                        <Clock className="w-16 h-16 mx-auto" />
+                      </div>
+                      <h3 className="text-xl font-semibold mb-2 dark:text-white">
+                        Brand Assets Being Generated
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300 mb-4">
+                        Your brand assets (business cards, social media content, marketing templates, etc.) are currently being generated. They will appear here once ready.
+                      </p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        This process may take a few minutes. Please check back shortly.
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
                 {/* Logos */}
                 {brand?.brand_identity?.logos &&
                   brand.brand_identity.logos.length > 0 && (
@@ -497,16 +574,18 @@ const FullBrandResultsContent = () => {
                           {brand.brand_identity.logos.map(
                             (logo: any, index: number) => (
                               <div key={index} className="space-y-4">
-                                <div className="border rounded-lg p-4 bg-white">
+                                <div className="border rounded-lg p-4 bg-white dark:bg-gray-700">
                                   <img
                                     src={logo.image_url}
                                     alt={`Logo ${index + 1}`}
                                     className="w-full h-32 object-contain"
                                   />
                                 </div>
-                                <div className="text-sm text-gray-600">
-                                  {logo.description}
-                                </div>
+                                {logo.description && (
+                                  <div className="text-sm text-gray-600 dark:text-gray-300">
+                                    {logo.description}
+                                  </div>
+                                )}
                                 <Button
                                   onClick={() =>
                                     handleDownloadAsset(
@@ -539,7 +618,7 @@ const FullBrandResultsContent = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {brand_assets.full_brand_identity.business_cards.map(
+                        {brand_assets?.full_brand_identity?.business_cards?.map(
                           (card: any, index: number) => (
                             <div key={index} className="space-y-4">
                               <div className="border rounded-lg p-4 bg-white">
@@ -581,7 +660,7 @@ const FullBrandResultsContent = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {brand_assets.full_brand_identity.t_shirt_mockups.map(
+                        {brand_assets?.full_brand_identity?.t_shirt_mockups?.map(
                           (tshirt: any, index: number) => (
                             <div key={index} className="space-y-4">
                               <div className="border rounded-lg p-4 bg-white">
@@ -621,7 +700,7 @@ const FullBrandResultsContent = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {brand_assets.full_brand_identity.t_shirt_mockups.map(
+                        {brand_assets?.full_brand_identity?.cap_mockups?.map(
                           (cap: any, index: number) => (
                             <div key={index} className="space-y-4">
                               <div className="border rounded-lg p-4 bg-white">
@@ -661,7 +740,7 @@ const FullBrandResultsContent = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {brand_assets.full_brand_identity.letterheads.map(
+                        {brand_assets?.full_brand_identity?.letterheads?.map(
                           (tshirt: any, index: number) => (
                             <div key={index} className="space-y-4">
                               <div className="border rounded-lg p-4 bg-white">
@@ -695,8 +774,24 @@ const FullBrandResultsContent = () => {
             )}
 
             {/* Brand Guidelines Tab */}
-            {activeTab === "guidelines" &&
-              brand_assets?.premium_assets?.brand_guidelines && (
+            {activeTab === "guidelines" && (
+                <>
+                {!brand_assets?.premium_assets?.brand_guidelines ? (
+                  <Card>
+                    <CardContent className="p-8 text-center">
+                      <div className="text-yellow-500 dark:text-yellow-400 mb-4">
+                        <Clock className="w-16 h-16 mx-auto" />
+                      </div>
+                      <h3 className="text-xl font-semibold mb-2 dark:text-white">
+                        Brand Guidelines Being Generated
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300 mb-4">
+                        Your brand guidelines are currently being generated and will appear here once ready.
+                      </p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                <>
                 <div className="space-y-8">
                   {/* Colors */}
                   <Card>
@@ -708,7 +803,7 @@ const FullBrandResultsContent = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {brand_assets.premium_assets.brand_guidelines.style_guide.color_usage.map(
+                        {brand_assets?.premium_assets?.brand_guidelines?.style_guide?.color_usage?.map(
                           (color: any, index: number) => (
                             <div
                               key={index}
@@ -746,7 +841,7 @@ const FullBrandResultsContent = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        {brand_assets.premium_assets.brand_guidelines.style_guide.typography_rules.map(
+                        {brand_assets?.premium_assets?.brand_guidelines?.style_guide?.typography_rules?.map(
                           (font: any, index: number) => (
                             <div key={index} className="p-4 border rounded-lg">
                               <h4 className="font-semibold mb-2">
@@ -780,8 +875,8 @@ const FullBrandResultsContent = () => {
                           <h4 className="font-semibold mb-2">Tone</h4>
                           <p className="text-gray-700">
                             {
-                              brand_assets.premium_assets.brand_guidelines
-                                .brand_voice.tone
+                              brand_assets?.premium_assets?.brand_guidelines
+                                ?.brand_voice?.tone
                             }
                           </p>
                         </div>
@@ -791,8 +886,8 @@ const FullBrandResultsContent = () => {
                           </h4>
                           <p className="text-gray-700">
                             {
-                              brand_assets.premium_assets.brand_guidelines
-                                .brand_voice.communication_style
+                              brand_assets?.premium_assets?.brand_guidelines
+                                ?.brand_voice?.communication_style
                             }
                           </p>
                         </div>
@@ -801,7 +896,7 @@ const FullBrandResultsContent = () => {
                             Personality Traits
                           </h4>
                           <div className="flex flex-wrap gap-2">
-                            {brand_assets.premium_assets.brand_guidelines.brand_voice.personality_traits.map(
+                            {brand_assets?.premium_assets?.brand_guidelines?.brand_voice?.personality_traits?.map(
                               (trait: string, index: number) => (
                                 <Badge key={index} variant="secondary">
                                   {trait}
@@ -814,11 +909,30 @@ const FullBrandResultsContent = () => {
                     </CardContent>
                   </Card>
                 </div>
+                </>
+                )}
+                </>
               )}
 
             {/* Marketing Materials Tab */}
-            {activeTab === "marketing" &&
-              brand_assets?.premium_assets?.marketing_templates && (
+            {activeTab === "marketing" && (
+                <div>
+                {!brand_assets?.premium_assets?.marketing_templates ? (
+                  <Card>
+                    <CardContent className="p-8 text-center">
+                      <div className="text-yellow-500 dark:text-yellow-400 mb-4">
+                        <Clock className="w-16 h-16 mx-auto" />
+                      </div>
+                      <h3 className="text-xl font-semibold mb-2 dark:text-white">
+                        Marketing Materials Being Generated
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300 mb-4">
+                        Your marketing materials (email templates, landing page copy, etc.) are currently being generated and will appear here once ready.
+                      </p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                <>
                 <div className="space-y-8">
                   {/* Email Templates */}
                   <Card>
@@ -830,7 +944,7 @@ const FullBrandResultsContent = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-6">
-                        {brand_assets.premium_assets.marketing_templates.email_templates.map(
+                        {brand_assets?.premium_assets?.marketing_templates?.email_templates?.map(
                           (template: any, index: number) => (
                             <div key={index} className="border rounded-lg p-6">
                               <div className="flex items-center justify-between mb-4">
@@ -891,8 +1005,8 @@ const FullBrandResultsContent = () => {
                           <h4 className="font-semibold mb-2">Hero Headline</h4>
                           <p className="text-lg text-gray-700">
                             {
-                              brand_assets.premium_assets.marketing_templates
-                                .landing_page_copy.hero_headline
+                              brand_assets?.premium_assets?.marketing_templates
+                                ?.landing_page_copy?.hero_headline
                             }
                           </p>
                         </div>
@@ -902,8 +1016,8 @@ const FullBrandResultsContent = () => {
                           </h4>
                           <p className="text-gray-700">
                             {
-                              brand_assets.premium_assets.marketing_templates
-                                .landing_page_copy.hero_subheadline
+                              brand_assets?.premium_assets?.marketing_templates
+                                ?.landing_page_copy?.hero_subheadline
                             }
                           </p>
                         </div>
@@ -911,15 +1025,15 @@ const FullBrandResultsContent = () => {
                           <h4 className="font-semibold mb-2">Call to Action</h4>
                           <p className="text-gray-700">
                             {
-                              brand_assets.premium_assets.marketing_templates
-                                .landing_page_copy.call_to_action
+                              brand_assets?.premium_assets?.marketing_templates
+                                ?.landing_page_copy?.call_to_action
                             }
                           </p>
                         </div>
                         <div>
                           <h4 className="font-semibold mb-2">Benefits</h4>
                           <ul className="list-disc list-inside space-y-1">
-                            {brand_assets.premium_assets.marketing_templates.landing_page_copy.benefits.map(
+                            {brand_assets?.premium_assets?.marketing_templates?.landing_page_copy?.benefits?.map(
                               (benefit: string, index: number) => (
                                 <li key={index} className="text-gray-700">
                                   {benefit}
@@ -932,11 +1046,30 @@ const FullBrandResultsContent = () => {
                     </CardContent>
                   </Card>
                 </div>
+                </>
+                )}
+                </div>
               )}
 
             {/* Social Media Tab */}
-            {activeTab === "social-media" &&
-              brand_assets.social_media_content && (
+            {activeTab === "social-media" && (
+                <div>
+                {!brand_assets?.social_media_content ? (
+                  <Card>
+                    <CardContent className="p-8 text-center">
+                      <div className="text-yellow-500 dark:text-yellow-400 mb-4">
+                        <Clock className="w-16 h-16 mx-auto" />
+                      </div>
+                      <h3 className="text-xl font-semibold mb-2 dark:text-white">
+                        Social Media Content Being Generated
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-300 mb-4">
+                        Your social media content (posts, ad copies, etc.) is currently being generated and will appear here once ready.
+                      </p>
+                    </CardContent>
+                  </Card>
+                ) : (
+                <>
                 <div className="space-y-8">
                   {/* Ready Made Posts */}
                   <Card>
@@ -948,7 +1081,7 @@ const FullBrandResultsContent = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-6">
-                        {brand_assets.social_media_content.ready_made_posts.map(
+                        {brand_assets?.social_media_content?.ready_made_posts?.map(
                           (post: any, index: number) => (
                             <div key={index} className="border rounded-lg p-6">
                               <div className="flex items-center justify-between mb-4">
@@ -997,7 +1130,7 @@ const FullBrandResultsContent = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        {brand_assets.social_media_content.ad_copies.map(
+                        {brand_assets?.social_media_content?.ad_copies?.map(
                           (ad: string, index: number) => (
                             <div key={index} className="border rounded-lg p-4">
                               <div className="flex items-center justify-between mb-2">
@@ -1023,12 +1156,224 @@ const FullBrandResultsContent = () => {
                     </CardContent>
                   </Card>
                 </div>
+                </>
+              )}
+                </div>
               )}
 
             {/* Business Strategy Tab */}
-            {activeTab === "strategy" &&
-              brand_assets?.premium_assets?.business_strategy && (
+            {activeTab === "strategy" && (
                 <div className="space-y-8">
+                  {/* Brand Substance */}
+                  {brand?.brand_strategy?.brand_substance && (
+                    <>
+                      {/* Mission */}
+                      {brand.brand_strategy.brand_substance.our_mission && (
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                              <Target className="w-5 h-5 text-blue-600" />
+                              Our Mission
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <p className="text-gray-700 dark:text-gray-300">
+                              {brand.brand_strategy.brand_substance.our_mission.we_are_committed_to}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      )}
+
+                      {/* Purpose */}
+                      {brand.brand_strategy.brand_substance.our_purpose && (
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                              <Lightbulb className="w-5 h-5 text-yellow-600" />
+                              {brand.brand_strategy.brand_substance.our_purpose.title || "Our Purpose"}
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-4">
+                            {brand.brand_strategy.brand_substance.our_purpose.purpose_statement && (
+                              <p className="text-gray-700 dark:text-gray-300 font-medium">
+                                {brand.brand_strategy.brand_substance.our_purpose.purpose_statement}
+                              </p>
+                            )}
+                            {brand.brand_strategy.brand_substance.our_purpose.we_believe_in_something_bigger_than_ourselves && (
+                              <p className="text-gray-600 dark:text-gray-400">
+                                {brand.brand_strategy.brand_substance.our_purpose.we_believe_in_something_bigger_than_ourselves}
+                              </p>
+                            )}
+                            {brand.brand_strategy.brand_substance.our_purpose.what_our_customers_mean_to_us && (
+                              <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                                <p className="text-gray-700 dark:text-gray-300">
+                                  {brand.brand_strategy.brand_substance.our_purpose.what_our_customers_mean_to_us}
+                                </p>
+                              </div>
+                            )}
+                          </CardContent>
+                        </Card>
+                      )}
+
+                      {/* Values */}
+                      {brand.brand_strategy.brand_substance.our_values && (
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                              <Heart className="w-5 h-5 text-red-600" />
+                              Our Values
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-4">
+                            {brand.brand_strategy.brand_substance.our_values.values && (
+                              <div className="flex flex-wrap gap-2">
+                                {brand.brand_strategy.brand_substance.our_values.values.map((value: string, index: number) => (
+                                  <Badge key={index} variant="secondary" className="text-base px-4 py-2">
+                                    {value}
+                                  </Badge>
+                                ))}
+                              </div>
+                            )}
+                            {brand.brand_strategy.brand_substance.our_values.how_we_do_wellness_business && (
+                              <p className="text-gray-600 dark:text-gray-400 mt-4">
+                                {brand.brand_strategy.brand_substance.our_values.how_we_do_wellness_business}
+                              </p>
+                            )}
+                          </CardContent>
+                        </Card>
+                      )}
+
+                      {/* Vision */}
+                      {brand.brand_strategy.brand_substance.our_vision && (
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                              <Star className="w-5 h-5 text-purple-600" />
+                              Our Vision
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <p className="text-gray-700 dark:text-gray-300">
+                              {brand.brand_strategy.brand_substance.our_vision.our_vision_is_bright}
+                            </p>
+                          </CardContent>
+                        </Card>
+                      )}
+                    </>
+                  )}
+
+                  {/* Our Position - Target Audience */}
+                  {brand?.brand_strategy?.our_position && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Users className="w-5 h-5 text-green-600" />
+                          Target Audience: {brand.brand_strategy.our_position.name}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-6">
+                        {brand.brand_strategy.our_position.personality && (
+                          <div>
+                            <h4 className="font-semibold mb-2">Personality</h4>
+                            <p className="text-gray-700 dark:text-gray-300">
+                              {brand.brand_strategy.our_position.personality}
+                            </p>
+                          </div>
+                        )}
+                        {brand.brand_strategy.our_position.demographics && (
+                          <div>
+                            <h4 className="font-semibold mb-2">Demographics</h4>
+                            <p className="text-gray-700 dark:text-gray-300">
+                              {brand.brand_strategy.our_position.demographics}
+                            </p>
+                          </div>
+                        )}
+                        {brand.brand_strategy.our_position.psychographics && (
+                          <div>
+                            <h4 className="font-semibold mb-2">Psychographics</h4>
+                            <p className="text-gray-700 dark:text-gray-300">
+                              {brand.brand_strategy.our_position.psychographics}
+                            </p>
+                          </div>
+                        )}
+                        {brand.brand_strategy.our_position.desires && (
+                          <div>
+                            <h4 className="font-semibold mb-2 text-green-600">Desires</h4>
+                            <p className="text-gray-700 dark:text-gray-300">
+                              {brand.brand_strategy.our_position.desires}
+                            </p>
+                          </div>
+                        )}
+                        {brand.brand_strategy.our_position.fears && (
+                          <div>
+                            <h4 className="font-semibold mb-2 text-red-600">Fears</h4>
+                            <p className="text-gray-700 dark:text-gray-300">
+                              {brand.brand_strategy.our_position.fears}
+                            </p>
+                          </div>
+                        )}
+                        {brand.brand_strategy.our_position.challenges_and_pain_points && (
+                          <div>
+                            <h4 className="font-semibold mb-2 text-orange-600">Challenges & Pain Points</h4>
+                            <p className="text-gray-700 dark:text-gray-300">
+                              {brand.brand_strategy.our_position.challenges_and_pain_points}
+                            </p>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Top Competitors */}
+                  {brand?.brand_strategy?.top_competitors && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <BarChart3 className="w-5 h-5 text-blue-600" />
+                          Top Competitors
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-gray-700 dark:text-gray-300">
+                          {brand.brand_strategy.top_competitors}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Why We Are Different */}
+                  {brand?.brand_strategy?.why_we_are_different && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Zap className="w-5 h-5 text-yellow-600" />
+                          Why We Are Different
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        {brand.brand_strategy.why_we_are_different.positioning_statement && (
+                          <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                            <h4 className="font-semibold mb-2">Positioning Statement</h4>
+                            <p className="text-gray-700 dark:text-gray-300">
+                              {brand.brand_strategy.why_we_are_different.positioning_statement}
+                            </p>
+                          </div>
+                        )}
+                        {brand.brand_strategy.why_we_are_different.the_difference_we_provide && (
+                          <div>
+                            <h4 className="font-semibold mb-2">The Difference We Provide</h4>
+                            <p className="text-gray-700 dark:text-gray-300">
+                              {brand.brand_strategy.why_we_are_different.the_difference_we_provide}
+                            </p>
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {/* Premium Assets Strategy (if available) */}
+                  {brand_assets?.premium_assets?.business_strategy && (
+                    <div className="space-y-8">
                   {/* SWOT Analysis */}
                   <Card>
                     <CardHeader>
@@ -1044,7 +1389,7 @@ const FullBrandResultsContent = () => {
                             Strengths
                           </h4>
                           <ul className="space-y-2">
-                            {brand_assets.premium_assets.business_strategy.swot_analysis.strengths.map(
+                            {brand_assets?.premium_assets?.business_strategy?.swot_analysis?.strengths?.map(
                               (strength: string, index: number) => (
                                 <li
                                   key={index}
@@ -1062,7 +1407,7 @@ const FullBrandResultsContent = () => {
                             Weaknesses
                           </h4>
                           <ul className="space-y-2">
-                            {brand_assets.premium_assets.business_strategy.swot_analysis.weaknesses.map(
+                            {brand_assets?.premium_assets?.business_strategy?.swot_analysis?.weaknesses?.map(
                               (weakness: string, index: number) => (
                                 <li
                                   key={index}
@@ -1082,7 +1427,7 @@ const FullBrandResultsContent = () => {
                             Opportunities
                           </h4>
                           <ul className="space-y-2">
-                            {brand_assets.premium_assets.business_strategy.swot_analysis.opportunities.map(
+                            {brand_assets?.premium_assets?.business_strategy?.swot_analysis?.opportunities?.map(
                               (opportunity: string, index: number) => (
                                 <li
                                   key={index}
@@ -1100,7 +1445,7 @@ const FullBrandResultsContent = () => {
                             Threats
                           </h4>
                           <ul className="space-y-2">
-                            {brand_assets.premium_assets.business_strategy.swot_analysis.threats.map(
+                            {brand_assets?.premium_assets?.business_strategy?.swot_analysis?.threats?.map(
                               (threat: string, index: number) => (
                                 <li
                                   key={index}
@@ -1129,7 +1474,7 @@ const FullBrandResultsContent = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-6">
-                        {brand_assets.premium_assets.business_strategy.competitive_analysis.map(
+                        {brand_assets?.premium_assets?.business_strategy?.competitive_analysis?.map(
                           (competitor: any, index: number) => (
                             <div key={index} className="border rounded-lg p-6">
                               <h4 className="font-semibold text-lg mb-4">
@@ -1177,6 +1522,8 @@ const FullBrandResultsContent = () => {
                       </div>
                     </CardContent>
                   </Card>
+                    </div>
+                  )}
                 </div>
               )}
           </motion.div>

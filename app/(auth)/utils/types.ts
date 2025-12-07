@@ -29,7 +29,8 @@ export interface AuthResponse {
         userid?: string, // Handle lowercase (backend inconsistency)
         username: string,
         referral_code?: string,
-        phoneNumber?: string
+        phoneNumber?: string,
+        is_first_login?: boolean
     },
     userId?: string
 }

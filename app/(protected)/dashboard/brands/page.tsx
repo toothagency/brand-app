@@ -98,7 +98,7 @@ const BrandsPage = () => {
   };
 
   const view = (brand: DetailedBrandObject) => {
-    if (brand.payment_status) {
+    if (brand.premium) {
       // Premium brand - navigate to full brand results page
       router.push(`/full-brand-results?brandId=${brand.id}`);
     } else {
@@ -318,7 +318,7 @@ const BrandsPage = () => {
             ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" 
             : "space-y-4"
           }>
-            {filteredBrands.map((brand) => (
+            {filteredBrands.map((brand: DetailedBrandObject) => (
               <Card
                 key={brand.id}
                 className={`hover:shadow-lg transition-shadow duration-200 dark:bg-gray-800 ${
@@ -349,13 +349,13 @@ const BrandsPage = () => {
                         <CardDescription className="text-sm text-gray-500 dark:text-gray-400">
                           <div className="flex items-center gap-2">
                             <Calendar className="w-3 h-3" />
-                            {new Date(brand.id).toLocaleDateString()}
+                            {new Date(brand.created_at || "").toLocaleDateString()}
                           </div>
                         </CardDescription>
                       </div>
                     </div>
                     <Badge variant="outline" className={viewMode === "list" ? "ml-2" : "ml-2"}>
-                      {brand.payment_status ? (
+                      {brand.premium ? (
                         <div className="flex items-center gap-1">
                           <Star className="w-3 h-3" />
                           Premium
@@ -378,20 +378,22 @@ const BrandsPage = () => {
                         <Eye className="h-4 w-4 mr-1" />
                         View
                       </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex-1"
-                        onClick={() => handleDownloadBrand(brand)}
-                        disabled={downloadBrandMutation.isPending}
-                      >
-                        {downloadBrandMutation.isPending ? (
-                          <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-                        ) : (
-                          <Download className="h-4 w-4 mr-1" />
-                        )}
-                        Download
-                      </Button>
+                      {brand.premium && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => handleDownloadBrand(brand)}
+                          disabled={downloadBrandMutation.isPending}
+                        >
+                          {downloadBrandMutation.isPending ? (
+                            <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                          ) : (
+                            <Download className="h-4 w-4 mr-1" />
+                          )}
+                          Download
+                        </Button>
+                      )}
                       <Button
                         variant="outline"
                         size="sm"

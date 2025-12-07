@@ -74,8 +74,12 @@ const LoginForm = () => {
       onSuccess: (authData) => {
         console.log("Login successful:", authData);
         toast.success("Login successful! Redirecting...");
-
-        router.push("/form");
+        // Redirect based on first login status
+        if (authData.user?.is_first_login) {
+          router.push("/form");
+        } else {
+          router.push("/dashboard");
+        }
       },
       onError: (error) => {
         console.error("Login failed:", error);

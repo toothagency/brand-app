@@ -177,14 +177,7 @@ const BrandResultsContent = () => {
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Try Again
               </Button>
-              <Button
-                variant="outline"
-                onClick={() => router.push("/form")}
-                className="w-full"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Form
-              </Button>
+             
             </div>
           </CardContent>
         </Card>
@@ -282,9 +275,9 @@ const BrandResultsContent = () => {
             variant="outline"
             size="lg"
             onClick={handleStartOver}
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-900 dark:text-white"
           >
-            Back to Form
+            Create a New Brand
           </Button>
         </div>
       </motion.div>

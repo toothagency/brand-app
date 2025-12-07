@@ -122,7 +122,9 @@ export const useSignup = () => {
                     
                     throw apiError;
                 }
+                console.log("Signup error:", error);
                 throw error;
+
             }
         },
         onSuccess: (data) => {

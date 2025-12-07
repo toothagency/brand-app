@@ -62,6 +62,7 @@ const GoogleCallbackContent = () => {
             email: data.user.email,
             profile_picture: data.user.profile_picture,
             auth_provider: data.user.auth_provider,
+            is_first_login: data.user.is_first_login,
           };
 
           // Store in localStorage
@@ -71,9 +72,13 @@ const GoogleCallbackContent = () => {
           setMessage(data.message || "Authentication successful!");
           toast.success(data.message || "Successfully signed in with Google");
 
-          // Redirect after a short delay
+          // Redirect based on first login status after a short delay
           setTimeout(() => {
-            router.push("/form");
+            if (data.user.is_first_login) {
+              router.push("/form");
+            } else {
+              router.push("/dashboard");
+            }
           }, 2000);
         } else {
           setStatus("error");
@@ -139,7 +144,7 @@ const GoogleCallbackContent = () => {
                 </h2>
                 <p className="text-gray-600 mb-4">{message}</p>
                 <p className="text-sm text-gray-500">
-                  Redirecting you to the form...
+                  Redirecting you...
                 </p>
               </>
             )}

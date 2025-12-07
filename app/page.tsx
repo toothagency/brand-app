@@ -90,19 +90,19 @@ export default function HomePage() {
   const brandCards: BrandCard[] = [
     {
       color: "bg-gradient-to-br from-pink-400 to-pink-500",
-      image: "/images/Hanging T Shirt.jpg",
+      image: "/images/730Logo.png",
       alt: "Fashion-Store",
       height: "h-56",
     },
     {
       color: "bg-gradient-to-br from-blue-400 to-blue-500",
-      image: "/images/05.jpg",
+      image: "/images/Engwari.png",
       alt: "Tech-Company",
       height: "h-48",
     },
     {
       color: "bg-gradient-to-br from-orange-300 to-orange-400",
-      image: "/images/10.jpg",
+      image: "/images/SeaHomes.png",
       alt: "Restaurant",
       height: "h-48",
     },
@@ -114,43 +114,43 @@ export default function HomePage() {
     },
     {
       color: "bg-gradient-to-br from-red-400 to-red-500",
-      image: "/images/marcel-strauss-kOzjvV0Wy8E-unsplash.jpg",
+      image: "/images/SeaHomesCap.png",
       alt: "Marketing-Agency",
       height: "h-80",
     },
     {
       color: "bg-gradient-to-br from-teal-400 to-teal-500",
-      image: "/images/christian-wiediger-8d8KfpYCQV0-unsplash.jpg",
+      image: "/images/AThreads.png",
       alt: "Business-Consulting",
       height: "h-48",
     },
     {
       color: "bg-gradient-to-br from-purple-400 to-purple-500",
-      image: "/images/nik-WUTpM4iPCVA-unsplash.jpg",
+      image: "/images/AgroNest.png",
       alt: "Creative-Studio",
       height: "h-80",
     },
+    // {
+    //   color: "bg-gradient-to-br from-gray-400 to-gray-500",
+    //   image: "/images/david-hurley-YBUj1dkt4Do-unsplash.jpg",
+    //   alt: "Energy-Company",
+    //   height: "h-80",
+    // },
+    // {
+    //   color: "bg-gradient-to-br from-gray-400 to-gray-500",
+    //   image: "/images/drink-462776_1280.jpg",
+    //   alt: "Energy-Company",
+    //   height: "h-48",
+    // },
+    // {
+    //   color: "bg-gradient-to-br from-gray-400 to-gray-500",
+    //   image: "/images/AArchives.png",
+    //   alt: "Energy-Company",
+    //   height: "h-80",
+    // },
     {
       color: "bg-gradient-to-br from-gray-400 to-gray-500",
-      image: "/images/david-hurley-YBUj1dkt4Do-unsplash.jpg",
-      alt: "Energy-Company",
-      height: "h-80",
-    },
-    {
-      color: "bg-gradient-to-br from-gray-400 to-gray-500",
-      image: "/images/drink-462776_1280.jpg",
-      alt: "Energy-Company",
-      height: "h-48",
-    },
-    {
-      color: "bg-gradient-to-br from-gray-400 to-gray-500",
-      image: "/images/paul-steuber-SrrFCmYXHLg-unsplash.jpg",
-      alt: "Energy-Company",
-      height: "h-80",
-    },
-    {
-      color: "bg-gradient-to-br from-gray-400 to-gray-500",
-      image: "/images/mercedes-star-188957_1280.jpg",
+      image: "/images/SWaindim.png",
       alt: "Energy-Company",
       height: "h-48",
     },
@@ -160,12 +160,12 @@ export default function HomePage() {
     {
       number: "01",
       title: "Sign up and create your account",
-      timeEstimate: "2-3 minutes",
+      timeEstimate: "1 minute",
     },
     {
       number: "02",
       title: "Answer a few important questions that tell Jara about your business.",
-      timeEstimate: "30 seconds",
+      timeEstimate: "2-5 minutes",
     },
 
     {
@@ -566,7 +566,7 @@ export default function HomePage() {
                     <div className="bg-[#F5A819] text-white p-1 w-[4rem] h-[4rem] grid justify-center items-center rounded-full">
                       <Icon/>
                     </div>
-                    <p className="w-[23vw] lg:w-[17vw] text-center text-gray-600 dark:text-gray-300">{text}</p>
+                    <p className="w-[50vw] lg:w-[17vw] text-center text-gray-600 dark:text-gray-300">{text}</p>
                   </div>
                 ))}
               </div>
@@ -608,7 +608,7 @@ export default function HomePage() {
                         }`}
                       >
                         <div className="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg">
-                          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                          <h3 className="text-[3vw] lg:text-xl font-semibold text-gray-900 dark:text-white mb-2">
                             {step.title}
                           </h3>
                           {/* <p className="text-gray-600 dark:text-gray-300 mb-3">
@@ -649,7 +649,6 @@ export default function HomePage() {
               </div>
 
               <div className="grid md:grid-cols-4 gap-8 mb-12">
-                {/* Here there is too much repitition that needs to be arranged */}
                 <div
                   className="text-center"
                   data-aos="fade-up"
@@ -659,10 +658,10 @@ export default function HomePage() {
                     01
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    Answer Questions
+                    Saves Thousands of Mullah & Time
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 text-sm">
-                    Tell us about your business and preferences
+                    Instantly get a complete, professional brand identity tailored to your specific business goals without hiring a costly agency.
                   </p>
                 </div>
 
@@ -675,10 +674,10 @@ export default function HomePage() {
                     02
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    AI Generates Options
+                    Achieve Instant Clarity & Direction
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 text-sm">
-                    Get multiple professional logo variations
+                    Stop guessing about your brand's foundation. Our guided, expert-level questions structure your business vision using proven marketing frameworks
                   </p>
                 </div>
 
@@ -691,10 +690,10 @@ export default function HomePage() {
                     03
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    Customize & Refine
+                    Get Pro Designer - Quality Visuals, Fast
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 text-sm">
-                    Adjust colors, fonts, and elements
+                    Access curated social media content and logo concepts that perfectly match your brand's tone and audience, allowing you to launch with confidence
                   </p>
                 </div>
 
@@ -707,10 +706,26 @@ export default function HomePage() {
                     04
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    Download & Launch
+                    Communicate with Impact & Convert Customers
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 text-sm">
-                    Get your complete brand kit instantly
+                    Receive a complete, professionally written messaging kit including your tagline, pitch, and tone of voice guaranteed to resonate with your target market
+                  </p>
+                </div>
+
+                <div
+                  className="text-center"
+                  data-aos="fade-up"
+                  data-aos-delay="400"
+                >
+                  <div className="w-16 h-16 bg-gradient-to-r bg-[#3467AA] rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                    05
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    Ensure Consistency and Seamless Handoffs
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm">
+                    You receive a complete, shareable brand guide that you can immediately hand over to any designer, marketer, or web developer, eliminating confusion and delays
                   </p>
                 </div>
               </div>

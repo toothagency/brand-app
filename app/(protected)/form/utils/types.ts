@@ -48,7 +48,7 @@ export interface DetailedBrandObject { // This is the main object from get_brand
   brandId?: string;
 
   name: string;
-
+answerId?: string;
   logo: string;
   brand_communication: BrandObjectCommunication;
   brand_identity: BrandObjectIdentity;
@@ -366,8 +366,17 @@ export interface BrandAssets {
 
 export interface FullBrand{
   brand: DetailedBrandObject;
-  brand_assets: BrandAssets;
-
+  brand_assets: BrandAssets | null;
+  user?: {
+    userid: string;
+    email: string;
+    username: string;
+    phone_number?: string;
+    profile_picture?: string | null;
+    auth_provider?: string;
+    created_at?: string;
+    [key: string]: any;
+  };
 }
 // Full Results Response
 export interface FullBrandResponse {
