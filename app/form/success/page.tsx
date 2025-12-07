@@ -22,7 +22,7 @@ const FormSuccessContent = () => {
   const { verifyPayment } = useFapshiPayment();
   
   // Use ref to prevent duplicate calls
-  const verificationInProgress = useRef(false);
+  const verificationInProgress = useRef(false); 
   const hasVerifiedPayment = useRef(false);
   
   // Debug: Log component mount

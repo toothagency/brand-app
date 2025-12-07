@@ -18,6 +18,7 @@ import {
   ZapOff,
   MessageSquare,
   Download,
+  Check,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Head from "next/head";
@@ -274,14 +275,14 @@ export default function HomePage() {
         />
         {/* Open Graph */}
         <meta
-          property="og:title"
+          property="og:title" 
           content="AI Brand Builder | Launch Your Brand Instantly"
         />
         <meta
           property="og:description"
           content="Create your brand, logo, and social content instantly with AI. Build, launch, and grow your business with the ultimate brand builder."
         />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="website" /> 
         <meta property="og:url" content="https://jara-ai.com/" />
         <meta property="og:image" content="/Logo.png" />
         {/* Twitter Card */}
@@ -380,6 +381,7 @@ export default function HomePage() {
                     using the power of artificial intelligence!
                   </p>
                 </div>
+                
 
                 {/* Get Started Section with improved button and input styling */}
                 <div
@@ -475,6 +477,72 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+
+
+        {/* --- PRODUCT DEMO VIDEO SECTION --- */}
+<section
+  className="mt-20 md:mt-28 relative"
+  data-aos="fade-up"
+  data-aos-delay="300"
+>
+  <div className="container mx-auto px-6 max-w-5xl">
+    
+    {/* Title */}
+    <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-gray-100 mb-6">
+      See Jara AI in Action
+    </h2>
+
+    <p className="text-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10">
+      A quick 1-minute walkthrough showing how Jara AI helps you launch your 
+      brand instantly with world-class design and marketing tools.
+    </p>
+
+    {/* Video Container */}
+    <div className="relative w-full overflow-hidden rounded-2xl shadow-xl bg-gray-100 dark:bg-gray-800 border border-gray-200/60 dark:border-gray-700/60">
+      
+      {/* FINAL VIDEO EMBED — replace src when you have it */}
+     
+      {false && (
+        <iframe
+          className="w-full h-[260px] md:h-[420px] rounded-2xl"
+          src="https://www.youtube.com/embed/VIDEO_ID"//replace with video
+          title="Jara AI Demo Video"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      )}
+
+      {/* Placeholder image */}
+      <div className="relative w-full h-[260px] md:h-[420px]">
+        <Image
+          src="/video-placeholder.jpg" // Replace with placeholder image
+          alt="Jara AI Product Demo Placeholder"
+          fill
+          className="object-cover rounded-2xl brightness-95 dark:brightness-75"
+        />
+
+        {/* Minimal play button */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <button
+            className="w-20 h-20 bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
+          >
+            <svg
+              className="w-10 h-10 text-gray-900 dark:text-white"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path d="M6.5 5.5v9l8-4.5-8-4.5z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+{/* --- END PRODUCT DEMO SECTION --- */}
+
 
         {/* Lazy load the rest of the page */}
         <Suspense
@@ -581,6 +649,7 @@ export default function HomePage() {
               </div>
 
               <div className="grid md:grid-cols-4 gap-8 mb-12">
+                {/* Here there is too much repitition that needs to be arranged */}
                 <div
                   className="text-center"
                   data-aos="fade-up"
