@@ -500,7 +500,7 @@ export default function HomePage() {
     {/* Video Container */}
     <div className="relative w-full overflow-hidden rounded-2xl shadow-xl bg-gray-100 dark:bg-gray-800 border border-gray-200/60 dark:border-gray-700/60">
       
-      {/* FINAL VIDEO EMBED — replace src when you have it */}
+      {/* FINAL VIDEO EMBED — replace src whe present */}
      
       {false && (
         <iframe
