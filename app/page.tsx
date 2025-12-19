@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Head from "next/head";
+import thumbnail from "../public/thumbnail2.png";
 
 // Lazy load the lower sections of the page
 
@@ -31,6 +32,9 @@ export default function HomePage() {
   const [error, setError] = useState<string | null>(null);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
+
+  const [showVideo, setShowVideo] = useState(false);
+
 
   // Wait for component to mount before starting animations
   useEffect(() => {
@@ -480,14 +484,10 @@ export default function HomePage() {
 
 
         {/* --- PRODUCT DEMO VIDEO SECTION --- */}
-<section
-  className="mt-20 md:mt-28 relative"
-  data-aos="fade-up"
-  data-aos-delay="300"
->
+
+<section className="mt-20 md:mt-28 relative" data-aos="fade-up" data-aos-delay="300">
   <div className="container mx-auto px-6 max-w-5xl">
-    
-    {/* Title */}
+
     <h2 className="text-3xl md:text-4xl font-bold text-center text-gray-900 dark:text-gray-100 mb-6">
       See Jara AI in Action
     </h2>
@@ -497,50 +497,54 @@ export default function HomePage() {
       brand instantly with world-class design and marketing tools.
     </p>
 
-    {/* Video Container */}
     <div className="relative w-full overflow-hidden rounded-2xl shadow-xl bg-gray-100 dark:bg-gray-800 border border-gray-200/60 dark:border-gray-700/60">
-      
-      {/* FINAL VIDEO EMBED — replace src whe present */}
-     
-      {false && (
-        <iframe
-          className="w-full h-[260px] md:h-[420px] rounded-2xl"
-          src="https://www.youtube.com/embed/VIDEO_ID"//replace with video
-          title="Jara AI Demo Video"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+
+      {/* Show the video only when play is clicked */}
+      {showVideo && (
+        <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-xl bg-black" >
+  <iframe
+    src="https://player.vimeo.com/video/1147230346?autoplay=1&title=0&byline=0&portrait=0"
+    className="absolute inset-0 w-full h-full"
+    frameBorder="0"
+    allow="autoplay; fullscreen; picture-in-picture"
+    allowFullScreen
+    title="Jara AI Demo Video"
+  />
+</div>
+
       )}
 
-      {/* Placeholder image */}
-      <div className="relative w-full h-[260px] md:h-[420px]">
-        <Image
-          src="/video-placeholder.jpg" // Replace with placeholder image
-          alt="Jara AI Product Demo Placeholder"
-          fill
-          className="object-cover rounded-2xl brightness-95 dark:brightness-75"
-        />
+      {/* Placeholder image + play button */}
+      {!showVideo && (
+         <div className="relative w-full aspect-video overflow-hidden rounded-2xl shadow-xl bg-black" >
+          <Image
+            src={thumbnail}
+            alt="Jara AI Demo Thumbnail"
+            fill
+            className="object-cover rounded-2xl brightness-95 dark:brightness-75"
+          />
 
-        {/* Minimal play button */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <button
-            className="w-20 h-20 bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
-          >
-            <svg
-              className="w-10 h-10 text-gray-900 dark:text-white"
-              fill="currentColor"
-              viewBox="0 0 20 20"
+          <div className="absolute inset-0 flex items-center justify-center">
+            <button
+              onClick={() => setShowVideo(true)}
+              className="w-20 h-20 bg-white/90 dark:bg-gray-900/80 backdrop-blur-xl rounded-full shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
             >
-              <path d="M6.5 5.5v9l8-4.5-8-4.5z" />
-            </svg>
-          </button>
+              <svg
+                className="w-10 h-10 text-gray-900 dark:text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M6.5 5.5v9l8-4.5-8-4.5z" />
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
     </div>
   </div>
 </section>
+
 {/* --- END PRODUCT DEMO SECTION --- */}
 
 
