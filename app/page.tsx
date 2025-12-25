@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useBrand } from "./contexts/BrandContext";
 import { getCurrentUser } from "./(auth)/hooks/authHooks";
 import Link from "next/link";
-import React, { useEffect, useState, lazy, Suspense } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import Image from "next/image"; // Using Next.js Image for better optimization
 import {
   ArrowRight,
@@ -16,8 +16,6 @@ import {
   Award,
   Send,
   ZapOff,
-  MessageSquare,
-  Download,
   Check,
 } from "lucide-react";
 import toast from "react-hot-toast";
@@ -27,7 +25,7 @@ import Head from "next/head";
 
 export default function HomePage() {
   const router = useRouter();
-  const { createBrand, isLoading } = useBrand();
+  const { isLoading } = useBrand();
   const [error, setError] = useState<string | null>(null);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -610,7 +608,7 @@ export default function HomePage() {
                     Achieve Instant Clarity & Direction
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 text-sm">
-                    Stop guessing about your brand's foundation. Our guided, expert-level questions structure your business vision using proven marketing frameworks
+                    Stop guessing about your brand&apos;s foundation. Our guided, expert-level questions structure your business vision using proven marketing frameworks
                   </p>
                 </div>
 
@@ -626,7 +624,7 @@ export default function HomePage() {
                     Get Pro Designer - Quality Visuals, Fast
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 text-sm">
-                    Access curated social media content and logo concepts that perfectly match your brand's tone and audience, allowing you to launch with confidence
+                    Access curated social media content and logo concepts that perfectly match your brand&apos;s tone and audience, allowing you to launch with confidence
                   </p>
                 </div>
 
@@ -771,7 +769,7 @@ export default function HomePage() {
             <div className="container mx-auto px-6">
               <div className="text-center mb-12 md:mb-16" data-aos="fade-up">
                 <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-                  Here's How Our Brand Blueprints Look Like
+                  Here is How Our Brand Blueprints Look Like
                 </h2>
                 <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
                   Professional, comprehensive brand kits designed by AI that capture your vision perfectly
@@ -785,8 +783,8 @@ export default function HomePage() {
                   {/* Left PDF - Hidden on mobile, visible on larger screens */}
                   <div className="hidden sm:block transform -rotate-6 hover:rotate-0 transition-transform duration-300 cursor-pointer shadow-2xl">
                     <div className="w-48 sm:w-56 lg:w-64 h-72 sm:h-76 lg:h-80 bg-white rounded-lg shadow-xl overflow-hidden border-4 border-gray-200">
-                      <div className="h-full bg-gradient-to-b from-gray-100 to-gray-200 p-4 sm:p-6">
-                        <div className="space-y-3 sm:space-y-4">
+                      <div className="bg-gradient-to-b from-gray-100 to-gray-200 ">
+                        {/* <div className="space-y-3 sm:space-y-4">
                           <div className="h-3 sm:h-4 bg-gray-300 rounded w-3/4"></div>
                           <div className="h-2 sm:h-3 bg-gray-300 rounded w-1/2"></div>
                           <div className="h-24 sm:h-28 lg:h-32 bg-gradient-to-r from-pink-400 to-purple-500 rounded-lg flex items-center justify-center">
@@ -796,7 +794,8 @@ export default function HomePage() {
                             <div className="h-2 sm:h-3 bg-gray-300 rounded w-full"></div>
                             <div className="h-2 sm:h-3 bg-gray-300 rounded w-2/3"></div>
                           </div>
-                        </div>
+                        </div> */}
+                        <Image className="w-full size-[18rem] object-cover" src={'/images/BrandGuide.png'} alt="BrandGuide" width={1000} height={1000} />
                       </div>
                     </div>
                   </div>
@@ -805,18 +804,19 @@ export default function HomePage() {
                   <div className="transform rotate-1 sm:rotate-2 hover:rotate-0 transition-transform duration-300 cursor-pointer shadow-2xl z-10">
                     <div className="w-64 sm:w-72 lg:w-80 h-80 sm:h-88 lg:h-96 bg-white rounded-lg shadow-xl overflow-hidden border-4 border-gray-200">
                       {/* PDF Header */}
-                      <div className="bg-gradient-to-r from-[#3467AA] to-[#28518a] text-white p-4 sm:p-6 text-center">
-                        <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2">BRAND BLUEPRINT 2024</h3>
+                      <div className="bg-white text-white  text-center">
+                        {/* <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-1 sm:mb-2">BRAND BLUEPRINT 2024</h3>
                         <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-white/20 rounded-full mx-auto mb-3 sm:mb-4 flex items-center justify-center">
                           <span className="text-lg sm:text-xl lg:text-2xl font-bold">B</span>
                         </div>
                         <h4 className="text-base sm:text-lg lg:text-xl font-semibold">TechFlow Solutions</h4>
-                        <p className="text-xs sm:text-sm opacity-90">Innovating the future together</p>
+                        <p className="text-xs sm:text-sm opacity-90">Innovating the future together</p> */}
+                        <Image className="w-full h-full " src={'/images/PDFHeader.png'} alt="pdfHeader" width={1000} height={1000} />
                       </div>
                       
                       {/* PDF Content Preview */}
-                      <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
-                        <div className="flex items-center justify-between">
+                      <div className="p-4 sm:p-2 space-y-3 sm:space-y-4">
+                        {/* <div className="flex items-center justify-between">
                           <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 bg-[#3467AA] rounded"></div>
                           <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 bg-[#F5A819] rounded"></div>
                           <div className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 bg-gray-600 rounded"></div>
@@ -827,7 +827,8 @@ export default function HomePage() {
                         </div>
                         <div className="h-16 sm:h-18 lg:h-20 bg-gradient-to-r from-[#3467AA]/20 to-[#F5A819]/20 rounded-lg flex items-center justify-center">
                           <span className="text-gray-600 font-medium text-sm sm:text-base">Logo Variations</span>
-                        </div>
+                        </div> */}
+                        <Image src={'/images/PDFDetails.png'} alt="PDFContent" width={1000} height={1000} />
                       </div>
                     </div>
                   </div>
@@ -835,8 +836,8 @@ export default function HomePage() {
                   {/* Right PDF - Hidden on mobile, visible on larger screens */}
                   <div className="hidden sm:block transform rotate-6 hover:rotate-0 transition-transform duration-300 cursor-pointer shadow-2xl">
                     <div className="w-48 sm:w-56 lg:w-64 h-72 sm:h-76 lg:h-80 bg-white rounded-lg shadow-xl overflow-hidden border-4 border-gray-200">
-                      <div className="h-full bg-gradient-to-b from-gray-100 to-gray-200 p-4 sm:p-6">
-                        <div className="space-y-3 sm:space-y-4">
+                      <div className="h-full bg-gradient-to-b from-gray-100 to-gray-200 p-1">
+                        {/* <div className="space-y-3 sm:space-y-4">
                           <div className="h-16 sm:h-18 lg:h-20 bg-gradient-to-r from-blue-400 to-green-500 rounded-lg flex items-center justify-center">
                             <span className="text-white font-bold text-sm sm:text-base">Marketing Kit</span>
                           </div>
@@ -846,7 +847,8 @@ export default function HomePage() {
                             <div className="h-2 sm:h-3 bg-gray-300 rounded w-4/5"></div>
                           </div>
                           <div className="h-12 sm:h-14 lg:h-16 bg-gray-300 rounded-lg"></div>
-                        </div>
+                        </div> */}
+                        <Image className="h-full w-full" src={'/images/MarketKit.png'} alt="MarketKit" width={1000} height={1000} />
                       </div>
                     </div>
                   </div>
@@ -958,7 +960,7 @@ export default function HomePage() {
                     ))}
                   </div>
                   <span className="text-white/90">
-                    Trusted by 10,000+ brands
+                    Trusted by about 100+ brands
                   </span>
                 </div>
               </div>
