@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 import AOSInit from "./components/AOSInit";
 import Footer from "./components/footer";
 import Providers from "./providers";
+import FloatingWhatsappButton from "@/components/ui/floatingWhatsappButton";
 
 export const metadata: Metadata = {
   title: "Jara AI Brand Builder",
@@ -27,6 +28,7 @@ export default function RootLayout({
           <BrandProvider>{children}</BrandProvider>
         </Providers>
         <Footer />
+         <FloatingWhatsappButton />
         <script type="text/javascript" src="https://www.monetbil.com/widget/v2/monetbil.min.js"></script>
       </body>
     </html>
