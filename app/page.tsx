@@ -494,7 +494,7 @@ export default function HomePage() {
 
     <p className="text-center text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10">
       A quick 1-minute walkthrough showing how Jara AI helps you launch your 
-      brand instantly with world-class design and marketing tools.
+      brand instantly with world class design and marketing tools.
     </p>
 
     <div className="relative w-full overflow-hidden rounded-2xl shadow-xl bg-gray-100 dark:bg-gray-800 border border-gray-200/60 dark:border-gray-700/60">
